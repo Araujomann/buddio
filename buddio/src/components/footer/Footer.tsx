@@ -1,21 +1,22 @@
 import { Button } from "../button";
 export const Footer: React.FC = () => {
     return (
-        <div className="pt-10 flex flex-col gap-10 px-10">
-            <h2 className="font-montserrat">Buddio</h2>
+        <div className="pt-10 flex flex-col gap-10 px-10 bg-black">
+            <h2 className="font-montserrat">Buddio.</h2>
             <div className="flex flex-col gap-4">
             <Button
-                color="white"
-                textColor="black"
+                color="black"
+                textColor="white"
                 onClick={() => console.log("clicked")}
                 text="JOIN FOR FREE"
+                borderColor="#444444"
             />
             <Button
                 color="black"
                 textColor="white"
                 onClick={() => console.log("clicked")}
                 text="SIGN IN"
-                borderColor="white"
+                borderColor="#444444"
             />
 
             </div>

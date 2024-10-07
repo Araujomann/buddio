@@ -1,7 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { App } from "./App.tsx";
-import { Login, Search, Feed, Profile } from "./pages";
+import { Welcome, Search, Feed, Profile, Register, Login } from "./pages";
 import "./main.css";
 import {
     createBrowserRouter,
@@ -14,10 +14,12 @@ const routes: RouteObject[] = [
         element: <App />,
         errorElement: <div>error</div>,
         children: [
-            { path: "/", element: <Login /> },
+            { path: "/", element: <Welcome /> },
             { path: "/search", element: <Search /> },
             { path: "/profile", element: <Profile /> },
             { path: "/feed", element: <Feed /> },
+            { path: "/register", element: <Register /> },
+            {path: "/login", element: <Login />},
         ],
     },
 ];

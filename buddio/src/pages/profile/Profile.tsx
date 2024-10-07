@@ -1,7 +1,15 @@
 
+import { Header, Footer } from "../../components"
 
-export const Profile = () => {
-  return (
-    <div>Profile</div>
+export const Profile:React.FC = () => {
+  return(
+    <>
+    <Header />
+     <div className="bg-white flex flex-col h-full">
+
+     </div>
+     <Footer />
+
+    </>
   )
 }
