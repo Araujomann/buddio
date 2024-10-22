@@ -6,8 +6,7 @@ import axios from "axios";
 
 
 const eyeOpen = "https://img.icons8.com/ios/452/visible.png";
-const eyeClosed =
-    "https://img.icons8.com/?size=100&id=121539&format=png&color=000000";
+const eyeClosed = "https://img.icons8.com/?size=100&id=121539&format=png&color=000000";
 
 
 export const Login: React.FC = () => {
@@ -37,9 +36,10 @@ export const Login: React.FC = () => {
                 email: form.email,
                 password: form.password
             });
-            console.log("Token:", response.data.token);
-            // Você pode armazenar o token em localStorage ou state
-            localStorage.setItem('token', response.data.token);
+            console.log("accessToken: ", response.data.accessToken);
+            console.log("refreshToken: ", response.data.refreshToken);
+            localStorage.setItem('accessToken', response.data.accessToken);
+            window.location.href = "/feed";
         } catch (error) {
             console.log("Erro ao fazer login:", error);
         }
@@ -47,8 +47,6 @@ export const Login: React.FC = () => {
     const handleToBack = () => {
         navigate("/");
     }
-
-    
 
     const togglePassword = () => {
         const passwordInput = document.getElementById(

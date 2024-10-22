@@ -8,6 +8,9 @@ export default {
     extend: {
       colors: {
         "buddyGray": "#111111",
+        "postBarGray": "#B0B0B0",
+        "cleanGray": "#F5F5F5",
+        
       },
       fontFamily: {
         "montserrat": ["Montserrat", "sans-serif"],
