@@ -4,6 +4,7 @@ import { BiRepost } from "react-icons/bi";
 interface Props {
     img: string;
     author: string;
+    user: string;
 }
 export const Post: React.FC<Props> = ({ img, author }) => {
     return (

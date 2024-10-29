@@ -1,13 +1,13 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { toast, Toaster } from "react-hot-toast";
 import googleIcon from "../../assets/google.png";
 import back from "../../assets/back.svg";
 import axios from "axios";
 
-
 const eyeOpen = "https://img.icons8.com/ios/452/visible.png";
-const eyeClosed = "https://img.icons8.com/?size=100&id=121539&format=png&color=000000";
-
+const eyeClosed =
+    "https://img.icons8.com/?size=100&id=121539&format=png&color=000000";
 
 export const Login: React.FC = () => {
     const navigate = useNavigate();
@@ -28,25 +28,40 @@ export const Login: React.FC = () => {
         e.preventDefault();
         console.log("Form:", form);
         try {
-            const response = await axios.post("http://localhost:5000/auth/login", {
-                headers: {
-                    "Content-Type": "application/json"
-                },
+            const response = await axios.post(
+                "http://localhost:5000/auth/login",
+                {
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
 
-                email: form.email,
-                password: form.password
-            });
+                    email: form.email,
+                    password: form.password,
+                }
+            );
             console.log("accessToken: ", response.data.accessToken);
             console.log("refreshToken: ", response.data.refreshToken);
-            localStorage.setItem('accessToken', response.data.accessToken);
+            localStorage.setItem("accessToken", response.data.accessToken);
             window.location.href = "/feed";
-        } catch (error) {
-            console.log("Erro ao fazer login:", error);
+        } catch (error: any) {
+            if (error.response) {
+                // Exibir o erro dependendo da resposta da API
+                if (error.response.status === 401) {
+                    toast.error("Senha incorreta, tente novamente.");
+                } else if (error.response.status === 404) {
+                    toast.error("Email não encontrado, verifique seus dados.");
+                } else {
+                    toast.error("Ocorreu um erro ao tentar fazer login. Tente novamente.");
+                }
+            } else {
+                // Erro sem resposta da API
+                toast.error("Erro de conexão. Verifique sua internet.");
+            }
         }
     };
     const handleToBack = () => {
         navigate("/");
-    }
+    };
 
     const togglePassword = () => {
         const passwordInput = document.getElementById(
@@ -68,8 +83,8 @@ export const Login: React.FC = () => {
 
     return (
         <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-white pt-10">
-            <span  className="absolute top-6 left-4" onClick={handleToBack}>
-                <img src={back}  />
+            <span className="absolute top-6 left-4" onClick={handleToBack}>
+                <img src={back} />
             </span>
             <div className="flex flex-col items-center">
                 <h1 className="text-black font-montserrat text-3xl font-medium">
@@ -148,6 +163,7 @@ export const Login: React.FC = () => {
                     </button>
                 </form>
             </div>
+            <Toaster />
         </div>
     );
 };

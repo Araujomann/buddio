@@ -2,8 +2,6 @@ import { useEffect, useState } from "react";
 import { Post, Header } from "../../components";
 import axios from "axios";
 
-
-
 export const Feed: React.FC = () => {
     const [posts, setPosts] = useState<(typeof Post)[]>([]);
 
@@ -22,14 +20,14 @@ export const Feed: React.FC = () => {
         };
 
         fetchPosts();
-    },[]);
+    }, []);
 
     return (
         <>
             <Header />
             <div className="flex flex-col mt-14">
                 {posts.map((post) => (
-                    <Post  author={post.user.username} img={post.imageUrl} />
+                    <Post author={post.user.username} img={post.imageUrl} />
                 ))}
             </div>
         </>

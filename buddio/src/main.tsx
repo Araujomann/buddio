@@ -8,6 +8,7 @@ import {
     RouterProvider,
     RouteObject,
 } from "react-router-dom";
+import { PhotoSelection } from "./components/index.ts";
 
 const routes: RouteObject[] = [
     {
@@ -21,6 +22,7 @@ const routes: RouteObject[] = [
             { path: "/register", element: <Register /> },
             {path: "/login", element: <Login />},
             {path: "/post", element: <Post/>},
+            {path: "/photo-selection", element: <PhotoSelection/>},
         ],
     },
 ];
