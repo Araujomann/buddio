@@ -1,5 +1,8 @@
 import { Button } from "../button";
+import { useNavigate } from "react-router-dom";
 export const Footer: React.FC = () => {
+    const navigate = useNavigate();
+
     return (
         <div className="pt-10 flex flex-col gap-10 px-10 bg-black">
             <h2 className="font-montserrat">Buddio.</h2>
@@ -7,14 +10,14 @@ export const Footer: React.FC = () => {
             <Button
                 color="black"
                 textColor="white"
-                onClick={() => console.log("clicked")}
+                onClick={() => navigate("/register")}
                 text="JOIN FOR FREE"
                 borderColor="#444444"
             />
             <Button
                 color="black"
                 textColor="white"
-                onClick={() => console.log("clicked")}
+                onClick={() => navigate("/login")}
                 text="SIGN IN"
                 borderColor="#444444"
             />
