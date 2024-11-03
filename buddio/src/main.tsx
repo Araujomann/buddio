@@ -17,7 +17,7 @@ const routes: RouteObject[] = [
         children: [
             { path: "/", element: <Welcome /> },
             { path: "/search", element: <Search /> },
-            { path: "/profile", element: <Profile /> },
+            { path: "/profile/:userId", element: <Profile  /> },
             { path: "/feed", element: <Feed /> },
             { path: "/register", element: <Register /> },
             {path: "/login", element: <Login />},

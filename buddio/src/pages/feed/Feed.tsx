@@ -26,8 +26,8 @@ export const Feed: React.FC = () => {
         <>
             <Header />
             <div className="flex flex-col mt-14">
-                {posts.map((post) => (
-                    <Post author={post.user.username} img={post.imageUrl} />
+                {posts.map((post, index) => (
+                    <Post key={index} author={post.user.username} img={post.imageUrl} />
                 ))}
             </div>
         </>

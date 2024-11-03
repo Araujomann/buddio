@@ -39,8 +39,7 @@ export const Login: React.FC = () => {
                     password: form.password,
                 }
             );
-            console.log("accessToken: ", response.data.accessToken);
-            console.log("refreshToken: ", response.data.refreshToken);
+
             localStorage.setItem("accessToken", response.data.accessToken);
             window.location.href = "/feed";
         } catch (error: any) {
