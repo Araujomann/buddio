@@ -2,8 +2,15 @@ import { useEffect, useState } from "react";
 import { Post, Header } from "../../components";
 import axios from "axios";
 
+interface PostData {
+    _id: string;
+    imageUrl: string;
+    user: {
+        username: string
+    }
+}
 export const Feed: React.FC = () => {
-    const [posts, setPosts] = useState<(typeof Post)[]>([]);
+    const [posts, setPosts] = useState<(PostData)[]>([]);
 
     useEffect(() => {
         const fetchPosts = async () => {
@@ -12,7 +19,6 @@ export const Feed: React.FC = () => {
                     "http://localhost:5000/feed/posts"
                 );
                 const data = response.data;
-                console.log("Resposta da requisição: ", data);
                 setPosts(data);
             } catch (error) {
                 console.error("Erro ao buscar posts: ", error);
@@ -22,12 +28,13 @@ export const Feed: React.FC = () => {
         fetchPosts();
     }, []);
 
+    console.log("Posts: ", posts);
     return (
         <>
             <Header />
             <div className="flex flex-col mt-14">
                 {posts.map((post, index) => (
-                    <Post key={index} author={post.user.username} img={post.imageUrl} />
+                    <Post key={index} author={post.user.username} img={post.imageUrl} postId={post._id} />
                 ))}
             </div>
         </>
