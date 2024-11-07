@@ -9,7 +9,7 @@ interface Props {
 export const Post: React.FC<Props> = ({ img, author, postId }) => {
     return (
         <div className="bg-white pb-6">
-            <img src={img} className="w-full h-full" />
+            <img src={img} className="w-full h-fit" />
             <div className="flex justify-between p-4">
                 <span className="text-black flex items-center font-montserrat text-xs font-bold">{author}</span>
                 <div className="flex items-center gap-4">

@@ -30,11 +30,14 @@ export const Profile: React.FC = () => {
 
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
+    type section = "gallery" | "likes";
+    const [activeSection, setActiveSection] = useState<section>("gallery");
+    const [likedPosts, setLikedPosts] = useState<Post[]>([]);
     const navigate = useNavigate();
 
-    useEffect(() => {
-        const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem("accessToken");
 
+    useEffect(() => {
         if (token) {
             const decodedToken = jwtDecode<TokenPayload>(token);
             const loggedUser = decodedToken.id;
@@ -43,26 +46,20 @@ export const Profile: React.FC = () => {
         }
     }, []);
 
-    console.log("id do usuário clicado: ", userId);
-    console.log("usuário logado no momento: ", myProfileId);
     const isOwnProfile = userId === myProfileId && myProfileId !== "";
-    console.log("é  o meu perfil? ", isOwnProfile);
 
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const token = localStorage.getItem("accessToken");
                 const response = await axios.get(
                     `http://localhost:5000/profile/${userId}`,
                     {
                         headers: {
-
                             Authorization: `Bearer ${token}`,
                         },
                     }
                 );
                 const data = response.data;
-                console.log("Resposta da requisição: ", data);
                 setUser(data.user);
                 setPosts(data.posts);
             } catch (error) {
@@ -73,7 +70,26 @@ export const Profile: React.FC = () => {
         fetchProfile();
     }, [userId]);
 
-    console.log("User: ", user);
+    useEffect(() => {
+        const fetchLikedPosts = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:5000/posts/${userId}/liked-posts`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                const likedPosts = response.data;
+                setLikedPosts(likedPosts);
+            } catch (error) {
+                console.error("Erro ao buscar perfil: ", error);
+            }
+        };
+
+        fetchLikedPosts();
+    }, [activeSection]);
 
     const handleBack = () => {
         window.history.back();
@@ -136,17 +152,61 @@ export const Profile: React.FC = () => {
                             <p className="text-sm text-[#9b9b9b] ">biography</p>
                         </div>
 
-                        {!isOwnProfile && <FollowButton folllowingUserId={userId} />}
+                        {!isOwnProfile && (
+                            <FollowButton folllowingUserId={userId} />
+                        )}
                     </div>
                 </div>
                 <div className="mx-4">
-                    <span className="  flex w-fit px-2 py-2 border-solid border-t-4  border-black ">
-                        <h2 className="text-black font-montserrat font-semibold text-sm">
-                            Galeria
-                        </h2>
-                    </span>
+                    <div className="flex">
+                        <span
+                            className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
+                                activeSection === "gallery"
+                                    ? " border-black"
+                                    : "border-[#9b9b9b]"
+                            }`}
+                            onClick={() => setActiveSection("gallery")}
+                        >
+                            <h2
+                                className={`font-montserrat font-semibold text-sm ${
+                                    activeSection === "gallery"
+                                        ? " text-black"
+                                        : "text-[#9b9b9b]"
+                                } `}
+                            >
+                                Galeria
+                            </h2>
+                        </span>
+                        <span
+                            className={`  flex w-fit px-2 py-2 border-solid border-t-4  ${
+                                activeSection === "likes"
+                                    ? " border-black"
+                                    : "border-[#9b9b9b]"
+                            }`}
+                            onClick={() => setActiveSection("likes")}
+                        >
+                            <h2
+                                className={`font-montserrat font-semibold text-sm ${
+                                    activeSection === "likes"
+                                        ? " text-black"
+                                        : "text-[#9b9b9b]"
+                                }`}
+                            >
+                                Likes
+                            </h2>
+                        </span>
+                    </div>
 
-                    <Gallery images={posts.map((post) => post.imageUrl)} />
+                    {activeSection === "gallery" && (
+                        <Gallery images={posts.map((post) => post.imageUrl)} />
+                    )}
+                    {activeSection === "likes" && (
+                        <Gallery
+                            images={likedPosts.map(
+                                (likedPost) => likedPost.imageUrl
+                            )}
+                        />
+                    )}
                 </div>
             </div>
         </div>
