@@ -27,7 +27,6 @@ interface TokenPayload {
 export const Profile: React.FC = () => {
     const { userId = "" } = useParams();
     const [myProfileId, setMyProfileId] = useState<string>("");
-
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
     type section = "gallery" | "likes";
