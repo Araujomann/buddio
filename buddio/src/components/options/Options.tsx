@@ -49,8 +49,8 @@ export const Options: React.FC<Props> = ({ handleClick }) => {
     };
 
     return (
-        <div className="absolute z-30 w-full h-full bg-black ">
-            <div className="relative flex items-center h-14 justify-between w-screen p-4 bg-black">
+        <div className="fixed z-20 w-full h-full bg-black  bg-opacity-95">
+            <div className="flex items-center h-14 justify-between w-screen p-4 bg-black">
                 <img src={buddioIcon} className="rounded-full size-9" />
                 <span className="absolute right-4 " onClick={handleClick}>
                     <img src={CloseIcon1} />

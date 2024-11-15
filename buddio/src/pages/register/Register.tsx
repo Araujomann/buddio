@@ -88,7 +88,7 @@ export const Register: React.FC = () => {
                 <p className="text-[#9b9b9b] font-montserrat text-center text-sm">
                     Welcome! Enter your details
                 </p>
-                <button className="w-full flex items-center justify-center gap-2 bg-white text-[#838383] border-[#cecece] border-[1px] rounded-none mt-4">
+                <button className="w-full flex items-center justify-center gap-2 bg-white text-[#838383] border-[#cecece] border-[1px] rounded-none mt-4" onClick={() => window.location.href="http://localhost:5000/auth/google"}>
                     <span>
                         <img className="size-4" src={googleIcon} />
                     </span>
