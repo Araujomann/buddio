@@ -1,4 +1,4 @@
-import { api } from "../../axios";
+import { api } from '../../axios';
 
 api.interceptors.response.use(
     (response) => {
@@ -11,25 +11,20 @@ api.interceptors.response.use(
             originalRequest._retry = true;
 
             try {
-                const response = await api.post(
-                    "/token",
-                    {},
-                  
-                );
+                const response = await api.post('/token', {});
 
                 const newAccessToken = response.data.accessToken;
 
-                localStorage.setItem("accessToken", newAccessToken);
+                localStorage.setItem('accessToken', newAccessToken);
 
-                originalRequest.headers[
-                    "Authorization"
-                ] = `Bearer ${newAccessToken}`;
+                originalRequest.headers['Authorization'] =
+                    `Bearer ${newAccessToken}`;
                 return api(originalRequest);
             } catch (error) {
-                console.error("Falha ao renovar o token: ", error);
+                console.error('Falha ao renovar o token: ', error);
                 return Promise.reject(error);
             }
         }
         return Promise.reject(error);
-    }
+    },
 );

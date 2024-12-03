@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { FaceSmileIcon } from "@heroicons/react/24/solid";
-import plus from "../../assets/plus.svg";
-import aperture from "../../assets/aperture.svg";
-import checkmark from "../../assets/checkmark.svg";
-import close from "../../assets/close.svg";
-import { Header } from "../../components";
-import { Loader } from "../../components";
-import axios from "axios";
+import React, { useState, useEffect } from 'react';
+import { FaceSmileIcon } from '@heroicons/react/24/solid';
+import plus from '../../assets/plus.svg';
+import aperture from '../../assets/aperture.svg';
+import checkmark from '../../assets/checkmark.svg';
+import close from '../../assets/close.svg';
+import { Header } from '../../components';
+import { Loader } from '../../components';
+import axios from 'axios';
 
 export const PhotoSelection: React.FC = () => {
     const [loading, setLoading] = useState<boolean>(false);
@@ -17,21 +17,21 @@ export const PhotoSelection: React.FC = () => {
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setSelectedImage(e.target.files[0]);
-            console.log("imagem selecionada: ", e.target.files[0]);
+            console.log('imagem selecionada: ', e.target.files[0]);
         }
     };
 
     const handleClick = () => {
         const fileInput = document.getElementById(
-            "fileInput"
+            'fileInput',
         ) as HTMLInputElement;
         fileInput?.click();
     };
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("accessToken");
+        const storedToken = localStorage.getItem('accessToken');
         setToken(storedToken);
-        console.log("Token capturado: ", storedToken);
+        console.log('Token capturado: ', storedToken);
     }, []);
 
     const handleClose = () => {
@@ -41,39 +41,39 @@ export const PhotoSelection: React.FC = () => {
     const handleSubmit = async () => {
         setLoading(true);
         if (!token) {
-            console.error("Token não encontrado!");
+            console.error('Token não encontrado!');
             return;
         }
 
         if (selectedImage) {
             const formData = new FormData();
-            formData.append("file", selectedImage);
+            formData.append('file', selectedImage);
 
             try {
                 const uploadResponse = await axios.post(
-                    "http://localhost:5000/profile/upload-profile",
+                    'http://localhost:5000/profile/upload-profile',
                     formData,
                     {
                         headers: {
-                            "Content-Type": "multipart/form-data",
+                            'Content-Type': 'multipart/form-data',
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
                 const data = uploadResponse.data;
-                console.log("Resposta do upload: ", data);
+                console.log('Resposta do upload: ', data);
                 const imageUrl = data.url;
-                console.log("Imagem enviada com sucesso: ", imageUrl);
+                console.log('Imagem enviada com sucesso: ', imageUrl);
 
                 const updateResponse = await axios.put(
-                    "http://localhost:5000/profile/user/update-profile",
+                    'http://localhost:5000/profile/user/update-profile',
                     { imageUrl },
                     {
                         headers: {
-                            "Content-Type": "application/json",
+                            'Content-Type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
 
                 if (
@@ -81,8 +81,8 @@ export const PhotoSelection: React.FC = () => {
                     updateResponse.status === 201
                 ) {
                     console.log(
-                        "Foto de perfil atualizada com sucesso! ",
-                        updateResponse.data
+                        'Foto de perfil atualizada com sucesso! ',
+                        updateResponse.data,
                     );
                     setSelectedImage(null);
                     setLoading(false);
@@ -93,20 +93,19 @@ export const PhotoSelection: React.FC = () => {
                     }, 2600);
                 } else {
                     console.error(
-                        "Erro ao atualizar a foto do perfil: ",
-                        updateResponse.status
+                        'Erro ao atualizar a foto do perfil: ',
+                        updateResponse.status,
                     );
                 }
             } catch (error) {
-                console.error("Erro ao enviar a imagem: ", error);
+                console.error('Erro ao enviar a imagem: ', error);
             }
         }
     };
 
     return (
         <>
-        
-        <Header />
+            <Header />
             {loading && (
                 <div className="z-20 absolute flex items-center justify-center w-full h-full bg-white">
                     <Loader loading={loading} />
@@ -116,7 +115,9 @@ export const PhotoSelection: React.FC = () => {
                 <div className="absolute z-20 inset-0 flex items-center justify-center font-montserrat font-medium bg-black">
                     <div className="flex flex-col items-center text-white">
                         <FaceSmileIcon className="w-24 h-24 text-[#4CAF50] animate-bounce" />
-                        <h2 className="mt-4 text-2xl">Retrado do perfil atualizado</h2>
+                        <h2 className="mt-4 text-2xl">
+                            Retrado do perfil atualizado
+                        </h2>
                     </div>
                 </div>
             )}

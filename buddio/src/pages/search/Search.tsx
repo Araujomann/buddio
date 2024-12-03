@@ -1,9 +1,10 @@
-import { Header, Footer } from "../../components";
-import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-import defaultImage from "../../assets/profilePlaceHolder.png";
-import axios from "axios";
-import isFollowing from "../../assets/following.svg";
+import { Header, Footer } from '../../components';
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import defaultImage from '../../assets/profilePlaceHolder.png';
+import axios from 'axios';
+import isFollowing from '../../assets/following.svg';
+
 interface User {
     _id: string;
     username: string;
@@ -11,28 +12,28 @@ interface User {
 }
 
 export const Search: React.FC = () => {
-    const [searchTerm, setSearchTerm] = useState<string>("");
+    const [searchTerm, setSearchTerm] = useState<string>('');
     const [searchResults, setSearchResults] = useState<User[]>([]);
     const [followingIds, setFollowingIds] = useState<string[]>([]);
 
     useEffect(() => {
         const fetchFollowing = async () => {
-            const token = localStorage.getItem("accessToken");
+            const token = localStorage.getItem('accessToken');
 
             try {
                 const response = await axios.get(
-                    "http://localhost:5000/user/following",
+                    'http://localhost:5000/user/following',
                     {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
                 setFollowingIds(response.data);
             } catch (error) {
                 console.error(
-                    "Erro ao carregar a lista de seguidores: ",
-                    error
+                    'Erro ao carregar a lista de seguidores: ',
+                    error,
                 );
             }
         };
@@ -42,7 +43,7 @@ export const Search: React.FC = () => {
 
     useEffect(() => {
         const handleSearch = async () => {
-            const token = localStorage.getItem("accessToken");
+            const token = localStorage.getItem('accessToken');
 
             try {
                 if (!searchTerm.trim()) return;
@@ -50,21 +51,19 @@ export const Search: React.FC = () => {
                     `http://localhost:5000/search/users?query=${searchTerm}`,
                     {
                         headers: {
-                            "Content-Type": "application/json",
+                            'Content-Type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
                 setSearchResults(response.data);
             } catch (error) {
-                console.log("Erro na busca: ", error);
+                console.log('Erro na busca: ', error);
             }
         };
 
         handleSearch();
     }, [searchTerm]);
-
-    console.log("searchResults heereeeee: ", searchResults);
 
     return (
         <>
@@ -106,20 +105,19 @@ export const Search: React.FC = () => {
                                                 <span className="flex items-center gap-1 text-black font-montserrat font-semibold text-sm">
                                                     {user.username}
                                                     {followingIds.includes(
-                                                user._id
-                                            ) && (
-                                                <img
-                                                    src={isFollowing}
-                                                    className="size-3"
-                                                />
-                                            )}
+                                                        user._id,
+                                                    ) && (
+                                                        <img
+                                                            src={isFollowing}
+                                                            className="size-3"
+                                                        />
+                                                    )}
                                                 </span>
                                             </div>
                                             <span className="text-gray-400 font-montserrat  text-xs">
                                                 Lorem ipsum dolor sit amet
                                                 consec.
                                             </span>
-                                            
                                         </div>
                                     </div>
                                 </Link>

@@ -1,21 +1,33 @@
-import React from "react";
-import googleIcon from "../../assets/google.png";
-import back from "../../assets/back.svg";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
-const eyeOpen = "https://img.icons8.com/ios/452/visible.png";
+import { useState } from 'react';
+import googleIcon from '../../assets/google.png';
+import rightArrow from '../../assets/circle-chevron-right.svg';
+import back from '../../assets/back.svg';
+import { useNavigate } from 'react-router-dom';
+import { useUser } from '../../context/UserContext';
+import axios from 'axios';
+import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
+import { App } from '../../services/googleAuthConfig';
+
+const eyeOpen = 'https://img.icons8.com/ios/452/visible.png';
 const eyeClosed =
-    "https://img.icons8.com/?size=100&id=121539&format=png&color=000000";
+    'https://img.icons8.com/?size=100&id=121539&format=png&color=000000';
+
+const provider = new GoogleAuthProvider();
+const auth = getAuth(App);
 
 export const Register: React.FC = () => {
     const navigate = useNavigate();
 
-    const [form, setForm] = React.useState({
-        username: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
+    const { setUserData } = useUser();
+
+    const [form, setForm] = useState({
+        username: '',
+        email: '',
+        password: '',
+        confirmPassword: '',
     });
+
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -24,60 +36,115 @@ export const Register: React.FC = () => {
         console.log(e.target.value);
     };
 
+    const handleGoogleRegister = async () => {
+        const result = await signInWithPopup(auth, provider);
+        const user = result.user;
+        try {
+            const response = await axios.post(
+                'http://localhost:5000/user/register',
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    username: user.displayName,
+                    email: user.email,
+                    password: user.uid,
+                    authProvider: 'google',
+                },
+            );
+            console.log(response.data);
+        } catch (error) {
+            console.error('aconteceu algo inesperado: ', error);
+            setErrorMessage(
+                'Já existe um perfil associado a essa conta. Faça login em vez disso.',
+            );
+        }
+    };
+
     const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log(form);
         if (form.password !== form.confirmPassword) {
-            alert("passwords do not match");
+            alert('passwords do not match');
             return;
         }
         try {
+            setUserData({
+                username: form.username,
+                email: form.email,
+            });
+
             const response = await axios.post(
-                "http://localhost:5000/user/register",
+                'http://localhost:5000/user/register',
                 {
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                     },
 
                     username: form.username,
                     email: form.email,
                     password: form.password,
-                }
+                },
             );
             console.log(response.data);
+            navigate('/email-confirmation');
         } catch (error) {
-            console.error("aconteceu algo inesperado: ", error);
+            console.error('aconteceu algo inesperado: ', error);
         }
     };
 
     const handleToBack = () => {
-        navigate("/");
+        navigate('/');
     };
 
-    const handleLogin = () => {
-        navigate("/login");
-    }
+    const navigateToLogin = () => {
+        navigate('/login');
+    };
 
     const togglePassword = () => {
         const passwordInput = document.getElementById(
-            "password"
+            'password',
         ) as HTMLInputElement | null;
         const eyeIcon = document.getElementById(
-            "eye-icon"
+            'eye-icon',
         ) as HTMLImageElement | null;
         if (passwordInput && eyeIcon) {
-            if (passwordInput.type === "text") {
-                passwordInput.type = "password";
+            if (passwordInput.type === 'text') {
+                passwordInput.type = 'password';
                 eyeIcon.src = eyeOpen;
             } else {
-                passwordInput.type = "text";
+                passwordInput.type = 'text';
                 eyeIcon.src = eyeClosed;
             }
         }
     };
 
     return (
-        <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-white pt-10">
+        <div className="relative flex flex-col items-center justify-center w-screen h-screen bg-white ">
+            {errorMessage && (
+                <div
+                    className="absolute z-30 flex items-center justify-center h-full w-full bg-black bg-opacity-70"
+                    onClick={() => setErrorMessage(null)}
+                >
+                    <div
+                        className="relative flex flex-col items-center bg-white py-4 px-2 mx-4 rounded-sm"
+                        onClick={(e) => e.stopPropagation()}
+                    >
+                        <h1 className="text-black text-2xl font-bold mb-4">
+                            Conta existente!
+                        </h1>
+                        <p className="text-gray-700 mb-6 text-center">
+                            {errorMessage}
+                        </p>
+                        <button
+                            className="bg-black text-white border-black flex items-center justify-center gap-2 text-xs px-3 py-1 uppercase h-10 rounded-none outline-none transition-all duration-200 hover:bg-black hover:text-white"
+                            onClick={navigateToLogin}
+                        >
+                            Ir para Login
+                            <img src={rightArrow} alt="" />
+                        </button>
+                    </div>
+                </div>
+            )}
             <span className="absolute top-6 left-4" onClick={handleToBack}>
                 <img src={back} />
             </span>
@@ -88,7 +155,10 @@ export const Register: React.FC = () => {
                 <p className="text-[#9b9b9b] font-montserrat text-center text-sm">
                     Welcome! Enter your details
                 </p>
-                <button className="w-full flex items-center justify-center gap-2 bg-white text-[#838383] border-[#cecece] border-[1px] rounded-none mt-4" onClick={() => window.location.href="http://localhost:5000/auth/google"}>
+                <button
+                    className="w-full flex items-center justify-center gap-2 bg-white text-[#838383] border-[#cecece] border-[1px] rounded-none mt-4"
+                    onClick={handleGoogleRegister}
+                >
                     <span>
                         <img className="size-4" src={googleIcon} />
                     </span>
@@ -143,7 +213,7 @@ export const Register: React.FC = () => {
                     >
                         Password
                     </label>
-                    <div className="relative flex  ">
+                    <div className="relative flex">
                         <input
                             type="password"
                             id="password"
@@ -187,7 +257,7 @@ export const Register: React.FC = () => {
                             id=""
                         />
                         <p className="text-[#383838] text-sm ">
-                            I accept all{" "}
+                            I accept all{' '}
                             <span className="font-medium">
                                 tearms & conditions.
                             </span>
@@ -202,8 +272,11 @@ export const Register: React.FC = () => {
                     </button>
                     <div className="flex w-full items-center justify-center text-sm mt-2 gap-2">
                         <p className="text-[#7e7e7e]">
-                            Already have a account?{" "}
-                            <span className="font-medium text-black" onClick={handleLogin}>
+                            Already have a account?{' '}
+                            <span
+                                className="font-medium text-black"
+                                onClick={navigateToLogin}
+                            >
                                 Sign in
                             </span>
                         </p>

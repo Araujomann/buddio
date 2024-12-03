@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from "react";
-import { CheckBadgeIcon } from '@heroicons/react/24/solid'
-import plus from "../../assets/plus.svg";
-import aperture from "../../assets/aperture.svg";
-import checkmark from "../../assets/checkmark.svg";
-import close from "../../assets/close.svg";
-import { Header, Loader } from "../../components";
-import axios from "axios";
-
-
+import React, { useEffect, useState } from 'react';
+import { CheckBadgeIcon } from '@heroicons/react/24/solid';
+import plus from '../../assets/plus.svg';
+import aperture from '../../assets/aperture.svg';
+import checkmark from '../../assets/checkmark.svg';
+import close from '../../assets/close.svg';
+import { Header, Loader } from '../../components';
+import axios from 'axios';
 
 export const Post: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -16,21 +14,21 @@ export const Post: React.FC = () => {
     const [postedCheck, setPostedCheck] = useState<boolean>(false);
 
     useEffect(() => {
-        const storedToken = localStorage.getItem("accessToken");
+        const storedToken = localStorage.getItem('accessToken');
         setToken(storedToken);
-        console.log("Token capturado: ", storedToken);
+        console.log('Token capturado: ', storedToken);
     }, []);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
             setSelectedImage(e.target.files[0]);
-            console.log("imagem selecionada: ", e.target.files[0]);
+            console.log('imagem selecionada: ', e.target.files[0]);
         }
     };
 
     const handleClick = () => {
         const fileInput = document.getElementById(
-            "fileInput"
+            'fileInput',
         ) as HTMLInputElement;
         fileInput?.click();
     };
@@ -38,63 +36,59 @@ export const Post: React.FC = () => {
     const handleSubmit = async () => {
         setLoading(true);
         if (!token) {
-            console.error("Token não encontrado!");
+            console.error('Token não encontrado!');
             return;
         }
 
         if (selectedImage) {
             const formData = new FormData();
-            formData.append("file", selectedImage);
+            formData.append('file', selectedImage);
 
             try {
                 const uploadResponse = await axios.post(
-                    "http://localhost:5000/posts/upload",
+                    'http://localhost:5000/posts/upload',
                     formData,
                     {
                         headers: {
-                            "Content-Type": "multipart/form-data",
+                            'Content-Type': 'multipart/form-data',
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
                 const data = uploadResponse.data;
-                console.log("Resposta do upload: ", data);
                 const imageUrl = data.url;
-                console.log("Imagem enviada com sucesso: ", imageUrl);
 
                 const postResponse = await axios.post(
-                    "http://localhost:5000/posts",
+                    'http://localhost:5000/posts',
                     { imageUrl },
                     {
                         headers: {
-                            "Content-Type": "application/json",
+                            'Content-Type': 'application/json',
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
 
                 if (
                     postResponse.status === 200 ||
                     postResponse.status === 201
                 ) {
-                    console.log("Post criado com sucesso! ", postResponse.data);
+                    console.log('Post criado com sucesso! ', postResponse.data);
+
                     setSelectedImage(null);
                     setLoading(false);
                     setPostedCheck(true);
-
                     setTimeout(() => {
                         setPostedCheck(false);
-                    },2600);
-
-                   
+                    }, 2600);
                 } else {
                     console.error(
-                        "Erro ao criar o post: ",
-                        postResponse.status
+                        'Erro ao criar o post: ',
+                        postResponse.status,
                     );
                 }
             } catch (error) {
-                console.error("Erro ao enviar a imagem: ", error);
+                console.error('Erro ao enviar a imagem: ', error);
             }
         }
     };
@@ -113,12 +107,12 @@ export const Post: React.FC = () => {
                 </div>
             )}
             {postedCheck && (
-               <div className="absolute z-20 inset-0 flex items-center justify-center font-montserrat font-medium bg-black">
-               <div className="flex flex-col items-center text-white">
-                 <CheckBadgeIcon className="w-24 h-24 text-[#4CAF50] animate-bounce" />
-                 <h2 className="mt-4 text-2xl">Retrato postado!</h2>
-               </div>
-             </div>
+                <div className="absolute z-20 inset-0 flex items-center justify-center font-montserrat font-medium bg-black">
+                    <div className="flex flex-col items-center text-white">
+                        <CheckBadgeIcon className="w-24 h-24 text-[#4CAF50] animate-bounce" />
+                        <h2 className="mt-4 text-2xl">Retrato postado!</h2>
+                    </div>
+                </div>
             )}
             <div className="flex items-end bg-white w-screen h-full">
                 {selectedImage ? (

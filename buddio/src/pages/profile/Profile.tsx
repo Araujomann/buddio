@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { FollowButton, Gallery } from "../../components";
-import { useNavigate, useParams } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
-import axios from "axios";
-import profileCam from "../../assets/profile-cam.jpg";
-import edit from "../../assets/edit.svg";
-import back from "../../assets/back.svg";
+import { useState, useEffect } from 'react';
+import { FollowButton, Gallery } from '../../components';
+import { useNavigate, useParams } from 'react-router-dom';
+import { jwtDecode } from 'jwt-decode';
+import axios from 'axios';
+import profileCam from '../../assets/profile-cam.jpg';
+import edit from '../../assets/edit.svg';
+import back from '../../assets/back.svg';
 
 interface User {
     username: string;
@@ -25,16 +25,16 @@ interface TokenPayload {
 }
 
 export const Profile: React.FC = () => {
-    const { userId = "" } = useParams();
-    const [myProfileId, setMyProfileId] = useState<string>("");
+    const { userId = '' } = useParams();
+    const [myProfileId, setMyProfileId] = useState<string>('');
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
-    type section = "gallery" | "likes";
-    const [activeSection, setActiveSection] = useState<section>("gallery");
+    type section = 'gallery' | 'likes';
+    const [activeSection, setActiveSection] = useState<section>('gallery');
     const [likedPosts, setLikedPosts] = useState<Post[]>([]);
     const navigate = useNavigate();
 
-    const token = localStorage.getItem("accessToken");
+    const token = localStorage.getItem('accessToken');
 
     useEffect(() => {
         if (token) {
@@ -45,7 +45,7 @@ export const Profile: React.FC = () => {
         }
     }, []);
 
-    const isOwnProfile = userId === myProfileId && myProfileId !== "";
+    const isOwnProfile = userId === myProfileId && myProfileId !== '';
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -56,13 +56,13 @@ export const Profile: React.FC = () => {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
                 const data = response.data;
                 setUser(data.user);
                 setPosts(data.posts);
             } catch (error) {
-                console.error("Erro ao buscar perfil: ", error);
+                console.error('Erro ao buscar perfil: ', error);
             }
         };
 
@@ -78,12 +78,12 @@ export const Profile: React.FC = () => {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
-                    }
+                    },
                 );
                 const likedPosts = response.data;
                 setLikedPosts(likedPosts);
             } catch (error) {
-                console.error("Erro ao buscar perfil: ", error);
+                console.error('Erro ao buscar perfil: ', error);
             }
         };
 
@@ -95,7 +95,7 @@ export const Profile: React.FC = () => {
     };
 
     const handleEdit = () => {
-        navigate("/photo-selection");
+        navigate('/photo-selection');
     };
 
     if (!user) return <h2>carregando perfil...</h2>;
@@ -160,17 +160,17 @@ export const Profile: React.FC = () => {
                     <div className="flex">
                         <span
                             className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
-                                activeSection === "gallery"
-                                    ? " border-black"
-                                    : "border-[#9b9b9b]"
+                                activeSection === 'gallery'
+                                    ? ' border-black'
+                                    : 'border-[#9b9b9b]'
                             }`}
-                            onClick={() => setActiveSection("gallery")}
+                            onClick={() => setActiveSection('gallery')}
                         >
                             <h2
                                 className={`font-montserrat font-semibold text-sm ${
-                                    activeSection === "gallery"
-                                        ? " text-black"
-                                        : "text-[#9b9b9b]"
+                                    activeSection === 'gallery'
+                                        ? ' text-black'
+                                        : 'text-[#9b9b9b]'
                                 } `}
                             >
                                 Galeria
@@ -178,17 +178,17 @@ export const Profile: React.FC = () => {
                         </span>
                         <span
                             className={`  flex w-fit px-2 py-2 border-solid border-t-4  ${
-                                activeSection === "likes"
-                                    ? " border-black"
-                                    : "border-[#9b9b9b]"
+                                activeSection === 'likes'
+                                    ? ' border-black'
+                                    : 'border-[#9b9b9b]'
                             }`}
-                            onClick={() => setActiveSection("likes")}
+                            onClick={() => setActiveSection('likes')}
                         >
                             <h2
                                 className={`font-montserrat font-semibold text-sm ${
-                                    activeSection === "likes"
-                                        ? " text-black"
-                                        : "text-[#9b9b9b]"
+                                    activeSection === 'likes'
+                                        ? ' text-black'
+                                        : 'text-[#9b9b9b]'
                                 }`}
                             >
                                 Likes
@@ -196,13 +196,13 @@ export const Profile: React.FC = () => {
                         </span>
                     </div>
 
-                    {activeSection === "gallery" && (
+                    {activeSection === 'gallery' && (
                         <Gallery images={posts.map((post) => post.imageUrl)} />
                     )}
-                    {activeSection === "likes" && (
+                    {activeSection === 'likes' && (
                         <Gallery
                             images={likedPosts.map(
-                                (likedPost) => likedPost.imageUrl
+                                (likedPost) => likedPost.imageUrl,
                             )}
                         />
                     )}

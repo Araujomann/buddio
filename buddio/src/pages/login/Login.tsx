@@ -1,20 +1,24 @@
-import React from "react";
-import { useNavigate } from "react-router-dom";
-import { toast, Toaster } from "react-hot-toast";
-import googleIcon from "../../assets/google.png";
-import back from "../../assets/back.svg";
-import axios from "axios";
-
-const eyeOpen = "https://img.icons8.com/ios/452/visible.png";
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import { toast, Toaster } from 'react-hot-toast';
+import googleIcon from '../../assets/google.png';
+import back from '../../assets/back.svg';
+import axios from 'axios';
+import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
+import { App } from '../../services/googleAuthConfig';
+const eyeOpen = 'https://img.icons8.com/ios/452/visible.png';
 const eyeClosed =
-    "https://img.icons8.com/?size=100&id=121539&format=png&color=000000";
+    'https://img.icons8.com/?size=100&id=121539&format=png&color=000000';
+
+const provider = new GoogleAuthProvider();
+const auth = getAuth(App);
 
 export const Login: React.FC = () => {
     const navigate = useNavigate();
 
     const [form, setForm] = React.useState({
-        email: "",
-        password: "",
+        email: '',
+        password: '',
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,57 +28,81 @@ export const Login: React.FC = () => {
         console.log(e.target.value);
     };
 
+    const handleGoogleLogin = async () => {
+        try {
+            const result = await signInWithPopup(auth, provider);
+            const user = result.user;
+
+            const response = await axios.post(
+                'http://localhost:5000/auth/login',
+                {
+                    Headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    email: user.email,
+                    password: user.uid,
+                },
+            );
+            localStorage.setItem('accessToken', response.data.accessToken);
+            window.location.href = '/feed';
+        } catch (error) {
+            console.error('aconteceu algo inesperado: ', error);
+        }
+    };
+
     const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        console.log("Form:", form);
+        console.log('Form:', form);
         try {
             const response = await axios.post(
-                "http://localhost:5000/auth/login",
+                'http://localhost:5000/auth/login',
                 {
                     headers: {
-                        "Content-Type": "application/json",
+                        'Content-Type': 'application/json',
                     },
 
                     email: form.email,
                     password: form.password,
-                }
+                },
             );
 
-            localStorage.setItem("accessToken", response.data.accessToken);
-            window.location.href = "/feed";
+            localStorage.setItem('accessToken', response.data.accessToken);
+            window.location.href = '/feed';
         } catch (error: any) {
             if (error.response) {
                 // Exibir o erro dependendo da resposta da API
                 if (error.response.status === 401) {
-                    toast.error("Senha incorreta, tente novamente.");
+                    toast.error('Senha incorreta, tente novamente.');
                 } else if (error.response.status === 404) {
-                    toast.error("Email não encontrado, verifique seus dados.");
+                    toast.error('Email não encontrado, verifique seus dados.');
                 } else {
-                    toast.error("Ocorreu um erro ao tentar fazer login. Tente novamente.");
+                    toast.error(
+                        'Ocorreu um erro ao tentar fazer login. Tente novamente.',
+                    );
                 }
             } else {
                 // Erro sem resposta da API
-                toast.error("Erro de conexão. Verifique sua internet.");
+                toast.error('Erro de conexão. Verifique sua internet.');
             }
         }
     };
     const handleToBack = () => {
-        navigate("/");
+        navigate('/');
     };
 
     const togglePassword = () => {
         const passwordInput = document.getElementById(
-            "password"
+            'password',
         ) as HTMLInputElement | null;
         const eyeIcon = document.getElementById(
-            "eye-icon"
+            'eye-icon',
         ) as HTMLImageElement | null;
         if (passwordInput && eyeIcon) {
-            if (passwordInput.type === "text") {
-                passwordInput.type = "password";
+            if (passwordInput.type === 'text') {
+                passwordInput.type = 'password';
                 eyeIcon.src = eyeOpen;
             } else {
-                passwordInput.type = "text";
+                passwordInput.type = 'text';
                 eyeIcon.src = eyeClosed;
             }
         }
@@ -92,7 +120,10 @@ export const Login: React.FC = () => {
                 <p className="text-[#9b9b9b] font-montserrat text-center text-sm">
                     Welcome! Enter your details
                 </p>
-                <button className="w-full flex items-center justify-center gap-2 bg-white text-[#838383] border-[#cecece] border-[1px] rounded-none mt-4">
+                <button
+                    className="w-full flex items-center justify-center gap-2 bg-white text-[#838383] border-[#cecece] border-[1px] rounded-none mt-4"
+                    onClick={handleGoogleLogin}
+                >
                     <span>
                         <img className="size-4" src={googleIcon} />
                     </span>

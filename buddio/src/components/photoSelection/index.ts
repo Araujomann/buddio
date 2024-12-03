@@ -1,1 +1,1 @@
-export { PhotoSelection } from "./PhotoSelection";
+export { PhotoSelection } from './PhotoSelection';
