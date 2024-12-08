@@ -75,7 +75,10 @@ export const Login: React.FC = () => {
                     toast.error('Senha incorreta, tente novamente.');
                 } else if (error.response.status === 404) {
                     toast.error('Email não encontrado, verifique seus dados.');
-                } else {
+                } else if(error.response.status ===403){
+                    toast.error("Por favor, verifique seu email para continuar.");
+
+                }else {
                     toast.error(
                         'Ocorreu um erro ao tentar fazer login. Tente novamente.',
                     );
@@ -88,6 +91,10 @@ export const Login: React.FC = () => {
     };
     const handleToBack = () => {
         navigate('/');
+    };
+
+    const navigateToRegister = () => {
+        navigate('/register');
     };
 
     const togglePassword = () => {
@@ -191,6 +198,17 @@ export const Login: React.FC = () => {
                     >
                         Login
                     </button>
+                    <div className="flex w-full items-center justify-center text-sm mt-2 gap-2">
+                        <p className="text-[#7e7e7e]">
+                            Don't have an account yet?{' '}
+                            <span
+                                className="font-medium text-black"
+                                onClick={navigateToRegister}
+                            >
+                                Register
+                            </span>
+                        </p>
+                    </div>
                 </form>
             </div>
             <Toaster />

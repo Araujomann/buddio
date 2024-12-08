@@ -51,6 +51,11 @@ export const Register: React.FC = () => {
                     password: user.uid,
                     authProvider: 'google',
                 },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
             );
             console.log(response.data);
         } catch (error) {

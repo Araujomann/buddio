@@ -6,6 +6,8 @@ import axios from 'axios';
 import profileCam from '../../assets/profile-cam.jpg';
 import edit from '../../assets/edit.svg';
 import back from '../../assets/back.svg';
+import messages from '../../assets/messages.svg';
+import remove from '../../assets/remove.svg';
 
 interface User {
     username: string;
@@ -24,14 +26,16 @@ interface TokenPayload {
     id: string;
 }
 
+type Section = 'gallery' | 'likes' | 'followers';
+
 export const Profile: React.FC = () => {
     const { userId = '' } = useParams();
     const [myProfileId, setMyProfileId] = useState<string>('');
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
-    type section = 'gallery' | 'likes';
-    const [activeSection, setActiveSection] = useState<section>('gallery');
+    const [activeSection, setActiveSection] = useState<Section>('gallery');
     const [likedPosts, setLikedPosts] = useState<Post[]>([]);
+    const [followers, setFollowers] = useState<User[]>([]);
     const navigate = useNavigate();
 
     const token = localStorage.getItem('accessToken');
@@ -56,7 +60,7 @@ export const Profile: React.FC = () => {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
-                    },
+                    }
                 );
                 const data = response.data;
                 setUser(data.user);
@@ -78,7 +82,7 @@ export const Profile: React.FC = () => {
                         headers: {
                             Authorization: `Bearer ${token}`,
                         },
-                    },
+                    }
                 );
                 const likedPosts = response.data;
                 setLikedPosts(likedPosts);
@@ -87,7 +91,29 @@ export const Profile: React.FC = () => {
             }
         };
 
-        fetchLikedPosts();
+        if (activeSection === 'likes') fetchLikedPosts();
+    }, [activeSection]);
+
+    useEffect(() => {
+        const fetchFollowers = async () => {
+            try {
+                const response = await axios.get(
+                    `http://localhost:5000/followers`,
+                    {
+                        headers: {
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+                const myFollowers = response.data;
+                setFollowers(myFollowers);
+                console.log('myFollowers', myFollowers);
+            } catch (error) {
+                console.error('Erro ao buscar perfil: ', error);
+            }
+        };
+
+        if (activeSection === 'followers') fetchFollowers();
     }, [activeSection]);
 
     const handleBack = () => {
@@ -156,8 +182,8 @@ export const Profile: React.FC = () => {
                         )}
                     </div>
                 </div>
-                <div className="mx-4">
-                    <div className="flex">
+                <div className="mx-4 ">
+                    <div className="flex ">
                         <span
                             className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
                                 activeSection === 'gallery'
@@ -194,6 +220,24 @@ export const Profile: React.FC = () => {
                                 Likes
                             </h2>
                         </span>
+                        <span
+                            className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
+                                activeSection === 'followers'
+                                    ? ' border-black'
+                                    : 'border-[#9b9b9b]'
+                            }`}
+                            onClick={() => setActiveSection('followers')}
+                        >
+                            <h2
+                                className={`font-montserrat font-semibold text-sm ${
+                                    activeSection === 'followers'
+                                        ? ' text-black'
+                                        : 'text-[#9b9b9b]'
+                                } `}
+                            >
+                                Followers
+                            </h2>
+                        </span>
                     </div>
 
                     {activeSection === 'gallery' && (
@@ -202,9 +246,36 @@ export const Profile: React.FC = () => {
                     {activeSection === 'likes' && (
                         <Gallery
                             images={likedPosts.map(
-                                (likedPost) => likedPost.imageUrl,
+                                (likedPost) => likedPost.imageUrl
                             )}
                         />
+                    )}
+                    {activeSection === 'followers' && (
+                        <div className="flex flex-col gap-2 mt-4 ">
+                            {followers.map((follower) => (
+                                <div className="flex items-center justify-between gap-4 h-20 rounded-md px-4 shadow-[0px_4px_10px_-2px_rgba(0,0,0,0.5),0px_-4px_10px_-2px_rgba(0,0,0,0.1)]">
+                                    <div className="flex items-center gap-4">
+                                        <img
+                                            src={follower.profileImage}
+                                            className="rounded-full w-14"
+                                        />
+                                        <div className="flex flex-col">
+                                            <h2 className="font-bold text-md text-black">
+                                                {follower.username}
+                                            </h2>
+                                        </div>
+                                    </div>
+                                    <div className="flex gap-4">
+                                        <span>
+                                            <img src={messages} />
+                                        </span>
+                                        <span>
+                                            <img src={remove} />
+                                        </span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     )}
                 </div>
             </div>

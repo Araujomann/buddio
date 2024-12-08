@@ -8,8 +8,10 @@ import SearchIcon from '../../assets/search.svg';
 import CloseIcon1 from '../../assets/close1.svg';
 import buddioIcon from '../../assets/buddio-logo.jpg';
 import logoutIcon from '../../assets/logout.svg';
+import messages from '../../assets/messages.svg';
 
 import { Link } from 'react-router-dom';
+import { Conversations } from '../../pages';
 
 interface Props {
     handleClick: () => void;
@@ -63,6 +65,14 @@ export const Options: React.FC<Props> = ({ handleClick }) => {
                             <img src={FeedIcon} />
                         </span>
                         FEED
+                    </div>
+                </Link>
+                <Link to="/conversations">
+                    <div className="flex items-center gap-2 text-white">
+                        <span>
+                            <img src={messages} />
+                        </span>
+                        MESSAGES
                     </div>
                 </Link>
                 <Link to="/post">
