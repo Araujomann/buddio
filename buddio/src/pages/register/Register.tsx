@@ -2,6 +2,8 @@ import { useState } from 'react';
 import googleIcon from '../../assets/google.png';
 import rightArrow from '../../assets/circle-chevron-right.svg';
 import back from '../../assets/back.svg';
+import { toast, Toaster } from 'react-hot-toast';
+
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import axios from 'axios';
@@ -43,9 +45,6 @@ export const Register: React.FC = () => {
             const response = await axios.post(
                 'http://localhost:5000/user/register',
                 {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
                     username: user.displayName,
                     email: user.email,
                     password: user.uid,
@@ -57,11 +56,11 @@ export const Register: React.FC = () => {
                     },
                 }
             );
-            console.log(response.data);
+            console.log(response.data.message);
         } catch (error) {
             console.error('aconteceu algo inesperado: ', error);
             setErrorMessage(
-                'Já existe um perfil associado a essa conta. Faça login em vez disso.',
+                'Já existe um perfil associado a essa conta. Faça login em vez disso.'
             );
         }
     };
@@ -88,12 +87,21 @@ export const Register: React.FC = () => {
                     username: form.username,
                     email: form.email,
                     password: form.password,
-                },
+                    authProvider: 'form',
+                }
             );
             console.log(response.data);
             navigate('/email-confirmation');
-        } catch (error) {
+        } catch (error: any) {
             console.error('aconteceu algo inesperado: ', error);
+            if (error.response) {
+        
+                if (error.response.status === 409) {
+                    toast.error(error.response.data.Error);
+                }
+            } else {
+                toast.error('Erro de conexão. Verifique sua internet.');
+            }
         }
     };
 
@@ -107,10 +115,10 @@ export const Register: React.FC = () => {
 
     const togglePassword = () => {
         const passwordInput = document.getElementById(
-            'password',
+            'password'
         ) as HTMLInputElement | null;
         const eyeIcon = document.getElementById(
-            'eye-icon',
+            'eye-icon'
         ) as HTMLImageElement | null;
         if (passwordInput && eyeIcon) {
             if (passwordInput.type === 'text') {
@@ -288,6 +296,7 @@ export const Register: React.FC = () => {
                     </div>
                 </form>
             </div>
+            <Toaster />
         </div>
     );
 };
