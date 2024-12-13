@@ -6,3 +6,5 @@ export { Register } from './register';
 export { Login } from './login';
 export { Post } from './post';
 export { EmailConfirmation } from './emailConfirmation';
+export { Chat } from './chat';
+export { Conversations } from './conversations';

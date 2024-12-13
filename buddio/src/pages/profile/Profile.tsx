@@ -6,15 +6,18 @@ import axios from 'axios';
 import profileCam from '../../assets/profile-cam.jpg';
 import edit from '../../assets/edit.svg';
 import back from '../../assets/back.svg';
-import messages from '../../assets/messages.svg';
+import messages from '../../assets/followerMessage.svg';
 import remove from '../../assets/remove.svg';
 
 interface User {
+    _id: string;
     username: string;
     email: string;
     bio?: string;
     profileImage: string;
 }
+
+
 
 interface Post {
     _id: string;
@@ -48,7 +51,8 @@ export const Profile: React.FC = () => {
             setMyProfileId(loggedUser);
         }
     }, []);
-
+    console.log('token: ', myProfileId)
+    
     const isOwnProfile = userId === myProfileId && myProfileId !== '';
 
     useEffect(() => {
@@ -252,12 +256,12 @@ export const Profile: React.FC = () => {
                     )}
                     {activeSection === 'followers' && (
                         <div className="flex flex-col gap-2 mt-4 ">
-                            {followers.map((follower) => (
-                                <div className="flex items-center justify-between gap-4 h-20 rounded-md px-4 shadow-[0px_4px_10px_-2px_rgba(0,0,0,0.5),0px_-4px_10px_-2px_rgba(0,0,0,0.1)]">
+                            {followers.map((follower, index) => (
+                                <div key={index} className="flex items-center justify-between gap-4 h-20 rounded-md px-4 shadow-[0px_4px_10px_-2px_rgba(0,0,0,0.5),0px_-4px_10px_-2px_rgba(0,0,0,0.1)]">
                                     <div className="flex items-center gap-4">
                                         <img
                                             src={follower.profileImage}
-                                            className="rounded-full w-14"
+                                            className="rounded-full size-14 object-cover"
                                         />
                                         <div className="flex flex-col">
                                             <h2 className="font-bold text-md text-black">
@@ -266,8 +270,8 @@ export const Profile: React.FC = () => {
                                         </div>
                                     </div>
                                     <div className="flex gap-4">
-                                        <span>
-                                            <img src={messages} />
+                                        <span onClick={() => navigate(`/chat/${follower._id}`)}>
+                                            <img src={messages}  />
                                         </span>
                                         <span>
                                             <img src={remove} />

@@ -24,7 +24,7 @@ export const Feed: React.FC = () => {
                 console.error('Erro ao buscar posts: ', error);
             }
         };
-
+        console.log("token: ", localStorage.getItem('token'));
         fetchPosts();
     }, []);
 

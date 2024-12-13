@@ -10,6 +10,8 @@ import {
     Login,
     Post,
     EmailConfirmation,
+    Chat,
+    Conversations
 } from './pages';
 import { UserProvider } from './context/UserContext.tsx';
 import './main.css';
@@ -34,6 +36,8 @@ const routes: RouteObject[] = [
             { path: '/post', element: <Post /> },
             { path: '/photo-selection', element: <PhotoSelection /> },
             { path: '/email-confirmation', element: <EmailConfirmation /> },
+            { path: "/chat/:receiverId", element: <Chat />},
+            { path: "/conversation/:userId", element: <Conversations />}
         ],
     },
 ];
@@ -42,7 +46,9 @@ const route = createBrowserRouter(routes);
 createRoot(document.getElementById('root')!).render(
     <StrictMode>
         <UserProvider>
-            <RouterProvider router={route} />
+           
+                <RouterProvider router={route} />
+           
         </UserProvider>
-    </StrictMode>,
+    </StrictMode>
 );

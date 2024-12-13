@@ -1,7 +1,7 @@
 import { useUser } from '../../context/UserContext';
 import axios from 'axios';
 
-export const EmailConfirmation = () => {
+export const EmailConfirmation:React.FC = () => {
     const { userData } = useUser();
 
     const handleResendEmail = async () => {
