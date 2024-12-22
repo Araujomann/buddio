@@ -40,6 +40,7 @@ export const Profile: React.FC = () => {
     const [likedPosts, setLikedPosts] = useState<Post[]>([]);
     const [followers, setFollowers] = useState<User[]>([]);
     const navigate = useNavigate();
+    
 
     const token = localStorage.getItem('accessToken');
 

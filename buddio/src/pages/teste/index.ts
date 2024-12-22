@@ -1,0 +1,1 @@
+export { Teste } from "./Teste";
