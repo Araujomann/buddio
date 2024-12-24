@@ -116,7 +116,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
     if (messageEndRef.current) {
       messageEndRef.current.scrollIntoView({ behavior: 'smooth' });
     }
-  }, []);
+  }, [receiverId, chatMessages]);
 
   useEffect(() => {
     localStorage.setItem('darkTheme', darkTheme ? 'dark' : 'light');
