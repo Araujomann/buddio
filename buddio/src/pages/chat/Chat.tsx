@@ -369,8 +369,8 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
           <span className="flex h-full" onClick={handleBack}>
             <img src={back} />
           </span>
-          <div className="flex items-center h-fit ">
-            <img src={user?.profileImage} className="size-12 rounded-2xl" />
+          <div className="flex items-center">
+            <img src={user?.profileImage} className="size-12 rounded-2xl object-cover" />
           </div>
           <div
             className={`flex flex-col ${
