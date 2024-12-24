@@ -92,7 +92,7 @@ export const Search: React.FC = () => {
                                 >
                                     <div className=" flex items-center w-full h-16 rounded-md gap-4 mx-1">
                                         <img
-                                            className="flex size-12 rounded-full"
+                                            className="flex size-12 rounded-full object-cover"
                                             src={
                                                 user.profileImage
                                                     ? user.profileImage
