@@ -6,7 +6,6 @@ import { io, Socket } from 'socket.io-client';
 import { SwitchS } from '../../components';
 import darkSend from '../../assets/darkSend.svg';
 import lightSend from '../../assets/lightSend.svg';
-
 import back from '../../assets/back.svg';
 import clouds from '../../assets/clouds.png';
 import night from '../../assets/night.png';
@@ -137,6 +136,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
         );
 
         const { conversationId, startedAt } = conversationResponse.data;
+        console.log(conversationId)
 
         setConversationIdentifier(conversationId);
         setChatStartedAt(startedAt);
@@ -190,7 +190,6 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
         );
         setBackground(response.data.chatBackground);
 
-        console.log("preferencia de fundo", response.data.chatBackground);
       } catch (error) {
         console.error('Erro ao buscar preferências: ', error);
       }
@@ -198,7 +197,6 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
 
     fetchUser();
     fetchMessages();
-
     fetchPreferences();
   }, [receiverId, token]);
 
@@ -209,7 +207,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
   const handleSendMessage = () => {
     if (socket && newMessage.trim() !== '') {
       const messageToSend = {
-        conversationIdentifier,
+        conversationId: conversationIdentifier,
         senderId: myId,
         receiverId,
         message: newMessage,
@@ -276,7 +274,6 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
       console.error('Erro ao atualizar background: ', error.message);
     }
   };
-  console.log('hhhhhhhh', selectBackground);
 
   return (
     <div className="flex flex-col h-screen w-screen">
