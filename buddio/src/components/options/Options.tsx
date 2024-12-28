@@ -14,102 +14,101 @@ import { Link } from 'react-router-dom';
 import { Conversations } from '../../pages';
 
 interface Props {
-    handleClick: () => void;
+  handleClick: () => void;
 }
 
 interface TokenPayload {
-    id: string;
+  id: string;
 }
 
 export const Options: React.FC<Props> = ({ handleClick }) => {
-    const [id, setId] = useState<string>('');
+  const [id, setId] = useState<string>('');
 
-    useEffect(() => {
-        document.body.classList.add('no-scroll');
+  useEffect(() => {
+    document.body.classList.add('no-scroll');
 
-        const token = localStorage.getItem('accessToken');
-        if (token) {
-            const decodedToken = jwtDecode<TokenPayload>(token);
-            setId(decodedToken.id);
-        }
+    const token = localStorage.getItem('accessToken');
+    if (token) {
+      const decodedToken = jwtDecode<TokenPayload>(token);
+      setId(decodedToken.id);
+    }
 
-        return () => {
-            document.body.classList.remove('no-scroll');
-        };
-    }, []);
-
-    const handleLogout = async () => {
-        try {
-            await axios.post('http://localhost:5000/auth/logout');
-            localStorage.removeItem('accessToken');
-
-            window.location.href = '/login';
-            
-        } catch (error) {
-            console.error('Erro ao fazer o logout: ', error);
-        }
+    return () => {
+      document.body.classList.remove('no-scroll');
     };
+  }, []);
 
-    return (
-        <div className="fixed z-20 w-full h-full bg-black  bg-opacity-95">
-            <div className="flex items-center h-14 justify-between w-screen p-4 bg-black">
-                <img src={buddioIcon} className="rounded-full size-9" />
-                <span className="absolute right-4 " onClick={handleClick}>
-                    <img src={CloseIcon1} />
-                </span>
-            </div>
-            <section className="flex flex-col gap-4 p-4 border-b-[1px] border-gray-500 font-bold">
-                <Link to="/feed">
-                    <div className="flex items-center gap-2 text-white">
-                        <span>
-                            <img src={FeedIcon} />
-                        </span>
-                        FEED
-                    </div>
-                </Link>
-                <Link to="/conversations">
-                    <div className="flex items-center gap-2 text-white">
-                        <span>
-                            <img src={messages} />
-                        </span>
-                        MESSAGES
-                    </div>
-                </Link>
-                <Link to="/post">
-                    <div className="flex items-center gap-2 text-white">
-                        <span>
-                            <img src={PostIcon} className="size-8" />
-                        </span>
-                        POST
-                    </div>
-                </Link>
-                <Link to="/search">
-                    <div className="flex items-center gap-2 text-white">
-                        <span>
-                            <img src={SearchIcon} />
-                        </span>
-                        SEARCH
-                    </div>
-                </Link>
-                <Link to={`/profile/${id}`}>
-                    <div className="flex items-center gap-2 text-white">
-                        <span>
-                            <img src={ProfileIcon} />
-                        </span>
-                        PROFILE
-                    </div>
-                </Link>
-            </section>
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:5000/auth/logout');
+      localStorage.removeItem('accessToken');
 
-            <div
-                className="flex items-center gap-2 px-4 mt-4 font-bold "
-                onClick={handleLogout}
-            >
-                <span>
-                    <img src={logoutIcon} />
-                </span>
-                LOG OUT
-            </div>
-        </div>
-    );
+      window.location.href = '/login';
+    } catch (error) {
+      console.error('Erro ao fazer o logout: ', error);
+    }
+  };
+
+  return (
+    <div className="fixed z-20 w-full h-full bg-black  bg-opacity-95">
+      <div className="flex items-center h-14 justify-between w-screen p-4 bg-black">
+        <img src={buddioIcon} className="rounded-full size-9" />
+        <span className="absolute right-4 " onClick={handleClick}>
+          <img src={CloseIcon1} />
+        </span>
+      </div>
+      <section className="flex flex-col gap-4 p-4 border-b-[1px] border-gray-500 font-bold">
+        <Link to="/feed">
+          <div className="flex items-center gap-2 text-white">
+            <span>
+              <img src={FeedIcon} />
+            </span>
+            FEED
+          </div>
+        </Link>
+        <Link to="/conversations">
+          <div className="flex items-center gap-2 text-white">
+            <span>
+              <img src={messages} />
+            </span>
+            MESSAGES
+          </div>
+        </Link>
+        <Link to="/post">
+          <div className="flex items-center gap-2 text-white">
+            <span>
+              <img src={PostIcon} className="size-8" />
+            </span>
+            POST
+          </div>
+        </Link>
+        <Link to="/search">
+          <div className="flex items-center gap-2 text-white">
+            <span>
+              <img src={SearchIcon} />
+            </span>
+            SEARCH
+          </div>
+        </Link>
+        <Link to={`/profile/${id}`}>
+          <div className="flex items-center gap-2 text-white">
+            <span>
+              <img src={ProfileIcon} />
+            </span>
+            PROFILE
+          </div>
+        </Link>
+      </section>
+
+      <div
+        className="flex items-center gap-2 px-4 mt-4 font-bold "
+        onClick={handleLogout}
+      >
+        <span>
+          <img src={logoutIcon} />
+        </span>
+        LOG OUT
+      </div>
+    </div>
+  );
 };

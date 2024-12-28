@@ -1,1 +1,1 @@
-export { SwitchS } from "./Switch";
+export { SwitchS } from './Switch';

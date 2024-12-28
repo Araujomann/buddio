@@ -1,7 +1,3 @@
-
-
 export const Conversations = () => {
-  return (
-    <div>Conversations</div>
-  )
-}
+  return <div>Conversations</div>;
+};

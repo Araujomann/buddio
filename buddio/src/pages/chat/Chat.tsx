@@ -132,11 +132,11 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         const { conversationId, startedAt } = conversationResponse.data;
-        console.log(conversationId)
+        console.log(conversationId);
 
         setConversationIdentifier(conversationId);
         setChatStartedAt(startedAt);
@@ -147,7 +147,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         setChatMessages(fetchMessages.data);
@@ -160,7 +160,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
       try {
         const user = await axios.get(
           `http://localhost:5000/profile/${receiverId}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         setUser(user.data.user);
       } catch (error: any) {
@@ -177,7 +177,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const { conversationId } = identifierResponse.data;
         const response = await axios.get(
@@ -186,10 +186,9 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         setBackground(response.data.chatBackground);
-
       } catch (error) {
         console.error('Erro ao buscar preferências: ', error);
       }
@@ -256,7 +255,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
   let lastDate: string | null = null;
 
   const updateChatBackground = async (chatBackground: string) => {
-    if(background === chatBackground) return;
+    if (background === chatBackground) return;
     try {
       await axios.put(
         `http://localhost:5000/conversations/${conversationIdentifier}/chat-background`,
@@ -265,11 +264,10 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
-     
+
       return window.location.reload();
-      
     } catch (error: any) {
       console.error('Erro ao atualizar background: ', error.message);
     }
@@ -318,24 +316,25 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
                       }}
                     >
                       <img src={wallpaper} className="h-full rounded-xl" />
-                      {wallpapers[index] === background || selectBackground === index && (
-                        <div className="absolute bottom-1 right-1 bg-white rounded-full p-1">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="h-4 w-4 text-green-500"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={3}
-                              d="M5 13l4 4L19 7"
-                            />
-                          </svg>
-                        </div>
-                      )}
+                      {wallpapers[index] === background ||
+                        (selectBackground === index && (
+                          <div className="absolute bottom-1 right-1 bg-white rounded-full p-1">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              className="h-4 w-4 text-green-500"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={3}
+                                d="M5 13l4 4L19 7"
+                              />
+                            </svg>
+                          </div>
+                        ))}
                     </div>
                   ))}
                 </div>
@@ -370,7 +369,10 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             <img src={back} />
           </span>
           <div className="flex items-center">
-            <img src={user?.profileImage} className="size-12 rounded-2xl object-cover" />
+            <img
+              src={user?.profileImage}
+              className="size-12 rounded-2xl object-cover"
+            />
           </div>
           <div
             className={`flex flex-col ${

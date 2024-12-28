@@ -62,7 +62,7 @@ export const Profile: React.FC = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = response.data;
         setUser(data.user);
@@ -84,7 +84,7 @@ export const Profile: React.FC = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const likedPosts = response.data;
         setLikedPosts(likedPosts);
@@ -120,7 +120,7 @@ export const Profile: React.FC = () => {
   };
 
   const handleEdit = () => {
-    navigate('/photo-selection');
+    navigate('/profile-photo-selection');
   };
 
   if (!user) return <h2>carregando perfil...</h2>;
