@@ -63,9 +63,9 @@ export const Search: React.FC = () => {
   }, [searchTerm]);
 
   return (
-    <>
+    <div className='flex flex-col w-screen h-screen'>
       <Header />
-      <div className="flex flex-col items-center  bg-white">
+      <div className="flex flex-col items-center flex-1">
         <div className=" relative h-12 flex items-center  w-10/12  border-b-[1px] border-gray-300 mt-20 mb-6">
           <input
             className="bg-white font-montserrat text-xl outline-none text-black"
@@ -76,7 +76,7 @@ export const Search: React.FC = () => {
           />
         </div>
 
-        <ul className="flex flex-col items-center mb-2 mx-auto gap-1 max-h-80 w-80 overflow-auto py-1 rounded-md">
+        <ul className="flex flex-col items-center mb-2 mx-auto gap-1 max-h-80 w-80 overflow-y-auto overflow-x-hidden py-1 rounded-md">
           {searchResults &&
             searchResults.map((user) => (
               <li key={user._id} className="flex w-full items-center">
@@ -107,6 +107,6 @@ export const Search: React.FC = () => {
         </ul>
       </div>
       <Footer />
-    </>
+    </div>
   );
 };
