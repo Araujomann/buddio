@@ -153,7 +153,7 @@ export const Search: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="hidden md:flex md:px-2 ">
+                  <div className="hidden md:flex md:pl-2 md:pr-6 ">
                     <p className="text-black flex-grow font-montserrat font-semibold text-[10px]">
                       {user.username}
                     </p>
