@@ -95,7 +95,7 @@ export const Search: React.FC = () => {
                 <Link to={`/profile/${user._id}`} className="w-full">
                   <div className="md:relative flex items-center w-full h-16 md:h-32 rounded-md gap-4 mx-1 ">
                     <img
-                      className="md:absolute z-20 flex size-12 md:size-20 md:mt-14 rounded-full object-cover"
+                      className="md:absolute z-20  [filter:drop-shadow(7px_-1px_6px_black)] flex size-12 md:size-20 md:mt-14 rounded-full object-cover"
                       src={user.profileImage ? user.profileImage : withoutImage}
                       alt="user"
                     ></img>
