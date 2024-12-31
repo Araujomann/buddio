@@ -33,7 +33,7 @@ export const Search: React.FC = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
         setFollowingIds(response.data);
       } catch (error) {
@@ -57,7 +57,7 @@ export const Search: React.FC = () => {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
         console.log('response Results: ', response.data);
         setSearchResults(response.data);
@@ -70,7 +70,7 @@ export const Search: React.FC = () => {
   }, [searchTerm]);
 
   return (
-    <div className="flex flex-col w-screen h-screen">
+    <div className="flex flex-col w-screen h-screen md:overflow-x-hidden">
       <div className="relative z-30">
         <Header />
       </div>
@@ -85,17 +85,17 @@ export const Search: React.FC = () => {
           />
         </div>
 
-        <ul className="flex flex-col md:flex-row items-center justify-center mb-2 mx-auto gap-1 max-h-80 w-80 md:w-full md:flex-wrap overflow-y-auto overflow-x-hidden py-1 rounded-md">
+        <ul className="flex flex-col md:px-20 md:flex-row items-center justify-center mb-2 mx-auto gap-1 max-h-80 md:max-h-full md:overflow-y-hidden w-80 md:w-full md:flex-wrap overflow-y-auto overflow-x-hidden py-1 rounded-md">
           {searchResults &&
             searchResults.map((user) => (
               <li
                 key={user._id}
-                className="flex w-full md:w-52 md:h-40 items-center"
+                className="flex w-full md:w-60 md:h-48 items-center"
               >
                 <Link to={`/profile/${user._id}`} className="w-full">
                   <div className="md:relative flex items-center w-full h-16 md:h-32 rounded-md gap-4 mx-1 ">
                     <img
-                      className="md:absolute z-20 flex size-12 md:size-14 md:mt-14  rounded-full object-cover"
+                      className="md:absolute z-20 flex size-12 md:size-20 md:mt-14 rounded-full object-cover"
                       src={user.profileImage ? user.profileImage : withoutImage}
                       alt="user"
                     ></img>
@@ -108,7 +108,7 @@ export const Search: React.FC = () => {
                               ? user.posts[0].imageUrl
                               : withoutImage
                           }
-                          className="absolute z-10 max-w-24 bottom-3 left-8"
+                          className="hidden md:block absolute z-10 max-w-24 bottom-3 left-12"
                         />
                         {user.posts.length > 1 ? (
                           <img
@@ -117,12 +117,12 @@ export const Search: React.FC = () => {
                                 ? user.posts[1].imageUrl
                                 : withoutImage
                             }
-                            className="absolute max-w-20 left-20"
+                            className="hidden md:block absolute max-w-20 left-28"
                           />
                         ) : (
                           <img
                             src={withoutImage}
-                            className="absolute max-w-20 left-20"
+                            className="hidden md:block absolute max-w-20 left-28"
                           />
                         )}
                       </>
@@ -130,11 +130,11 @@ export const Search: React.FC = () => {
                       <>
                         <img
                           src={withoutImage}
-                          className="absolute z-10 max-w-24 bottom-3 left-8"
+                          className="hidden md:block absolute z-10 max-w-24 bottom-3 left-12"
                         />
                         <img
                           src={withoutImage}
-                          className="absolute max-w-20 left-20"
+                          className="hidden md:block absolute max-w-20 left-28"
                         />
                       </>
                     )}
@@ -154,7 +154,7 @@ export const Search: React.FC = () => {
                     </div>
                   </div>
                   <div className="hidden md:flex md:pl-2 md:pr-6 ">
-                    <p className="text-black flex-grow font-montserrat font-semibold text-[10px]">
+                    <p className="text-black flex items-center flex-grow font-montserrat font-semibold text-[12px] ">
                       {user.username}
                     </p>
 
