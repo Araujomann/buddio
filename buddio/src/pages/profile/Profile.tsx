@@ -141,7 +141,7 @@ export const Profile: React.FC = () => {
             <div className="relative flex items-center justify-center rounded-full">
               {isOwnProfile && (
                 <span
-                  className=" absolute right-0 bottom-0  p-1  cursor-pointer bg-black  rounded-full"
+                  className="absolute right-0 bottom-0 p-2 cursor-pointer bg-black rounded-full "
                   onClick={handleEdit}
                 >
                   <img src={edit} />
