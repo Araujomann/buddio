@@ -1,15 +1,20 @@
 import { Header, Footer } from '../../components';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import defaultImage from '../../assets/profilePlaceHolder.png';
+import withoutImage from '../../assets/withoutPhoto.png';
 import axios from 'axios';
 import isFollowing from '../../assets/following.svg';
 import visit from '../../assets/visit.svg';
+
+interface Post {
+  imageUrl: string;
+}
 
 interface User {
   _id: string;
   username: string;
   profileImage: string;
+  posts?: Post[];
 }
 
 export const Search: React.FC = () => {
@@ -28,7 +33,7 @@ export const Search: React.FC = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         setFollowingIds(response.data);
       } catch (error) {
@@ -52,8 +57,9 @@ export const Search: React.FC = () => {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
+        console.log('response Results: ', response.data);
         setSearchResults(response.data);
       } catch (error) {
         console.log('Erro na busca: ', error);
@@ -65,7 +71,9 @@ export const Search: React.FC = () => {
 
   return (
     <div className="flex flex-col w-screen h-screen">
-      <Header />
+      <div className="relative z-30">
+        <Header />
+      </div>
       <div className="flex flex-col items-center flex-1">
         <div className=" relative h-12 flex items-center  w-10/12  border-b-[1px] border-gray-300 mt-20 mb-6">
           <input
@@ -77,20 +85,60 @@ export const Search: React.FC = () => {
           />
         </div>
 
-        <ul className="flex flex-col md:flex-row items-center justify-center mb-2 mx-auto gap-1 max-h-80 w-80 md:w-full md:bg-purple-300 md:flex-wrap overflow-y-auto overflow-x-hidden py-1 rounded-md">
+        <ul className="flex flex-col md:flex-row items-center justify-center mb-2 mx-auto gap-1 max-h-80 w-80 md:w-full md:flex-wrap overflow-y-auto overflow-x-hidden py-1 rounded-md">
           {searchResults &&
             searchResults.map((user) => (
               <li
                 key={user._id}
-                className="flex w-full md:w-52 md:h-40 items-center bg-red-300"
+                className="flex w-full md:w-52 md:h-40 items-center"
               >
                 <Link to={`/profile/${user._id}`} className="w-full">
-                  <div className=" flex items-center w-full h-16 md:h-32 rounded-md gap-4 mx-1 bg-blue-400">
+                  <div className="md:relative flex items-center w-full h-16 md:h-32 rounded-md gap-4 mx-1 ">
                     <img
-                      className="flex size-12 md:size-14 md:mt-14 md:ml-2 rounded-full md:rounded object-cover"
-                      src={user.profileImage ? user.profileImage : defaultImage}
+                      className="md:absolute z-20 flex size-12 md:size-14 md:mt-14  rounded-full object-cover"
+                      src={user.profileImage ? user.profileImage : withoutImage}
                       alt="user"
                     ></img>
+
+                    {user.posts && user.posts.length > 0 ? (
+                      <>
+                        <img
+                          src={
+                            user.posts[0].imageUrl
+                              ? user.posts[0].imageUrl
+                              : withoutImage
+                          }
+                          className="absolute z-10 max-w-24 bottom-3 left-8"
+                        />
+                        {user.posts.length > 1 ? (
+                          <img
+                            src={
+                              user.posts[1].imageUrl
+                                ? user.posts[1].imageUrl
+                                : withoutImage
+                            }
+                            className="absolute max-w-20 left-20"
+                          />
+                        ) : (
+                          <img
+                            src={withoutImage}
+                            className="absolute max-w-20 left-20"
+                          />
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        <img
+                          src={withoutImage}
+                          className="absolute z-10 max-w-24 bottom-3 left-8"
+                        />
+                        <img
+                          src={withoutImage}
+                          className="absolute max-w-20 left-20"
+                        />
+                      </>
+                    )}
+
                     <div className="md:hidden flex flex-col h-12 justify-around ">
                       <div className="flex justify-between">
                         <span className="flex items-center gap-1 text-black font-montserrat font-semibold text-sm">
@@ -105,7 +153,7 @@ export const Search: React.FC = () => {
                       </span>
                     </div>
                   </div>
-                  <div className="hidden md:flex">
+                  <div className="hidden md:flex md:px-2 ">
                     <p className="text-black flex-grow font-montserrat font-semibold text-[10px]">
                       {user.username}
                     </p>
