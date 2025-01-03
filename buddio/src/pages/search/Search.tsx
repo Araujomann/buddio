@@ -117,7 +117,7 @@ export const Search: React.FC = () => {
                                 ? user.posts[1].imageUrl
                                 : withoutImage
                             }
-                            className="hidden md:block absolute max-w-20 left-28"
+                            className="hidden md:block absolute max-w-20 max-h-28 top-0 left-28"
                           />
                         ) : (
                           <img
