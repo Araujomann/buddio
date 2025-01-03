@@ -41,7 +41,7 @@ export const Welcome: React.FC = () => {
       </div>
 
       <div className="relative mt-8">
-        <h2 className="z-10 absolute font-montserrat text-4xl font-extrabold left-4 text-white">
+        <h2 className="z-10 absolute xs:font-montserrat text-4xl font-extrabold xs:left-4 text-white">
           FOR <span className="absolute right-6">ALL</span> PHOTOGRAPHERS
         </h2>
         <img src={cam} className="grayscale" />
