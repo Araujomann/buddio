@@ -1,9 +1,11 @@
 import { Header, Button, Footer } from '../../components';
 import cam from '../../assets/cam.jpg';
 import buddioIcon from '../../assets/buddio-logo.jpg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 export const Welcome: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  
 
   const handleJoinClick = () => {
     navigate('/register');

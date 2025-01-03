@@ -1,12 +1,15 @@
 import { HiMiniBars2 } from 'react-icons/hi2';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Options } from '../options/Options';
 import buddioIcon from '../../assets/buddio-logo.jpg';
 
 export const Header: React.FC = () => {
   const [isOptionsOpen, setIsOptionsOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  const welcomePage = location.pathname === '/';
 
   return (
     <>
@@ -19,9 +22,11 @@ export const Header: React.FC = () => {
           className="rounded-full size-9"
           onClick={() => navigate('/feed')}
         />
-        <span onClick={() => setIsOptionsOpen(!isOptionsOpen)}>
-          <HiMiniBars2 size={30} />
-        </span>
+        {!welcomePage && (
+          <span onClick={() => setIsOptionsOpen(!isOptionsOpen)}>
+            <HiMiniBars2 size={30} />
+          </span>
+        )}
       </div>
     </>
   );
