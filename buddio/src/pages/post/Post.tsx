@@ -93,10 +93,11 @@ export const Post: React.FC = () => {
       <Header />
 
       {loading && (
-        <div className="z-20 absolute flex items-center justify-center w-full h-full bg-white">
-          <Loader loading={loading} />
+        <div className="z-20 fixed flex items-center justify-center w-full h-full bg-white">
+         <div className="spinner"></div>
         </div>
       )}
+      
       {postedCheck && (
         <div className="absolute z-20 inset-0 flex items-center justify-center font-montserrat font-medium bg-black">
           <div className="flex flex-col items-center text-white">
@@ -107,8 +108,8 @@ export const Post: React.FC = () => {
       )}
       <div className="flex items-end bg-white w-screen h-full">
         {selectedImage ? (
-          <div className="absolute flex items-center w-80  justify-center inset-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="border-1 border-gray-300 flex justify-center items-center w-full ">
+          <div className="absolute flex items-center w-80 lg:w-4/6 xl:w-3/6 xl:pb-6 justify-center inset-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="border-1 border-gray-300 flex justify-center items-center w-full p-1 pb-3 ">
               <img
                 src={URL.createObjectURL(selectedImage)}
                 alt="Selected"
@@ -129,16 +130,16 @@ export const Post: React.FC = () => {
           {selectedImage ? (
             <div className="flex gap-2">
               <div
-                className="relative flex items-center justify-center bg-white hover:bg-slate-950 rounded-full size-20 bottom-10 border-[1px] cursor-pointer"
+                className="relative flex items-center justify-center bg-white hover:[filter:drop-shadow(0px_-1px_3px_black)] hover:transition-all rounded-full size-20 bottom-10 border-[1px] cursor-pointer"
                 onClick={handleClose}
               >
-                <img src={close} className="size-12" alt="Submit" />
+                <img src={close} className="size-12 hover:[filter:drop-shadow(0px_-1px_1px_red)]" alt="Submit" />
               </div>
               <div
-                className="relative flex items-center justify-center bg-white rounded-full size-20 bottom-10 border-[1px] cursor-pointer"
+                className="relative flex items-center justify-center bg-white hover:[filter:drop-shadow(0px_-1px_3px_black)] hover:transition-all rounded-full size-20 bottom-10 border-[1px] cursor-pointer"
                 onClick={handleSubmit}
               >
-                <img src={checkmark} className="size-12" alt="Submit" />
+                <img src={checkmark} className="size-12 hover:[filter:drop-shadow(0px_-1px_1px_green)]" alt="Submit" />
               </div>
             </div>
           ) : (

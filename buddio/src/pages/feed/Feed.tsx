@@ -14,10 +14,12 @@ interface PostData {
 
 export const Feed: React.FC = () => {
   const [posts, setPosts] = useState<PostData[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const token = localStorage.getItem('accessToken');
 
   useEffect(() => {
     const fetchPosts = async () => {
+      setIsLoading(true);
       try {
         const response = await axios.get(
           'http://localhost:5000/feed/posts',
@@ -30,8 +32,10 @@ export const Feed: React.FC = () => {
         );
         const data = response.data;
         setPosts(data);
+        setIsLoading(false);
       } catch (error) {
         console.error('Erro ao buscar posts: ', error);
+        setIsLoading(false);
       }
     };
 
@@ -69,7 +73,14 @@ export const Feed: React.FC = () => {
   return (
     <>
       <Header />
-      <div className="flex flex-col mt-14">
+
+      <div className="flex flex-col w-screen h-screen overflow-x-hidden">
+        {isLoading && (
+          <div className="fixed z-10 bg-white bg-opacity-75 overflow-hidden flex items-center h-full w-full   justify-center text-black">
+            <div className="spinner"></div>
+          </div>
+        )}
+        <div className="flex flex-col items-center flex-1 overflow-y-auto"></div>
         {posts.map((post) => (
           <Post
             key={post._id}

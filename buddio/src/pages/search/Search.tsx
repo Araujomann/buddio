@@ -21,6 +21,7 @@ export const Search: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [followingIds, setFollowingIds] = useState<string[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchFollowing = async () => {
@@ -50,19 +51,23 @@ export const Search: React.FC = () => {
 
       try {
         if (!searchTerm.trim()) return;
-        const response = await axios.get(
-          `http://localhost:5000/search/users?query=${searchTerm}`,
-          {
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        console.log('response Results: ', response.data);
-        setSearchResults(response.data);
+        setIsLoading(true);
+     
+          const response = await axios.get(
+            `http://localhost:5000/search/users?query=${searchTerm}`,
+            {
+              headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          console.log('response Results: ', response.data);
+          setSearchResults(response.data);
+        setIsLoading(false);
       } catch (error) {
         console.log('Erro na busca: ', error);
+        setIsLoading(false);
       }
     };
 
@@ -82,8 +87,13 @@ export const Search: React.FC = () => {
             placeholder="Buscar usuários"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-          />
+            />
         </div>
+            {isLoading && (
+              <div className="relative flex items-center h-full justify-center w-screen z-30 mt-20 text-black ">
+                <div className='spinner'></div>
+              </div>
+            )}
 
         <ul className="flex flex-col md:px-20 md:flex-row items-center justify-center mb-2 mx-auto gap-1 max-h-80 md:max-h-full md:overflow-y-hidden w-80 md:w-full md:flex-wrap overflow-y-auto overflow-x-hidden py-1 rounded-md">
           {searchResults &&
