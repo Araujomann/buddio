@@ -41,6 +41,10 @@ export default {
         montserrat: ['Montserrat', 'sans-serif'],
         ptSans: ['PT Sans', 'sans-serif'],
       },
+      animation: {
+        spinSlow: 'spin 3s linear infinite',
+      }
+
     },
   },
   plugins: [require('tailwind-scrollbar-hide')],
