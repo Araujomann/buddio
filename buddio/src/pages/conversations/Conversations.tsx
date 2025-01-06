@@ -13,16 +13,17 @@ import messages from '../../assets/messagesLight.svg';
 import buddioLogo from '../../assets/buddio-logo.jpg';
 import withoutChat from '../../assets/withoutChatImage2.jpeg';
 import search from '../../assets/searchLight.svg';
+import { Chat } from '../chat';
 
 interface TokenPayload {
   id: string;
 }
 
-
-
 export const Conversations = () => {
   const [conversations, setConversations] = useState([]);
+  const [otherPeopleId, setOtherPeopleId] = useState<string>('');
   const [myId, setMyId] = useState<string>('');
+  const [activeConversation, setActiveConversation] = useState<any>(null);
 
   const token = localStorage.getItem('accessToken');
 
@@ -54,6 +55,39 @@ export const Conversations = () => {
   }, []);
 
   console.log(conversations);
+
+  const fetchChat = async (conversationId: String) => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/conversations/messages/${conversationId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log('aoo fetchChat: ', response.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleOtherPeopleId = (conversation: any) => {
+    const otherParticipant = conversation.participants.find(
+      (participant: any) => participant._id !== myId
+    );
+    if (otherParticipant) {
+      console.log('otherParticipant: ', otherParticipant._id);
+      setOtherPeopleId(otherParticipant._id);
+      return otherParticipant._id;
+    }
+  };
+
+  useEffect(() => {
+    if (activeConversation) {
+      fetchChat(activeConversation);
+    }
+  }, [activeConversation]);
 
   return (
     <div className="flex w-screen h-full bg-[#f3f3f3]">
@@ -127,8 +161,17 @@ export const Conversations = () => {
         </span>
         {conversations.map((conversation: any) => (
           <div
-            key={conversation.id}
-            onClick={() => {console.log(conversation.id)}}
+            key={conversation._id}
+            onClick={() => {
+              if (activeConversation !== conversation._id) {
+                setActiveConversation(null);
+                setTimeout(() => {
+                  setActiveConversation(conversation._id);
+                  handleOtherPeopleId(conversation);
+                  fetchChat(conversation._id);
+                }, 0);
+              }
+            }}
             className="flex  border-b-2 py-2 mx-4 h-18 border-[#e7eaeb] text-black "
           >
             <div className="flex items-center justify-center w-12 mr-2">
@@ -143,9 +186,11 @@ export const Conversations = () => {
             </div>
             <div className="flex flex-col ">
               <span className="font-montserrat font-medium">
-                { conversation.participants.find(
+                {
+                  conversation.participants.find(
                     (participant: any) => participant._id !== myId
-                  ).username}
+                  ).username
+                }
               </span>
               <span className="font-montserrat text-black text-sm truncate w-44 ">
                 {conversation.lastMessage.text}
@@ -154,10 +199,15 @@ export const Conversations = () => {
           </div>
         ))}
       </div>
-
-      <div className="flex flex-grow h-screen items-center justify-center">
-        <img src={withoutChat} className="flex w-full max-h-full " />
-      </div>
+      {activeConversation ? (
+        <div className="flex items-center flex-grow max-h-screen">
+          <Chat chatOtherPeopleId={otherPeopleId} />
+        </div>
+      ) : (
+        <div className="flex flex-grow h-screen items-center justify-center">
+          <img src={withoutChat} className="flex w-full max-h-full " />
+        </div>
+      )}
     </div>
   );
 };

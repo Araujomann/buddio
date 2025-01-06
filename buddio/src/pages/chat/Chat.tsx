@@ -20,6 +20,7 @@ interface Message {
 
 interface ChatProps {
   switchTheme: any;
+  chatOtherPeopleId?: string;
 }
 
 interface User {
@@ -34,7 +35,7 @@ interface TokenPayload {
   id: string;
 }
 
-export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
+export const Chat: React.FC<ChatProps> = ({ switchTheme, chatOtherPeopleId }) => {
   const { receiverId } = useParams<{ receiverId: string }>();
   const [newMessage, setNewMessage] = useState<string>('');
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
@@ -69,6 +70,9 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
     chatBackground3,
   ];
   const [background, setBackground] = useState<string>(wallpapers[0]);
+
+
+  
 
   useEffect(() => {
     if (token) {
@@ -125,8 +129,9 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
   useEffect(() => {
     const fetchMessages = async () => {
       try {
+        const idToUse = chatOtherPeopleId? chatOtherPeopleId : receiverId;
         const conversationResponse = await axios.post(
-          `http://localhost:5000/conversations/${receiverId}`,
+          `http://localhost:5000/conversations/${idToUse}`,
           {},
           {
             headers: {
@@ -136,7 +141,6 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
         );
 
         const { conversationId, startedAt } = conversationResponse.data;
-        console.log(conversationId);
 
         setConversationIdentifier(conversationId);
         setChatStartedAt(startedAt);
@@ -158,8 +162,9 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
 
     const fetchUser = async () => {
       try {
+        const idToUse = chatOtherPeopleId? chatOtherPeopleId : receiverId;
         const user = await axios.get(
-          `http://localhost:5000/profile/${receiverId}`,
+          `http://localhost:5000/profile/${idToUse}`,
           { headers: { Authorization: `Bearer ${token}` } }
         );
         setUser(user.data.user);
@@ -170,8 +175,9 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
 
     const fetchPreferences = async () => {
       try {
+        const idToUse = chatOtherPeopleId? chatOtherPeopleId : receiverId;
         const identifierResponse = await axios.post(
-          `http://localhost:5000/conversations/${receiverId}`,
+          `http://localhost:5000/conversations/${idToUse}`,
           {},
           {
             headers: {
@@ -292,7 +298,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
   };
 
   return (
-    <div className="flex flex-col h-screen w-screen">
+    <div className="relative flex w-full  bg-emerald-600 flex-col h-full">
       {activeMenu && (
         <div
           className="absolute z-10 w-full h-full bg-black/60"
@@ -417,7 +423,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
       {/* Mensagens */}
 
       <div
-        className="flex-col h-full text-sm overflow-y-auto p-4 pb-16 pt-24 space-y-3 scrollbar-hide w-screen bg-cover bg-no-repeat"
+        className="flex-col h-full text-sm overflow-y-auto p-4 pb-16 pt-24 space-y-3 scrollbar-hide w-full bg-cover bg-no-repeat"
         style={{
           backgroundImage: `url(${background})`,
         }}
