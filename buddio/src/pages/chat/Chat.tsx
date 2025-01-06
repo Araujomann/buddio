@@ -4,13 +4,17 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { io, Socket } from 'socket.io-client';
 import { SwitchS } from '../../components';
+import video from '../../assets/video.svg';
+import videoLight from '../../assets/videoLight.svg';
+import call from '../../assets/call.svg';
+import callLight from '../../assets/callLight.svg';
 import darkSend from '../../assets/darkSend.svg';
 import lightSend from '../../assets/lightSend.svg';
 import back from '../../assets/back.svg';
 import clouds from '../../assets/clouds.png';
 import night from '../../assets/night.png';
-
 import ellipsis from '../../assets/ellipsis.svg';
+import ellipsisLight from '../../assets/ellipsisLight.svg';
 
 interface Message {
   senderId: string;
@@ -35,7 +39,10 @@ interface TokenPayload {
   id: string;
 }
 
-export const Chat: React.FC<ChatProps> = ({ switchTheme, chatOtherPeopleId }) => {
+export const Chat: React.FC<ChatProps> = ({
+  switchTheme,
+  chatOtherPeopleId,
+}) => {
   const { receiverId } = useParams<{ receiverId: string }>();
   const [newMessage, setNewMessage] = useState<string>('');
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
@@ -70,9 +77,6 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme, chatOtherPeopleId }) =>
     chatBackground3,
   ];
   const [background, setBackground] = useState<string>(wallpapers[0]);
-
-
-  
 
   useEffect(() => {
     if (token) {
@@ -129,7 +133,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme, chatOtherPeopleId }) =>
   useEffect(() => {
     const fetchMessages = async () => {
       try {
-        const idToUse = chatOtherPeopleId? chatOtherPeopleId : receiverId;
+        const idToUse = chatOtherPeopleId ? chatOtherPeopleId : receiverId;
         const conversationResponse = await axios.post(
           `http://localhost:5000/conversations/${idToUse}`,
           {},
@@ -162,7 +166,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme, chatOtherPeopleId }) =>
 
     const fetchUser = async () => {
       try {
-        const idToUse = chatOtherPeopleId? chatOtherPeopleId : receiverId;
+        const idToUse = chatOtherPeopleId ? chatOtherPeopleId : receiverId;
         const user = await axios.get(
           `http://localhost:5000/profile/${idToUse}`,
           { headers: { Authorization: `Bearer ${token}` } }
@@ -175,7 +179,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme, chatOtherPeopleId }) =>
 
     const fetchPreferences = async () => {
       try {
-        const idToUse = chatOtherPeopleId? chatOtherPeopleId : receiverId;
+        const idToUse = chatOtherPeopleId ? chatOtherPeopleId : receiverId;
         const identifierResponse = await axios.post(
           `http://localhost:5000/conversations/${idToUse}`,
           {},
@@ -385,7 +389,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme, chatOtherPeopleId }) =>
       {/* Header */}
       <div
         className={`absolute w-full flex items-center justify-between  pr-4 py-4 border-b ${
-          darkTheme ? 'bg-black/60' : 'bg-white/40'
+          darkTheme ? 'bg-black/60' : 'bg-white'
         } shadow-lg border-bottom border-white/20 backdrop-blur-md`}
       >
         <div className="flex items-center">
@@ -415,9 +419,17 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme, chatOtherPeopleId }) =>
           </div>
         </div>
 
-        <span className="" onClick={() => setActiveMenu(!activeMenu)}>
-          <img src={ellipsis} />
-        </span>
+        <div className="flex gap-4 items-center justify-center">
+          <span className="" onClick={() => setActiveMenu(!activeMenu)}>
+            <img src={darkTheme? video : videoLight } />
+          </span>
+          <span className="" onClick={() => setActiveMenu(!activeMenu)}>
+            <img src={darkTheme? call : callLight} />
+          </span>
+          <span className="" onClick={() => setActiveMenu(!activeMenu)}>
+            <img src={darkTheme? ellipsis : ellipsisLight}  />
+          </span>
+        </div>
       </div>
 
       {/* Mensagens */}
