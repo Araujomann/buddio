@@ -196,6 +196,14 @@ export const Conversations = () => {
                 {conversation.lastMessage.text}
               </span>
             </div>
+            <div className='flex flex-col items-center justify-start'>
+              <span className="font-semibold text-[#9b9da2] text-xs py-1">
+              {new Date(conversation.lastMessage.timestamp).toLocaleTimeString([], {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
+              </span>
+            </div>
           </div>
         ))}
       </div>
