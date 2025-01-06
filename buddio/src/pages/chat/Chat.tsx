@@ -132,7 +132,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
         const { conversationId, startedAt } = conversationResponse.data;
@@ -147,7 +147,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
         setChatMessages(fetchMessages.data);
@@ -160,7 +160,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
       try {
         const user = await axios.get(
           `http://localhost:5000/profile/${receiverId}`,
-          { headers: { Authorization: `Bearer ${token}` } },
+          { headers: { Authorization: `Bearer ${token}` } }
         );
         setUser(user.data.user);
       } catch (error: any) {
@@ -177,7 +177,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
         const { conversationId } = identifierResponse.data;
         const response = await axios.get(
@@ -186,7 +186,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
         setBackground(response.data.chatBackground);
       } catch (error) {
@@ -218,6 +218,24 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
         ...prevMessages,
         { ...messageToSend },
       ]);
+
+      const sendLastMessage = async () => {
+        try {
+          await axios.post(
+            `http://localhost:5000/conversations/lastMessage`,
+            { conversationId: conversationIdentifier, message: newMessage },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+        } catch (error) {
+          console.error('Erro ao atualizar a ultima mensagem: ', error);
+        }
+      };
+      sendLastMessage();
+
       setNewMessage('');
     }
   };
@@ -264,7 +282,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       return window.location.reload();
@@ -469,7 +487,7 @@ export const Chat: React.FC<ChatProps> = ({ switchTheme }) => {
             onChange={(e) => setNewMessage(e.target.value)}
             placeholder="Type message..."
             className={`flex-1 px-4 py-2 rounded-full w-full ${
-              darkTheme ? 'bg-black' : 'bg-white'
+              darkTheme ? 'bg-black text-white' : 'bg-white text-black'
             } border-none focus:outline-none`}
           />
         </div>

@@ -31,6 +31,7 @@ const routes: RouteObject[] = [
       { path: '/search', element: <Search /> },
       { path: '/profile/:userId', element: <Profile /> },
       { path: '/feed', element: <Feed /> },
+      {path: '/conversations', element: <Conversations />},
       { path: '/register', element: <Register /> },
       { path: '/login', element: <Login /> },
       { path: '/post', element: <Post /> },
