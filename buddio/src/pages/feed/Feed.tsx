@@ -8,6 +8,9 @@ import SearchIcon from '../../assets/searchLight.svg';
 import buddioIcon from '../../assets/buddio-logo.jpg';
 import logoutIcon from '../../assets/logoutLight.svg';
 import messages from '../../assets/messagesLight.svg';
+import empty from '../../assets/emptyFeed.json';
+import Lottie from 'lottie-react';
+
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
@@ -59,6 +62,7 @@ export const Feed: React.FC = () => {
       } catch (error) {
         console.error('Erro ao buscar posts: ', error);
         setIsLoading(false);
+
       }
     };
 
@@ -131,7 +135,13 @@ export const Feed: React.FC = () => {
 
             <div className="flex flex-col mt-8 gap-4  w-40">
               <Link to="/feed">
-                <div className={`flex items-center gap-2 hover:relative mr-4 border-r-4  text-black ${location.pathname === '/feed' ? 'font-bold border-black border-r-4 [filter:drop-shadow(7px_4px_3px_gray)]' : ''}`}>
+                <div
+                  className={`flex items-center gap-2 hover:relative mr-4 border-r-4  text-black ${
+                    location.pathname === '/feed'
+                      ? 'font-bold border-black border-r-4 [filter:drop-shadow(7px_4px_3px_gray)]'
+                      : ''
+                  }`}
+                >
                   <span>
                     <img src={FeedIcon} />
                   </span>
@@ -146,7 +156,7 @@ export const Feed: React.FC = () => {
                   MESSAGES
                 </div>
               </Link>
-              <Link to="/post" className='relative' >
+              <Link to="/post" className="relative">
                 <div className="flex items-center hover:relative   gap-2 hover:mr-4 hover:border-r-4 border-black hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black">
                   <span>
                     <img src={PostIcon} className="size-8" />
@@ -180,12 +190,12 @@ export const Feed: React.FC = () => {
                 LOG OUT
               </div>
             </div>
-          <div className="absolute z-40 bg-gray-300 h-screen w-px right-0" />
+            <div className="absolute z-40 bg-gray-300 h-screen w-px right-0" />
           </div>
         </div>
 
-        <div className="relative z-40 flex flex-col items-center lg:ml-60 lg:pr-60 flex-1 overflow-y-auto">
-          {posts.map((post) => (
+        <div className="relative z-40 flex flex-col items-center  lg:ml-60 lg:pr-96 lg:pl-32 flex-1 overflow-y-auto">
+          {posts.map((post, index) => (
             <Post
               key={post._id}
               author={post.user.username}
@@ -194,8 +204,18 @@ export const Feed: React.FC = () => {
               isLiked={post.isLiked}
               likesCount={post.likesCount}
               onLikeToggle={toggleLike}
+              className={index === 0 ? 'mt-8' : ''}
             />
           ))}
+          {
+          posts.length === 0 && (
+          <div className="flex flex-col items-center justify-center w-full h-full">
+            <Lottie animationData={empty} />
+            <p className="font-montserrat text-xl font-bold text-[#9b9da2]">
+              No one has posted yet
+            </p>
+          </div>
+          )}
         </div>
       </div>
     </>

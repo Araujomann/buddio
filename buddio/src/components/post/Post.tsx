@@ -7,13 +7,14 @@ interface Props {
   postId: string;
   isLiked: boolean;
   likesCount: number;
+  className?: string;
   onLikeToggle: (postId: string, isLiked: boolean) => void;
 }
-export const  Post: React.FC<Props> = ({ img, author, postId, isLiked, likesCount, onLikeToggle }) => {
+export const  Post: React.FC<Props> = ({ img, author, postId, isLiked, likesCount, className , onLikeToggle }) => {
  
  
   return (
-    <div className="bg-white pb-6">
+    <div className={`bg-white pb-6 w-full  ${className} `}>
       <img src={img} className="w-full h-fit" />
       <div className="flex justify-between p-4">
         <span className="text-black flex items-center font-montserrat text-xs font-bold">

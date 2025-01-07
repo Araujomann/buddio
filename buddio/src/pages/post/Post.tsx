@@ -1,18 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { CheckBadgeIcon } from '@heroicons/react/24/solid';
+import Lottie from 'lottie-react';
 
 import plus from '../../assets/plus.svg';
 import aperture from '../../assets/aperture.svg';
 import checkmark from '../../assets/checkmark.svg';
 import close from '../../assets/close.svg';
+import posted from '../../assets/posted.json';
+import error from '../../assets/error.json';
 import { Header, Loader } from '../../components';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 export const Post: React.FC = () => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
   const [postedCheck, setPostedCheck] = useState<boolean>(false);
+  const [errorUpload, setErrorUpload] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const storedToken = localStorage.getItem('accessToken');
@@ -74,12 +79,21 @@ export const Post: React.FC = () => {
           setPostedCheck(true);
           setTimeout(() => {
             setPostedCheck(false);
-          }, 2600);
+            navigate('/feed');
+          }, 1920);
         } else {
           console.error('Erro ao criar o post: ', postResponse.status);
         }
       } catch (error) {
         console.error('Erro ao enviar a imagem: ', error);
+        setLoading(false)
+          setErrorUpload(true);
+          setTimeout(() => {
+            setErrorUpload(false);
+            navigate('/post');
+          }, 3900);
+        
+
       }
     }
   };
@@ -91,19 +105,26 @@ export const Post: React.FC = () => {
   return (
     <>
       <Header />
-
       {loading && (
         <div className="z-20 fixed flex items-center justify-center w-full h-full bg-white">
          <div className="spinner"></div>
         </div>
       )}
-      
+      {errorUpload && (
+        <div className="absolute z-20 inset-0 flex flex-col items-center justify-center  font-montserrat font-medium bg-white">
+        <div className="flex flex-col items-center text-white size-36">
+        <Lottie animationData={error}  />
+        </div>
+          <h2 className="mt-4 text-2xl text-black">Parece que algo deu errado aqui!</h2>
+          <h3 className="mt-1 text-2xl text-black">Vamos voltar para você tentar novamente.</h3>
+      </div>
+      )}
       {postedCheck && (
-        <div className="absolute z-20 inset-0 flex items-center justify-center font-montserrat font-medium bg-black">
-          <div className="flex flex-col items-center text-white">
-            <CheckBadgeIcon className="w-24 h-24 text-[#4CAF50] animate-bounce" />
-            <h2 className="mt-4 text-2xl">Retrato postado!</h2>
+        <div className="absolute z-20 inset-0 flex flex-col items-center justify-center  font-montserrat font-medium bg-white">
+          <div className="flex flex-col items-center text-white size-36">
+          <Lottie animationData={posted}  />
           </div>
+            <h2 className="mt-4 text-2xl text-black ">Retrato postado!</h2>
         </div>
       )}
       <div className="flex items-end bg-white w-screen h-full">
