@@ -120,8 +120,8 @@ export const Feed: React.FC = () => {
             <div className="spinner"></div>
           </div>
         )}
-        <div className="hidden lg:flex flex-how relative">
-          <div className="hidden  lg:flex fixed flex-col border-black items-center left-0 top-0 bottom-0 bg-white w-60">
+        <div className="hidden md:flex flex-how relative  ">
+          <div className="hidden  md:flex fixed flex-col border-black items-center left-0 top-0 bottom-0 bg-white w-60">
             <div className="relative flex px-5">
               <h1 className="text-black font-ptSans font-extrabold text-8xl">
                 B
@@ -194,7 +194,7 @@ export const Feed: React.FC = () => {
           </div>
         </div>
 
-        <div className="relative z-40 flex flex-col items-center md:ml-40 md:pr-40 lg:ml-60 lg:pr-48 xl:ml-60 xl:pr-96 xl:pl-32 flex-1 overflow-y-auto">
+        <div className="relative z-40 flex flex-col items-center md:ml-60 md:pr-40 lg:ml-60 lg:pr-48 xl:ml-60 xl:pr-96 xl:pl-32 flex-1 overflow-y-auto">
           {posts.map((post, index) => (
             <Post
               key={post._id}
