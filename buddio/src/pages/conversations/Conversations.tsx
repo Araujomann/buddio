@@ -168,7 +168,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
       </div>
 
       <div
-        className={`flex md:ml-28  flex-col md:w-1/5  w-full ${
+        className={`flex md:ml-28  flex-col lg:w-1/5  w-full ${
           darkTheme ? 'bg-black border-[#505050]' : 'bg-white  border-[#EEEEEF]'
         }  border-r-2`}
       >
@@ -189,10 +189,16 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
             theme={switchTheme}
           />
         </div>
-        <div className={`border-t-2 ${darkTheme? "border-[#505050]" : "border-[#EEEEEF]"}  `}>
+        <div
+          className={`border-t-2 ${
+            darkTheme ? 'border-[#505050]' : 'border-[#EEEEEF]'
+          }  `}
+        >
           <div
             className={`${
-              darkTheme ? ' text-white border-[#505050]' : 'text-black   border-[#e7eaeb] '
+              darkTheme
+                ? ' text-white border-[#505050]'
+                : 'text-black   border-[#e7eaeb] '
             }  my-4 flex items-center justify-center h-12 border-2 mx-2 px-2 rounded-xl`}
           >
             <img src={darkTheme ? darkSearch : search} className="mr-2" />
@@ -206,7 +212,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
             />
           </div>
         </div>
-        <span className="flex h-6 gap-2 ml-4 mb-1">
+        <span className="flex h-6 gap-2 ml-4 mb-1 ">
           <Lottie animationData={allPeoplesAnimation} />
           <p className="text-[#9b9da2] font-medium">Todas as Mensagens</p>
         </span>
@@ -223,11 +229,13 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                 }, 0);
               }
             }}
-            className={`flex  border-b-2 py-2 mx-4 h-18  ${
-              darkTheme ? ' text-white border-[#505050]' : 'text-black border-[#e7eaeb]'
+            className={`flex border-b-2 py-2 mx-4 h-20   ${
+              darkTheme
+                ? ' text-white border-[#505050]'
+                : 'text-black border-[#e7eaeb]'
             } `}
           >
-            <div className="flex items-center justify-center w-12 mr-2">
+            <div className="flex items-center bg-red-300 justify-center w-12 mr-2">
               <img
                 src={
                   conversation.participants.find(
@@ -237,7 +245,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                 className="w-12 h-12 rounded-full"
               />
             </div>
-            <div className="flex flex-col ">
+            <div className="flex flex-col flex-grow bg-blue-300 ">
               <span className="font-montserrat font-medium">
                 {
                   conversation.participants.find(
@@ -248,12 +256,12 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
               <span
                 className={`font-montserrat ${
                   darkTheme ? ' text-white' : 'text-black'
-                } text-sm truncate w-44 `}
+                } text-sm truncate   `}
               >
                 {conversation.lastMessage.text}
               </span>
             </div>
-            <div className="flex flex-col items-center justify-start">
+            <div className="flex flex-col items-center justify-start minw-6 ">
               <span className="font-semibold text-[#9b9da2] text-xs py-1">
                 {new Date(
                   conversation.lastMessage.timestamp
@@ -267,11 +275,11 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
         ))}
       </div>
       {activeConversation ? (
-        <div className=" flex items-center flex-grow max-h-screen">
+        <div className=" absolute inset-0 xl:static flex items-center flex-grow max-h-screen">
           <Chat chatOtherPeopleId={otherPeopleId} darkTheme={darkTheme} />
         </div>
       ) : (
-        <div className="flex flex-grow h-screen ">
+        <div className="hidden lg:flex flex-grow h-screen ">
           <img
             src={darkTheme ? invertWithoutChat : withoutChat}
             className="flex w-full max-h-full "

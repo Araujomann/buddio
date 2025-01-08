@@ -379,8 +379,8 @@ export const Chat: React.FC<ChatProps> = ({
           darkTheme ? 'bg-black' : 'bg-white'
         } shadow-lg border-bottom border-white/20 backdrop-blur-md`}
       >
-        <div className="flex items-center">
-          <span className="flex h-full" onClick={handleBack}>
+        <div className="flex items-center xl:ml-4">
+          <span className="flex xl:hidden h-full" onClick={handleBack}>
             <img src={back} className='flex' />
           </span>
           <div className="flex items-center">
