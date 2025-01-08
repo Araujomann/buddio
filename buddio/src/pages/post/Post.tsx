@@ -47,6 +47,7 @@ export const Post: React.FC = () => {
     if (selectedImage) {
       const formData = new FormData();
       formData.append('file', selectedImage);
+      
 
       try {
         const uploadResponse = await axios.post(
@@ -60,6 +61,7 @@ export const Post: React.FC = () => {
           },
         );
         const data = uploadResponse.data;
+        console.log("pppppppppppppppp: ", data)
         const imageUrl = data.url;
 
         const postResponse = await axios.post(
@@ -84,8 +86,9 @@ export const Post: React.FC = () => {
         } else {
           console.error('Erro ao criar o post: ', postResponse.status);
         }
-      } catch (error) {
-        console.error('Erro ao enviar a imagem: ', error);
+      } catch (error: any) {
+
+        console.error('Erro ao enviar a imagem: ', error.message);
         setLoading(false)
           setErrorUpload(true);
           setTimeout(() => {
@@ -129,7 +132,7 @@ export const Post: React.FC = () => {
       )}
       <div className="flex items-end bg-white w-screen h-full">
         {selectedImage ? (
-          <div className="absolute flex items-center w-80 lg:w-4/6 xl:w-3/6 xl:pb-6 justify-center inset-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute flex items-center max-w-80 lg:w-4/6 xl:w-3/6 xl:pb-6 justify-center inset-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <div className="border-1 border-gray-300 flex justify-center items-center w-full p-1 pb-3 ">
               <img
                 src={URL.createObjectURL(selectedImage)}

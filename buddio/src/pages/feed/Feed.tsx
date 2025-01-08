@@ -110,7 +110,7 @@ export const Feed: React.FC = () => {
 
   return (
     <>
-      <div className="flex md:hidden">
+      <div className="fixed z-50 md:hidden">
         <Header />
       </div>
 
@@ -194,7 +194,7 @@ export const Feed: React.FC = () => {
           </div>
         </div>
 
-        <div className="relative z-40 flex flex-col items-center  lg:ml-60 lg:pr-96 lg:pl-32 flex-1 overflow-y-auto">
+        <div className="relative z-40 flex flex-col items-center md:ml-40 md:pr-40 lg:ml-60 lg:pr-48 xl:ml-60 xl:pr-96 xl:pl-32 flex-1 overflow-y-auto">
           {posts.map((post, index) => (
             <Post
               key={post._id}
@@ -204,7 +204,7 @@ export const Feed: React.FC = () => {
               isLiked={post.isLiked}
               likesCount={post.likesCount}
               onLikeToggle={toggleLike}
-              className={index === 0 ? 'mt-8' : ''}
+              className={index === 0 ? 'mt-14 md:mt-8 ' : ''}
             />
           ))}
           {

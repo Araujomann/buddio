@@ -14,8 +14,8 @@ export const  Post: React.FC<Props> = ({ img, author, postId, isLiked, likesCoun
  
  
   return (
-    <div className={`bg-white pb-6 w-full  ${className} `}>
-      <img src={img} className="w-full h-fit" />
+    <div className={`bg-white pb-6 w-full ${className} `}>
+      <img src={img} className=" w-fit h-fit md:max-h-svh md:mx-auto" />
       <div className="flex justify-between p-4">
         <span className="text-black flex items-center font-montserrat text-xs font-bold">
           {author}
