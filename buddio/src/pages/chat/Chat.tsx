@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { io, Socket } from 'socket.io-client';
-import { SwitchS } from '../../components';
 import video from '../../assets/video.svg';
 import videoLight from '../../assets/videoLight.svg';
 import call from '../../assets/call.svg';
@@ -23,7 +22,7 @@ interface Message {
 }
 
 interface ChatProps {
-  switchTheme: any;
+ darkTheme: boolean;
   chatOtherPeopleId?: string;
 }
 
@@ -40,8 +39,8 @@ interface TokenPayload {
 }
 
 export const Chat: React.FC<ChatProps> = ({
-  switchTheme,
-  chatOtherPeopleId,
+
+  chatOtherPeopleId, darkTheme
 }) => {
   const { receiverId } = useParams<{ receiverId: string }>();
   const [newMessage, setNewMessage] = useState<string>('');
@@ -56,10 +55,7 @@ export const Chat: React.FC<ChatProps> = ({
   const [isOnline, setIsOnline] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
-  const [darkTheme, setDarkTheme] = useState<boolean>(() => {
-    const savedTheme = localStorage.getItem('darkTheme');
-    return savedTheme === 'dark';
-  });
+ 
   const [selectBackground, setSelectBackground] = useState<number | null>(null);
   const token = localStorage.getItem('accessToken');
   const chatBackground0 =
@@ -126,9 +122,7 @@ export const Chat: React.FC<ChatProps> = ({
     }
   }, [receiverId, chatMessages]);
 
-  useEffect(() => {
-    localStorage.setItem('darkTheme', darkTheme ? 'dark' : 'light');
-  }, [darkTheme]);
+ 
 
   useEffect(() => {
     const fetchMessages = async () => {
@@ -318,14 +312,7 @@ export const Chat: React.FC<ChatProps> = ({
                 backgroundImage: `url(${darkTheme ? night : clouds})`,
               }}
             >
-              <SwitchS
-                onClick={() => {
-                  setDarkTheme(!darkTheme);
-                  console.log(localStorage.getItem('darkTheme'));
-                }}
-                checked={darkTheme}
-                theme={switchTheme}
-              />
+              
             </div>
 
             <div className="flex flex-col items-center justify-center">
@@ -389,12 +376,12 @@ export const Chat: React.FC<ChatProps> = ({
       {/* Header */}
       <div
         className={`absolute w-full flex items-center justify-between  pr-4 py-4 border-b ${
-          darkTheme ? 'bg-black/60' : 'bg-white'
+          darkTheme ? 'bg-black' : 'bg-white'
         } shadow-lg border-bottom border-white/20 backdrop-blur-md`}
       >
         <div className="flex items-center">
           <span className="flex h-full" onClick={handleBack}>
-            <img src={back} />
+            <img src={back} className='flex' />
           </span>
           <div className="flex items-center">
             <img
@@ -503,7 +490,7 @@ export const Chat: React.FC<ChatProps> = ({
             value={newMessage}
             onKeyDown={handleKeyDown}
             onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Type message..."
+            placeholder="Escrever..."
             className={`flex-1 px-4 py-2 rounded-full w-full ${
               darkTheme ? 'bg-black text-white' : 'bg-white text-black'
             } border-none focus:outline-none`}
@@ -512,7 +499,7 @@ export const Chat: React.FC<ChatProps> = ({
 
         <button
           onClick={handleSendMessage}
-          className={`${darkTheme ? 'bg-black' : 'bg-white'} p-3 rounded-full`}
+          className={`${darkTheme ? 'bg-black' : 'bg-white'} p-3  rounded-full`}
         >
           <img src={`${darkTheme ? darkSend : lightSend}`} />
         </button>
