@@ -31,7 +31,7 @@ const routes: RouteObject[] = [
       { path: '/search', element: <Search /> },
       { path: '/profile/:userId', element: <Profile /> },
       { path: '/feed', element: <Feed /> },
-      {path: '/conversations', element: <Conversations />},
+      { path: '/conversations', element: <Conversations /> },
       { path: '/register', element: <Register /> },
       { path: '/login', element: <Login /> },
       { path: '/post', element: <Post /> },
@@ -48,7 +48,7 @@ const route = createBrowserRouter(routes);
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <UserProvider>
-      <RouterProvider router={route} />
+        <RouterProvider router={route} />
     </UserProvider>
   </StrictMode>,
 );

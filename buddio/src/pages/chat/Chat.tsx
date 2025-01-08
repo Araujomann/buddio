@@ -296,7 +296,7 @@ export const Chat: React.FC<ChatProps> = ({
   };
 
   return (
-    <div className="relative flex w-full  bg-emerald-600 flex-col h-full">
+    <div className="flex w-full flex-col h-full">
       {activeMenu && (
         <div
           className="absolute z-10 w-full h-full bg-black/60"
@@ -375,7 +375,7 @@ export const Chat: React.FC<ChatProps> = ({
 
       {/* Header */}
       <div
-        className={`absolute w-full flex items-center justify-between  pr-4 py-4 border-b ${
+        className={`w-full flex items-center justify-between  pr-4 py-4 border-b ${
           darkTheme ? 'bg-black' : 'bg-white'
         } shadow-lg border-bottom border-white/20 backdrop-blur-md`}
       >
