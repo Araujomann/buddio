@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { io, Socket } from 'socket.io-client';
@@ -14,6 +14,7 @@ import clouds from '../../assets/clouds.png';
 import night from '../../assets/night.png';
 import ellipsis from '../../assets/ellipsis.svg';
 import ellipsisLight from '../../assets/ellipsisLight.svg';
+
 
 interface Message {
   senderId: string;
@@ -55,6 +56,8 @@ export const Chat: React.FC<ChatProps> = ({
   const [isOnline, setIsOnline] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+const navigate = useNavigate();
  
   const [selectBackground, setSelectBackground] = useState<number | null>(null);
   const token = localStorage.getItem('accessToken');
@@ -204,8 +207,11 @@ export const Chat: React.FC<ChatProps> = ({
   }, [receiverId, token]);
 
   const handleBack = () => {
-    window.history.back();
-  };
+    setTimeout(() => {
+     setIsLoading(true)
+     window.location.reload();
+   }, 100);
+  }
 
   const handleSendMessage = () => {
     if (socket && newMessage.trim() !== '') {
@@ -295,33 +301,40 @@ export const Chat: React.FC<ChatProps> = ({
     }
   };
 
+
+
   return (
+   
     <div className="flex w-full flex-col h-full">
+      {isLoading && (
+        <div className="z-20 fixed flex items-center justify-center w-full h-full bg-white">
+        <div className="spinner"></div>
+       </div>
+      )}
       {activeMenu && (
         <div
-          className="absolute z-10 w-full h-full bg-black/60"
+          className="absolute z-10  w-full h-full bg-black/60"
           onClick={() => setActiveMenu(false)}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="absolute z-10 top-14 right-10 w-60 h-80 bg-[#383838] rounded-lg shadow-lg"
+            className="absolute z-10 top-14 right-10 xl:right-96 xl:mr-16 w-60 xl:w-2/4 h-80 xl:h-2/4 xl:h bg-[#383838] rounded-lg shadow-lg"
           >
             <div
               className="flex items-center justify-center bg-cover h-20 rounded-t-lg"
               style={{
                 backgroundImage: `url(${darkTheme ? night : clouds})`,
               }}
-            >
+            />
               
-            </div>
-
+          
             <div className="flex flex-col items-center justify-center">
               <div className="w-full h-px bg-slate-200" />
-              <p className="font-montserrat text-xs font-semibold justify-self-center mt-5">
+              <p className="font-montserrat text-xs font-semibold justify-self-center mt-5 xl:text-lg">
                 Plano de fundo dessa conversa:
               </p>
               <div className="flex flex-col gap-2">
-                <div className="flex justify-center gap-1 mt-3 h-36">
+                <div className="flex justify-center gap-1 mt-3 h-36 xl:h-60">
                   {wallpapers.map((wallpaper, index) => (
                     <div
                       key={index}
@@ -355,7 +368,7 @@ export const Chat: React.FC<ChatProps> = ({
                 </div>
 
                 <button
-                  className="flex items-center justify-center rounded-md hover:ring-0 hover:outline-none mx-2 h-8 bg-[#292929] hover:bg-[#181818]"
+                  className="flex items-center justify-center xl:text-lg rounded-md hover:ring-0 hover:outline-none mx-2 h-8 xl:h-14 bg-[#292929] hover:bg-[#181818]"
                   onClick={() => {
                     if (
                       selectBackground !== null &&
@@ -364,7 +377,7 @@ export const Chat: React.FC<ChatProps> = ({
                       updateChatBackground(wallpapers[selectBackground]);
                     }
                   }}
-                >
+                > 
                   Aplicar plano de fundo
                 </button>
               </div>
@@ -407,13 +420,13 @@ export const Chat: React.FC<ChatProps> = ({
         </div>
 
         <div className="flex gap-4 items-center justify-center">
-          <span className="" onClick={() => setActiveMenu(!activeMenu)}>
+          <span  >
             <img src={darkTheme? video : videoLight } />
           </span>
-          <span className="" onClick={() => setActiveMenu(!activeMenu)}>
+          <span  >
             <img src={darkTheme? call : callLight} />
           </span>
-          <span className="" onClick={() => setActiveMenu(!activeMenu)}>
+          <span  onClick={() => setActiveMenu(!activeMenu)}>
             <img src={darkTheme? ellipsis : ellipsisLight}  />
           </span>
         </div>
@@ -434,14 +447,14 @@ export const Chat: React.FC<ChatProps> = ({
           lastDate = messageDate;
 
           return (
-            <div>
+            <div className='md:text-base lg:text-lg xl:text-sm'>
               {showDate && (
                 <div
                   className={`${
                     darkTheme
                       ? 'bg-black/60 font-normal'
                       : 'bg-white/60 text-black font-bold'
-                  } bg-flex mx-auto items-center  py-1 border border-gray-600 px-2 rounded-md w-fit justify-center text-center text-xs  my-4`}
+                  } bg-flex mx-auto items-center  py-1 border border-gray-600 px-2 rounded-md w-fit justify-center text-center text-xs md:text-base  my-4`}
                 >
                   {messageDate}
                 </div>
@@ -449,18 +462,18 @@ export const Chat: React.FC<ChatProps> = ({
 
               <div
                 key={index}
-                className={`flex ${
+                className={`flex lg:justify-end ${
                   msg.senderId === myId ? 'justify-end' : 'justify-start'
                 }`}
               >
                 <div
-                  className={`flex max-w-72 px-4 py-2 gap-0 rounded-2xl break-word  ${
+                  className={`flex max-w-72 xl:max-w-96 px-4 py-2 gap-0 rounded-2xl break-word  ${
                     msg.senderId === myId
                       ? 'bg-[#e0e0e0] text-[#363636] font-semibold rounded-tr-none'
                       : 'bg-[#363636] text-[#e0e0e0] font-semibold rounded-tl-none'
                   }`}
                 >
-                  <p>{msg.message}</p>
+                  <p  >{msg.message}</p>
 
                   <span
                     className={`text-[10px] text-gray-500 flex self-end h-2 `}
@@ -479,6 +492,8 @@ export const Chat: React.FC<ChatProps> = ({
       </div>
 
       {/* Input de mensagem */}
+      <div className='relative'>
+
       <div className="absolute bottom-3 w-full flex items-center gap-2 px-2">
         <div
           className={`w-full flex items-center ${
@@ -503,6 +518,7 @@ export const Chat: React.FC<ChatProps> = ({
         >
           <img src={`${darkTheme ? darkSend : lightSend}`} />
         </button>
+      </div>
       </div>
     </div>
   );

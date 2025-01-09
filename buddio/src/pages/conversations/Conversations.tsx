@@ -168,7 +168,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
       </div>
 
       <div
-        className={`flex md:ml-28  flex-col lg:w-1/5  w-full ${
+        className={`flex md:ml-28  flex-col xl:w-1/5  w-full ${
           darkTheme ? 'bg-black border-[#505050]' : 'bg-white  border-[#EEEEEF]'
         }  border-r-2`}
       >
@@ -229,24 +229,24 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                 }, 0);
               }
             }}
-            className={`flex border-b-2 py-2 mx-4 h-20   ${
+            className={`flex border-b-2 py-2 mx-4 h-20 lg:h-28 xl:h-20  ${
               darkTheme
                 ? ' text-white border-[#505050]'
                 : 'text-black border-[#e7eaeb]'
             } `}
           >
-            <div className="flex items-center bg-red-300 justify-center w-12 mr-2">
+            <div className="flex items-center justify-center ml-2 w-12 mr-2 lg:w-20 lg:h-20 xl:w-12 xl:h-12">
               <img
                 src={
                   conversation.participants.find(
                     (participant: any) => participant._id !== myId
                   ).profileImage
                 }
-                className="w-12 h-12 rounded-full"
+                className="w-12 h-12 lg:w-20 lg:h-20 xl:w-12 xl:h-12 rounded-full"
               />
             </div>
-            <div className="flex flex-col flex-grow bg-blue-300 ">
-              <span className="font-montserrat font-medium">
+            <div className="flex flex-col pt-2 flex-grow">
+              <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
                 {
                   conversation.participants.find(
                     (participant: any) => participant._id !== myId
@@ -256,12 +256,12 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
               <span
                 className={`font-montserrat ${
                   darkTheme ? ' text-white' : 'text-black'
-                } text-sm truncate   `}
+                } text-sm truncate  lg:text-lg xl:text-sm `}
               >
                 {conversation.lastMessage.text}
               </span>
             </div>
-            <div className="flex flex-col items-center justify-start minw-6 ">
+            <div className="flex flex-col items-center justify-start mr-1">
               <span className="font-semibold text-[#9b9da2] text-xs py-1">
                 {new Date(
                   conversation.lastMessage.timestamp
@@ -276,10 +276,10 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
       </div>
       {activeConversation ? (
         <div className=" absolute inset-0 xl:static flex items-center flex-grow max-h-screen">
-          <Chat chatOtherPeopleId={otherPeopleId} darkTheme={darkTheme} />
+          <Chat chatOtherPeopleId={otherPeopleId} darkTheme={darkTheme}  />
         </div>
       ) : (
-        <div className="hidden lg:flex flex-grow h-screen ">
+        <div className="hidden xl:flex flex-grow h-screen ">
           <img
             src={darkTheme ? invertWithoutChat : withoutChat}
             className="flex w-full max-h-full "
