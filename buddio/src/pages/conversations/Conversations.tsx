@@ -12,7 +12,6 @@ import PostIcon from '../../assets/postLight.svg';
 import darkPostIcon from '../../assets/post.svg';
 import SearchIcon from '../../assets/searchLight.svg';
 import darkSearchIcon from '../../assets/search.svg';
-
 import messages from '../../assets/messagesLight.svg';
 import darkMessages from '../../assets/messages.svg';
 import buddioLogo from '../../assets/buddio-logo.jpg';

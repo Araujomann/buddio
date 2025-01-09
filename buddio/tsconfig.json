@@ -3,5 +3,9 @@
   "references": [
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
-  ]
+  ],
+  "compilationOptions": {
+    "resolveJsonModule": true,
+     "esModuleInterop": true,
+   }
 }
