@@ -54,7 +54,7 @@ export const Feed: React.FC = () => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const data = response.data;
         setPosts(data);
@@ -62,7 +62,6 @@ export const Feed: React.FC = () => {
       } catch (error) {
         console.error('Erro ao buscar posts: ', error);
         setIsLoading(false);
-
       }
     };
 
@@ -79,7 +78,7 @@ export const Feed: React.FC = () => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       const updatedPosts = posts.map((post) =>
         post._id === postId
@@ -88,7 +87,7 @@ export const Feed: React.FC = () => {
               isLiked: response.data.isLiked,
               likesCount: response.data.likesCount,
             }
-          : post
+          : post,
       );
 
       setPosts(updatedPosts);
@@ -207,14 +206,13 @@ export const Feed: React.FC = () => {
               className={index === 0 ? 'mt-14 md:mt-8 ' : ''}
             />
           ))}
-          {
-          posts.length === 0 && (
-          <div className="flex flex-col items-center justify-center w-full h-full">
-            <Lottie animationData={empty} />
-            <p className="font-montserrat text-xl font-bold text-[#9b9da2]">
-              No one has posted yet
-            </p>
-          </div>
+          {posts.length === 0 && (
+            <div className="flex flex-col items-center justify-center w-full h-full">
+              <Lottie animationData={empty} />
+              <p className="font-montserrat text-xl font-bold text-[#9b9da2]">
+                No one has posted yet
+              </p>
+            </div>
           )}
         </div>
       </div>

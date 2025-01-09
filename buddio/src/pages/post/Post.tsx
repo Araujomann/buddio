@@ -47,7 +47,6 @@ export const Post: React.FC = () => {
     if (selectedImage) {
       const formData = new FormData();
       formData.append('file', selectedImage);
-      
 
       try {
         const uploadResponse = await axios.post(
@@ -61,7 +60,7 @@ export const Post: React.FC = () => {
           },
         );
         const data = uploadResponse.data;
-        console.log("pppppppppppppppp: ", data)
+        console.log('pppppppppppppppp: ', data);
         const imageUrl = data.url;
 
         const postResponse = await axios.post(
@@ -87,16 +86,13 @@ export const Post: React.FC = () => {
           console.error('Erro ao criar o post: ', postResponse.status);
         }
       } catch (error: any) {
-
         console.error('Erro ao enviar a imagem: ', error.message);
-        setLoading(false)
-          setErrorUpload(true);
-          setTimeout(() => {
-            setErrorUpload(false);
-            navigate('/post');
-          }, 3900);
-        
-
+        setLoading(false);
+        setErrorUpload(true);
+        setTimeout(() => {
+          setErrorUpload(false);
+          navigate('/post');
+        }, 3900);
       }
     }
   };
@@ -110,24 +106,28 @@ export const Post: React.FC = () => {
       <Header />
       {loading && (
         <div className="z-20 fixed flex items-center justify-center w-full h-full bg-white">
-         <div className="spinner"></div>
+          <div className="spinner"></div>
         </div>
       )}
       {errorUpload && (
         <div className="absolute z-20 inset-0 flex flex-col items-center justify-center  font-montserrat font-medium bg-white">
-        <div className="flex flex-col items-center text-white size-36">
-        <Lottie animationData={error}  />
+          <div className="flex flex-col items-center text-white size-36">
+            <Lottie animationData={error} />
+          </div>
+          <h2 className="mt-4 text-2xl text-black">
+            Parece que algo deu errado aqui!
+          </h2>
+          <h3 className="mt-1 text-2xl text-black">
+            Vamos voltar para você tentar novamente.
+          </h3>
         </div>
-          <h2 className="mt-4 text-2xl text-black">Parece que algo deu errado aqui!</h2>
-          <h3 className="mt-1 text-2xl text-black">Vamos voltar para você tentar novamente.</h3>
-      </div>
       )}
       {postedCheck && (
         <div className="absolute z-20 inset-0 flex flex-col items-center justify-center  font-montserrat font-medium bg-white">
           <div className="flex flex-col items-center text-white size-36">
-          <Lottie animationData={posted}  />
+            <Lottie animationData={posted} />
           </div>
-            <h2 className="mt-4 text-2xl text-black ">Retrato postado!</h2>
+          <h2 className="mt-4 text-2xl text-black ">Retrato postado!</h2>
         </div>
       )}
       <div className="flex items-end bg-white w-screen h-full">
@@ -157,13 +157,21 @@ export const Post: React.FC = () => {
                 className="relative flex items-center justify-center bg-white hover:[filter:drop-shadow(0px_-1px_3px_black)] hover:transition-all rounded-full size-20 bottom-10 border-[1px] cursor-pointer"
                 onClick={handleClose}
               >
-                <img src={close} className="size-12 hover:[filter:drop-shadow(0px_-1px_1px_red)]" alt="Submit" />
+                <img
+                  src={close}
+                  className="size-12 hover:[filter:drop-shadow(0px_-1px_1px_red)]"
+                  alt="Submit"
+                />
               </div>
               <div
                 className="relative flex items-center justify-center bg-white hover:[filter:drop-shadow(0px_-1px_3px_black)] hover:transition-all rounded-full size-20 bottom-10 border-[1px] cursor-pointer"
                 onClick={handleSubmit}
               >
-                <img src={checkmark} className="size-12 hover:[filter:drop-shadow(0px_-1px_1px_green)]" alt="Submit" />
+                <img
+                  src={checkmark}
+                  className="size-12 hover:[filter:drop-shadow(0px_-1px_1px_green)]"
+                  alt="Submit"
+                />
               </div>
             </div>
           ) : (

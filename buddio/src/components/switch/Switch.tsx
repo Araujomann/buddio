@@ -52,6 +52,5 @@ export const SwitchS = styled(Switch)(({ theme }: SwitchSProps) => ({
     opacity: 1,
     backgroundColor: theme.palette.mode === 'dark' ? '#c4ac24' : '#c9c9c9',
     borderRadius: 20 / 2,
-   
   },
 }));

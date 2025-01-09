@@ -63,7 +63,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         setConversations(response.data);
       } catch (error) {
@@ -84,7 +84,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
       console.log('aoo fetchChat: ', response.data);
     } catch (error) {
@@ -94,7 +94,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
 
   const handleOtherPeopleId = (conversation: any) => {
     const otherParticipant = conversation.participants.find(
-      (participant: any) => participant._id !== myId
+      (participant: any) => participant._id !== myId,
     );
     if (otherParticipant) {
       console.log('otherParticipant: ', otherParticipant._id);
@@ -239,7 +239,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
               <img
                 src={
                   conversation.participants.find(
-                    (participant: any) => participant._id !== myId
+                    (participant: any) => participant._id !== myId,
                   ).profileImage
                 }
                 className="w-12 h-12 lg:w-20 lg:h-20 xl:w-12 xl:h-12 rounded-full"
@@ -249,7 +249,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
               <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
                 {
                   conversation.participants.find(
-                    (participant: any) => participant._id !== myId
+                    (participant: any) => participant._id !== myId,
                   ).username
                 }
               </span>
@@ -264,7 +264,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
             <div className="flex flex-col items-center justify-start mr-1">
               <span className="font-semibold text-[#9b9da2] text-xs py-1">
                 {new Date(
-                  conversation.lastMessage.timestamp
+                  conversation.lastMessage.timestamp,
                 ).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',
@@ -276,7 +276,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
       </div>
       {activeConversation ? (
         <div className=" absolute inset-0 xl:static flex items-center flex-grow max-h-screen">
-          <Chat chatOtherPeopleId={otherPeopleId} darkTheme={darkTheme}  />
+          <Chat chatOtherPeopleId={otherPeopleId} darkTheme={darkTheme} />
         </div>
       ) : (
         <div className="hidden xl:flex flex-grow h-screen ">

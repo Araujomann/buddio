@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { io, Socket } from 'socket.io-client';
@@ -15,7 +15,6 @@ import night from '../../assets/night.png';
 import ellipsis from '../../assets/ellipsis.svg';
 import ellipsisLight from '../../assets/ellipsisLight.svg';
 
-
 interface Message {
   senderId: string;
   message: string;
@@ -23,7 +22,7 @@ interface Message {
 }
 
 interface ChatProps {
- darkTheme: boolean;
+  darkTheme: boolean;
   chatOtherPeopleId?: string;
 }
 
@@ -39,10 +38,7 @@ interface TokenPayload {
   id: string;
 }
 
-export const Chat: React.FC<ChatProps> = ({
-
-  chatOtherPeopleId, darkTheme
-}) => {
+export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
   const { receiverId } = useParams<{ receiverId: string }>();
   const [newMessage, setNewMessage] = useState<string>('');
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
@@ -57,8 +53,8 @@ export const Chat: React.FC<ChatProps> = ({
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-const navigate = useNavigate();
- 
+  const navigate = useNavigate();
+
   const [selectBackground, setSelectBackground] = useState<number | null>(null);
   const token = localStorage.getItem('accessToken');
   const chatBackground0 =
@@ -125,8 +121,6 @@ const navigate = useNavigate();
     }
   }, [receiverId, chatMessages]);
 
- 
-
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -138,7 +132,7 @@ const navigate = useNavigate();
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         const { conversationId, startedAt } = conversationResponse.data;
@@ -152,7 +146,7 @@ const navigate = useNavigate();
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
 
         setChatMessages(fetchMessages.data);
@@ -166,7 +160,7 @@ const navigate = useNavigate();
         const idToUse = chatOtherPeopleId ? chatOtherPeopleId : receiverId;
         const user = await axios.get(
           `http://localhost:5000/profile/${idToUse}`,
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
         setUser(user.data.user);
       } catch (error: any) {
@@ -184,7 +178,7 @@ const navigate = useNavigate();
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         const { conversationId } = identifierResponse.data;
         const response = await axios.get(
@@ -193,7 +187,7 @@ const navigate = useNavigate();
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          }
+          },
         );
         setBackground(response.data.chatBackground);
       } catch (error) {
@@ -208,10 +202,10 @@ const navigate = useNavigate();
 
   const handleBack = () => {
     setTimeout(() => {
-     setIsLoading(true)
-     window.location.reload();
-   }, 100);
-  }
+      setIsLoading(true);
+      window.location.reload();
+    }, 100);
+  };
 
   const handleSendMessage = () => {
     if (socket && newMessage.trim() !== '') {
@@ -238,7 +232,7 @@ const navigate = useNavigate();
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-            }
+            },
           );
         } catch (error) {
           console.error('Erro ao atualizar a ultima mensagem: ', error);
@@ -292,7 +286,7 @@ const navigate = useNavigate();
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        }
+        },
       );
 
       return window.location.reload();
@@ -301,15 +295,12 @@ const navigate = useNavigate();
     }
   };
 
-
-
   return (
-   
     <div className="flex w-full flex-col h-full">
       {isLoading && (
         <div className="z-20 fixed flex items-center justify-center w-full h-full bg-white">
-        <div className="spinner"></div>
-       </div>
+          <div className="spinner"></div>
+        </div>
       )}
       {activeMenu && (
         <div
@@ -326,8 +317,7 @@ const navigate = useNavigate();
                 backgroundImage: `url(${darkTheme ? night : clouds})`,
               }}
             />
-              
-          
+
             <div className="flex flex-col items-center justify-center">
               <div className="w-full h-px bg-slate-200" />
               <p className="font-montserrat text-xs font-semibold justify-self-center mt-5 xl:text-lg">
@@ -377,7 +367,7 @@ const navigate = useNavigate();
                       updateChatBackground(wallpapers[selectBackground]);
                     }
                   }}
-                > 
+                >
                   Aplicar plano de fundo
                 </button>
               </div>
@@ -394,7 +384,7 @@ const navigate = useNavigate();
       >
         <div className="flex items-center xl:ml-4">
           <span className="flex xl:hidden h-full" onClick={handleBack}>
-            <img src={back} className='flex' />
+            <img src={back} className="flex" />
           </span>
           <div className="flex items-center">
             <img
@@ -420,14 +410,14 @@ const navigate = useNavigate();
         </div>
 
         <div className="flex gap-4 items-center justify-center">
-          <span  >
-            <img src={darkTheme? video : videoLight } />
+          <span>
+            <img src={darkTheme ? video : videoLight} />
           </span>
-          <span  >
-            <img src={darkTheme? call : callLight} />
+          <span>
+            <img src={darkTheme ? call : callLight} />
           </span>
-          <span  onClick={() => setActiveMenu(!activeMenu)}>
-            <img src={darkTheme? ellipsis : ellipsisLight}  />
+          <span onClick={() => setActiveMenu(!activeMenu)}>
+            <img src={darkTheme ? ellipsis : ellipsisLight} />
           </span>
         </div>
       </div>
@@ -447,7 +437,7 @@ const navigate = useNavigate();
           lastDate = messageDate;
 
           return (
-            <div className='md:text-base lg:text-lg xl:text-sm'>
+            <div className="md:text-base lg:text-lg xl:text-sm">
               {showDate && (
                 <div
                   className={`${
@@ -473,7 +463,7 @@ const navigate = useNavigate();
                       : 'bg-[#363636] text-[#e0e0e0] font-semibold rounded-tl-none'
                   }`}
                 >
-                  <p  >{msg.message}</p>
+                  <p>{msg.message}</p>
 
                   <span
                     className={`text-[10px] text-gray-500 flex self-end h-2 `}
@@ -492,33 +482,32 @@ const navigate = useNavigate();
       </div>
 
       {/* Input de mensagem */}
-      <div className='relative'>
+      <div className="relative">
+        <div className="absolute bottom-3 w-full flex items-center gap-2 px-2">
+          <div
+            className={`w-full flex items-center ${
+              darkTheme ? 'bg-black' : 'bg-white'
+            }  p-1 rounded-full`}
+          >
+            <input
+              type="text"
+              value={newMessage}
+              onKeyDown={handleKeyDown}
+              onChange={(e) => setNewMessage(e.target.value)}
+              placeholder="Escrever..."
+              className={`flex-1 px-4 py-2 rounded-full w-full ${
+                darkTheme ? 'bg-black text-white' : 'bg-white text-black'
+              } border-none focus:outline-none`}
+            />
+          </div>
 
-      <div className="absolute bottom-3 w-full flex items-center gap-2 px-2">
-        <div
-          className={`w-full flex items-center ${
-            darkTheme ? 'bg-black' : 'bg-white'
-          }  p-1 rounded-full`}
-        >
-          <input
-            type="text"
-            value={newMessage}
-            onKeyDown={handleKeyDown}
-            onChange={(e) => setNewMessage(e.target.value)}
-            placeholder="Escrever..."
-            className={`flex-1 px-4 py-2 rounded-full w-full ${
-              darkTheme ? 'bg-black text-white' : 'bg-white text-black'
-            } border-none focus:outline-none`}
-          />
+          <button
+            onClick={handleSendMessage}
+            className={`${darkTheme ? 'bg-black' : 'bg-white'} p-3  rounded-full`}
+          >
+            <img src={`${darkTheme ? darkSend : lightSend}`} />
+          </button>
         </div>
-
-        <button
-          onClick={handleSendMessage}
-          className={`${darkTheme ? 'bg-black' : 'bg-white'} p-3  rounded-full`}
-        >
-          <img src={`${darkTheme ? darkSend : lightSend}`} />
-        </button>
-      </div>
       </div>
     </div>
   );
