@@ -12,8 +12,7 @@ import PostIcon from '../../assets/postLight.svg';
 import darkPostIcon from '../../assets/post.svg';
 import SearchIcon from '../../assets/searchLight.svg';
 import darkSearchIcon from '../../assets/search.svg';
-import logoutIcon from '../../assets/logoutLight.svg';
-import darkLogoutIcon from '../../assets/logout.svg';
+
 import messages from '../../assets/messagesLight.svg';
 import darkMessages from '../../assets/messages.svg';
 import buddioLogo from '../../assets/buddio-logo.jpg';
@@ -153,7 +152,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
           <Link to="/search">
             <div className="flex items-center gap-2 hover:mr-4   hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black">
               <span>
-                <img src={darkTheme ? darkSearch : SearchIcon} />
+                <img src={darkTheme ? darkSearchIcon : SearchIcon} />
               </span>
             </div>
           </Link>

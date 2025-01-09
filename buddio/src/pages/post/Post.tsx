@@ -7,7 +7,7 @@ import checkmark from '../../assets/checkmark.svg';
 import close from '../../assets/close.svg';
 import posted from '../../assets/posted.json';
 import error from '../../assets/error.json';
-import { Header, Loader } from '../../components';
+import { Header } from '../../components';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 

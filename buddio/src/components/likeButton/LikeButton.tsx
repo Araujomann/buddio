@@ -10,7 +10,6 @@ interface LikeButtonProps {
 export const LikeButton: React.FC<LikeButtonProps> = ({
   postId,
   isLiked,
-  likesCount,
   onLikeToggle,
 }) => {
   const handleClick = () => {
