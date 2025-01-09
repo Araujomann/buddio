@@ -11,7 +11,6 @@ import logoutIcon from '../../assets/logout.svg';
 import messages from '../../assets/messages.svg';
 
 import { Link } from 'react-router-dom';
-import { Conversations } from '../../pages';
 
 interface Props {
   handleClick: () => void;

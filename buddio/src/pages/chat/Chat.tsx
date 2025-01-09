@@ -22,7 +22,7 @@ interface Message {
 }
 
 interface ChatProps {
-  darkTheme: boolean;
+  darkTheme?: boolean;
   chatOtherPeopleId?: string;
 }
 
@@ -53,7 +53,6 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const navigate = useNavigate();
 
   const [selectBackground, setSelectBackground] = useState<number | null>(null);
   const token = localStorage.getItem('accessToken');

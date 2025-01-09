@@ -24,7 +24,7 @@ import { Chat } from '../chat';
 import { SwitchS } from '../../components';
 
 interface Props {
-  switchTheme: any;
+  switchTheme?: any;
 }
 
 interface TokenPayload {

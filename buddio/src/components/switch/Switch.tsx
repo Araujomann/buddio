@@ -1,7 +1,6 @@
 import { styled } from '@mui/material/styles';
 import Switch from '@mui/material/Switch';
 import { Theme } from '@mui/material/styles';
-import { border } from '@mui/system';
 
 interface SwitchSProps {
   theme: Theme;
