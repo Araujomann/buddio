@@ -5,7 +5,14 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilationOptions": {
-    "resolveJsonModule": true,
-     "esModuleInterop": true,
-   }
+    "compilerOptions": {
+      "resolveJsonModule": true,
+      "esModuleInterop": true,
+      "moduleResolution": "node",
+      "module": "esnext",
+      "allowSyntheticDefaultImports": true,
+      "strict": true
+    },
+    "include": ["src/**/*", "src/assets/**/*"]
+  }
 }
