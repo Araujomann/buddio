@@ -1,5 +1,5 @@
 import { useUser } from '../../context/UserContext';
-import axios from 'axios';
+import { api }from '../../services/api'
 
 export const EmailConfirmation: React.FC = () => {
   const { userData } = useUser();
@@ -7,7 +7,7 @@ export const EmailConfirmation: React.FC = () => {
   const handleResendEmail = async () => {
     try {
       if (userData) {
-        await axios.post('http://localhost:5000/user/resend-email', {
+        await api.post('/user/resend-email', {
           email: userData.email,
           username: userData.username,
         });

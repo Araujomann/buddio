@@ -10,8 +10,8 @@ import logoutIcon from '../../assets/logoutLight.svg';
 import messages from '../../assets/messagesLight.svg';
 import empty from '../../assets/emptyFeed.json';
 import Lottie from 'lottie-react';
+import { api }from '../../services/api'
 
-import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
 
 interface PostData {
@@ -47,8 +47,8 @@ export const Feed: React.FC = () => {
     const fetchPosts = async () => {
       setIsLoading(true);
       try {
-        const response = await axios.get(
-          'http://localhost:5000/feed/posts',
+        const response = await api.get(
+          '/feed/posts',
 
           {
             headers: {
@@ -71,8 +71,8 @@ export const Feed: React.FC = () => {
   const toggleLike = async (postId: string) => {
     try {
       const token = localStorage.getItem('accessToken');
-      const response = await axios.post(
-        `http://localhost:5000/feed/posts/${postId}/like`,
+      const response = await api.post(
+        `/feed/posts/${postId}/like`,
         {},
         {
           headers: {
@@ -98,7 +98,7 @@ export const Feed: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:5000/auth/logout');
+      await api.post('/auth/logout');
       localStorage.removeItem('accessToken');
 
       window.location.href = '/login';

@@ -9,7 +9,8 @@ import checkmark from '../../assets/checkmark.svg';
 import close from '../../assets/close.svg';
 import { Header } from '../../components';
 import { Loader } from '../../components';
-import axios from 'axios';
+import { api }from '../../services/api'
+
 
 export const PhotoSelection: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
@@ -21,8 +22,8 @@ export const PhotoSelection: React.FC = () => {
     location.pathname === '/profile-photo-selection';
 
   const uploadEndpointPhoto = isProfilePhotoSelection
-    ? 'http://localhost:5000/profile/upload-profile'
-    : 'http://localhost:5000/posts/upload';
+    ? `${api}/profile/upload-profile`
+    : `${api}/posts/upload`
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -58,7 +59,7 @@ export const PhotoSelection: React.FC = () => {
       formData.append('file', selectedImage);
 
       try {
-        const uploadResponse = await axios.post(uploadEndpointPhoto, formData, {
+        const uploadResponse = await api.post(uploadEndpointPhoto, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
             Authorization: `Bearer ${token}`,
@@ -69,8 +70,8 @@ export const PhotoSelection: React.FC = () => {
         const imageUrl = data.url;
 
         if (isProfilePhotoSelection) {
-          const updateResponse = await axios.put(
-            'http://localhost:5000/profile/user/update-profile',
+          const updateResponse = await api.put(
+            `${api}/profile/user/update-profile`,
             { imageUrl },
             {
               headers: {

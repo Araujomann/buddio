@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import { api }from '../../services/api'
 import { jwtDecode } from 'jwt-decode';
 import FeedIcon from '../../assets/feed.svg';
 import ProfileIcon from '../../assets/profile.svg';
@@ -39,7 +39,7 @@ export const Options: React.FC<Props> = ({ handleClick }) => {
 
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:5000/auth/logout');
+      await api.post('/auth/logout');
       localStorage.removeItem('accessToken');
 
       window.location.href = '/login';

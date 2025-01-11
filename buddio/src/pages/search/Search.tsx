@@ -2,7 +2,7 @@ import { Header, Footer } from '../../components';
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import withoutImage from '../../assets/withoutPhoto.png';
-import axios from 'axios';
+import { api }from '../../services/api'
 import isFollowing from '../../assets/following.svg';
 import visit from '../../assets/visit.svg';
 
@@ -28,8 +28,8 @@ export const Search: React.FC = () => {
       const token = localStorage.getItem('accessToken');
 
       try {
-        const response = await axios.get(
-          'http://localhost:5000/user/following',
+        const response = await api.get(
+          '/user/following',
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -53,8 +53,8 @@ export const Search: React.FC = () => {
         if (!searchTerm.trim()) return;
         setIsLoading(true);
 
-        const response = await axios.get(
-          `http://localhost:5000/search/users?query=${searchTerm}`,
+        const response = await api.get(
+          `/search/users?query=${searchTerm}`,
           {
             headers: {
               'Content-Type': 'application/json',

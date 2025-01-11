@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import googleIcon from '../../assets/google.png';
 import back from '../../assets/back.svg';
-import axios from 'axios';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { App } from '../../services/googleAuthConfig';
+import { api }from '../../services/api'
+
 const eyeOpen = 'https://img.icons8.com/ios/452/visible.png';
 const eyeClosed =
   'https://img.icons8.com/?size=100&id=121539&format=png&color=000000';
@@ -33,7 +34,7 @@ export const Login: React.FC = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      const response = await axios.post('http://localhost:5000/auth/login', {
+      const response = await api.post('/auth/login', {
         Headers: {
           'Content-Type': 'application/json',
         },
@@ -51,7 +52,7 @@ export const Login: React.FC = () => {
     e.preventDefault();
     console.log('Form:', form);
     try {
-      const response = await axios.post('http://localhost:5000/auth/login', {
+      const response = await api.post('/auth/login', {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -113,7 +114,7 @@ export const Login: React.FC = () => {
       <span className="absolute top-6 left-4" onClick={handleToBack}>
         <img src={back} />
       </span>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center w-[90vw] max-w-[400px] ">
         <h1 className="text-black font-montserrat text-3xl font-medium">
           Login
         </h1>

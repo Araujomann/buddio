@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import { api }from '../../services/api'
+
+
 
 interface FollowButtonProps {
   folllowingUserId: string;
@@ -22,8 +25,8 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
       }
 
       try {
-        const response = await axios.get(
-          `http://localhost:5000/isFollowing/${folllowingUserId}`,
+        const response = await api.get(
+          `/${folllowingUserId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -43,8 +46,8 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
     const token = localStorage.getItem('accessToken');
 
     const url = isFollowing
-      ? `http://localhost:5000/unfollow/${folllowingUserId}`
-      : `http://localhost:5000/follow/${folllowingUserId}`;
+      ? `${api}/unfollow/${folllowingUserId}`
+      : `${api}/follow/${folllowingUserId}`;
 
     try {
       const response = await axios({

@@ -1,4 +1,5 @@
-import axios from 'axios';
+import { api } from '../../services/api';
+
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Link } from 'react-router-dom';
@@ -55,14 +56,11 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
   useEffect(() => {
     const fetchConversations = async () => {
       try {
-        const response = await axios.get(
-          'http://localhost:5000/conversations',
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await api.get('/conversations', {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         setConversations(response.data);
       } catch (error) {
         return console.log(error);
@@ -76,13 +74,13 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
 
   const fetchChat = async (conversationId: String) => {
     try {
-      const response = await axios.get(
-        `http://localhost:5000/conversations/messages/${conversationId}`,
+      const response = await api.get(
+        `/conversations/messages/${conversationId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
       console.log('aoo fetchChat: ', response.data);
     } catch (error) {
@@ -92,7 +90,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
 
   const handleOtherPeopleId = (conversation: any) => {
     const otherParticipant = conversation.participants.find(
-      (participant: any) => participant._id !== myId,
+      (participant: any) => participant._id !== myId
     );
     if (otherParticipant) {
       console.log('otherParticipant: ', otherParticipant._id);
@@ -237,7 +235,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
               <img
                 src={
                   conversation.participants.find(
-                    (participant: any) => participant._id !== myId,
+                    (participant: any) => participant._id !== myId
                   ).profileImage
                 }
                 className="w-12 h-12 lg:w-20 lg:h-20 xl:w-12 xl:h-12 rounded-full"
@@ -247,7 +245,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
               <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
                 {
                   conversation.participants.find(
-                    (participant: any) => participant._id !== myId,
+                    (participant: any) => participant._id !== myId
                   ).username
                 }
               </span>
@@ -262,7 +260,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
             <div className="flex flex-col items-center justify-start mr-1">
               <span className="font-semibold text-[#9b9da2] text-xs py-1">
                 {new Date(
-                  conversation.lastMessage.timestamp,
+                  conversation.lastMessage.timestamp
                 ).toLocaleTimeString([], {
                   hour: '2-digit',
                   minute: '2-digit',

@@ -3,10 +3,10 @@ import googleIcon from '../../assets/google.png';
 import rightArrow from '../../assets/circle-chevron-right.svg';
 import back from '../../assets/back.svg';
 import { toast, Toaster } from 'react-hot-toast';
+import { api }from '../../services/api'
 
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
-import axios from 'axios';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
 import { App } from '../../services/googleAuthConfig';
 
@@ -42,8 +42,8 @@ export const Register: React.FC = () => {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
     try {
-      const response = await axios.post(
-        'http://localhost:5000/user/register',
+      const response = await api.post(
+        '/user/register',
         {
           username: user.displayName,
           email: user.email,
@@ -77,7 +77,7 @@ export const Register: React.FC = () => {
         email: form.email,
       });
 
-      const response = await axios.post('http://localhost:5000/user/register', {
+      const response = await api.post('/user/register', {
         headers: {
           'Content-Type': 'application/json',
         },

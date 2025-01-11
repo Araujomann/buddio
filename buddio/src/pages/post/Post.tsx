@@ -8,7 +8,8 @@ import close from '../../assets/close.svg';
 import posted from '../../assets/posted.json';
 import error from '../../assets/error.json';
 import { Header } from '../../components';
-import axios from 'axios';
+import { api } from '../../services/api';
+
 import { useNavigate } from 'react-router-dom';
 
 export const Post: React.FC = () => {
@@ -49,29 +50,29 @@ export const Post: React.FC = () => {
       formData.append('file', selectedImage);
 
       try {
-        const uploadResponse = await axios.post(
-          'http://localhost:5000/posts/upload',
+        const uploadResponse = await api.post(
+          '/posts/upload',
           formData,
           {
             headers: {
               'Content-Type': 'multipart/form-data',
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
         const data = uploadResponse.data;
         console.log('pppppppppppppppp: ', data);
         const imageUrl = data.url;
 
-        const postResponse = await axios.post(
-          'http://localhost:5000/posts',
+        const postResponse = await api.post(
+          '/posts',
           { imageUrl },
           {
             headers: {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
         if (postResponse.status === 200 || postResponse.status === 201) {

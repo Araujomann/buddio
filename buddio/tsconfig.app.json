@@ -20,5 +20,5 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "src/axios.js"]
+  "include": ["src", "src/services/api.ts"]
 }

@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import { FollowButton, Gallery } from '../../components';
 import { useNavigate, useParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
+import { api }from '../../services/api'
+
 import profileCam from '../../assets/profile-cam.jpg';
 import edit from '../../assets/edit.svg';
 import back from '../../assets/back.svg';
@@ -56,8 +57,8 @@ export const Profile: React.FC = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/profile/${userId}`,
+        const response = await api.get(
+          `/profile/${userId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -78,8 +79,8 @@ export const Profile: React.FC = () => {
   useEffect(() => {
     const fetchLikedPosts = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:5000/posts/${userId}/liked-posts`,
+        const response = await api.get(
+          `/posts/${userId}/liked-posts`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -99,7 +100,7 @@ export const Profile: React.FC = () => {
   useEffect(() => {
     const fetchFollowers = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/followers`, {
+        const response = await api.get(`/followers`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

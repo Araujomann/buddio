@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
+import { api } from '../../services/api';
 import { io, Socket } from 'socket.io-client';
 import video from '../../assets/video.svg';
 import videoLight from '../../assets/videoLight.svg';
@@ -53,7 +53,6 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [activeMenu, setActiveMenu] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-
   const [selectBackground, setSelectBackground] = useState<number | null>(null);
   const token = localStorage.getItem('accessToken');
   const chatBackground0 =
@@ -82,7 +81,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
   }, []);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5000', {
+    const newSocket = io(`${api}`, {
       query: { token },
       transports: ['websocket'],
     });
@@ -124,8 +123,8 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
     const fetchMessages = async () => {
       try {
         const idToUse = chatOtherPeopleId ? chatOtherPeopleId : receiverId;
-        const conversationResponse = await axios.post(
-          `http://localhost:5000/conversations/${idToUse}`,
+        const conversationResponse = await api.post(
+          `/conversations/${idToUse}`,
           {},
           {
             headers: {
@@ -139,8 +138,8 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
         setConversationIdentifier(conversationId);
         setChatStartedAt(startedAt);
 
-        const fetchMessages = await axios.get(
-          `http://localhost:5000/conversations/messages/${conversationId}`,
+        const fetchMessages = await api.get(
+          `/conversations/messages/${conversationId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -157,8 +156,8 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
     const fetchUser = async () => {
       try {
         const idToUse = chatOtherPeopleId ? chatOtherPeopleId : receiverId;
-        const user = await axios.get(
-          `http://localhost:5000/profile/${idToUse}`,
+        const user = await api.get(
+          `/profile/${idToUse}`,
           { headers: { Authorization: `Bearer ${token}` } },
         );
         setUser(user.data.user);
@@ -170,8 +169,8 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
     const fetchPreferences = async () => {
       try {
         const idToUse = chatOtherPeopleId ? chatOtherPeopleId : receiverId;
-        const identifierResponse = await axios.post(
-          `http://localhost:5000/conversations/${idToUse}`,
+        const identifierResponse = await api.post(
+          `/conversations/${idToUse}`,
           {},
           {
             headers: {
@@ -180,8 +179,8 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
           },
         );
         const { conversationId } = identifierResponse.data;
-        const response = await axios.get(
-          `http://localhost:5000/conversations/${conversationId}/preferences`,
+        const response = await api.get(
+          `/conversations/${conversationId}/preferences`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -224,8 +223,8 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
 
       const sendLastMessage = async () => {
         try {
-          await axios.post(
-            `http://localhost:5000/conversations/lastMessage`,
+          await api.post(
+            `/conversations/lastMessage`,
             { conversationId: conversationIdentifier, message: newMessage },
             {
               headers: {
@@ -278,8 +277,8 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
   const updateChatBackground = async (chatBackground: string) => {
     if (background === chatBackground) return;
     try {
-      await axios.put(
-        `http://localhost:5000/conversations/${conversationIdentifier}/chat-background`,
+      await api.put(
+        `/conversations/${conversationIdentifier}/chat-background`,
         { chatBackground },
         {
           headers: {
