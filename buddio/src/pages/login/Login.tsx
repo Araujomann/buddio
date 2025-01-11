@@ -34,7 +34,7 @@ export const Login: React.FC = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
 
-      const response = await api.post('/auth/login', {
+      const response = await api.post('http://localhost:5000/auth/login', {
         Headers: {
           'Content-Type': 'application/json',
         },
@@ -52,7 +52,7 @@ export const Login: React.FC = () => {
     e.preventDefault();
     console.log('Form:', form);
     try {
-      const response = await api.post('/auth/login', {
+      const response = await api.post('http://localhost:5000/auth/login', {
         headers: {
           'Content-Type': 'application/json',
         },
