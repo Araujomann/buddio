@@ -1,9 +1,7 @@
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
-import { api }from '../../services/api'
-
-
+import { api } from '../../services/api';
 
 interface FollowButtonProps {
   folllowingUserId: string;
@@ -25,14 +23,11 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
       }
 
       try {
-        const response = await api.get(
-          `/${folllowingUserId}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
+        const response = await api.get(`/isFollowing/${folllowingUserId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
           },
-        );
+        });
         setIsFollowing(response.data.isFollowing);
       } catch (error) {
         console.error('Erro ao verificar status de follow: ', error);
