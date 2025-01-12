@@ -172,7 +172,7 @@ export const Profile: React.FC = () => {
               <p className="text-sm text-[#9b9b9b] ">biography</p>
             </div>
 
-            {!isOwnProfile && <FollowButton folllowingUserId={userId} />}
+            {!isOwnProfile && <FollowButton followingUserId={userId} />}
           </div>
         </div>
         <div className="mx-4 ">

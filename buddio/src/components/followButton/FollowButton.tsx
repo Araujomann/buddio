@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
+
 import { api } from '../../services/api';
 
 interface FollowButtonProps {
-  folllowingUserId: string;
+  followingUserId: string;
 }
 
 export const FollowButton: React.FC<FollowButtonProps> = ({
-  folllowingUserId,
+  followingUserId,
 }) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
   const [userFollowerId, setUserFollowerId] = useState<string>('');
@@ -23,7 +23,7 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
       }
 
       try {
-        const response = await api.get(`/isFollowing/${folllowingUserId}`, {
+        const response = await api.get(`/isFollowing/${followingUserId}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -35,19 +35,17 @@ export const FollowButton: React.FC<FollowButtonProps> = ({
     };
 
     checkifFollowing();
-  }, [folllowingUserId]);
+  }, [followingUserId]);
 
   const handleFollowToggle = async () => {
     const token = localStorage.getItem('accessToken');
 
-    const url = isFollowing
-      ? `${api}/unfollow/${folllowingUserId}`
-      : `${api}/follow/${folllowingUserId}`;
+ 
 
     try {
-      const response = await axios({
+      const response = await api({
         method: isFollowing ? 'DELETE' : 'POST',
-        url,
+        url: `/follow/${followingUserId}`,
         headers: {
           'Content-Type': 'application/json',
           Authorization: `Bearer ${token}`,
