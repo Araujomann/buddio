@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { useParams } from 'react-router-dom';
+
 import { jwtDecode } from 'jwt-decode';
 import { api } from '../../services/api';
 import { io, Socket } from 'socket.io-client';
@@ -39,7 +39,7 @@ interface TokenPayload {
 }
 
 export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
-  const { receiverId } = useParams<{ receiverId: string }>();
+  const receiverId = chatOtherPeopleId;
   const [newMessage, setNewMessage] = useState<string>('');
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [myId, setMyId] = useState<string>('');
@@ -81,23 +81,40 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
   }, []);
 
   useEffect(() => {
-    const newSocket = io(`${api}`, {
+    const newSocket = io('http://localhost:5000', {
       query: { token },
       transports: ['websocket'],
     });
 
     setSocket(newSocket);
 
+    if (receiverId) {
+      const conversationId = conversationIdentifier;
+      newSocket.emit('joinConversation', conversationId, () => {
+        console.log('Entrou na conversa: ', conversationId);
+      });
+    }
+
     newSocket.on('receiveMessage', (message: Message) => {
       setChatMessages((prevMessages) => [...prevMessages, message]);
     });
 
-    newSocket.on('userOnline', () => {
-      setIsOnline(true);
+    // newSocket.on('userOnline', () => {
+    //   setIsOnline(true);
+    // });
+
+    // newSocket.on('userOffline', () => {
+    //   setIsOnline(false);
+    // });
+
+    newSocket.on('updateOnlineStatus', (status) => {
+      console.log('Status Online: ', status);
+
+      setIsOnline(status.status === 'online');
     });
 
-    newSocket.on('userOffline', () => {
-      setIsOnline(false);
+    newSocket.on('currentOnlineUsers', (onlineUsers) => {
+      console.log('Usuários online:', [...onlineUsers]);
     });
 
     newSocket.on('userTyping', () => {
@@ -109,9 +126,13 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
     });
 
     return () => {
+      if (conversationIdentifier) {
+        newSocket.emit('leaveConversation', conversationIdentifier);
+        console.log('Saiu da conversa: ', conversationIdentifier);
+      }
       newSocket.disconnect();
     };
-  }, [token, receiverId]);
+  }, [token, conversationIdentifier]);
 
   useEffect(() => {
     if (messageEndRef.current) {
@@ -130,7 +151,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
         const { conversationId, startedAt } = conversationResponse.data;
@@ -144,7 +165,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
 
         setChatMessages(fetchMessages.data);
@@ -156,10 +177,9 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
     const fetchUser = async () => {
       try {
         const idToUse = chatOtherPeopleId ? chatOtherPeopleId : receiverId;
-        const user = await api.get(
-          `/profile/${idToUse}`,
-          { headers: { Authorization: `Bearer ${token}` } },
-        );
+        const user = await api.get(`/profile/${idToUse}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
         setUser(user.data.user);
       } catch (error: any) {
         console.error('Erro ao buscar usuário: ', error);
@@ -176,7 +196,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
         const { conversationId } = identifierResponse.data;
         const response = await api.get(
@@ -185,7 +205,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
+          }
         );
         setBackground(response.data.chatBackground);
       } catch (error) {
@@ -230,7 +250,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
               headers: {
                 Authorization: `Bearer ${token}`,
               },
-            },
+            }
           );
         } catch (error) {
           console.error('Erro ao atualizar a ultima mensagem: ', error);
@@ -284,7 +304,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
           headers: {
             Authorization: `Bearer ${token}`,
           },
-        },
+        }
       );
 
       return window.location.reload();
@@ -501,7 +521,9 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
 
           <button
             onClick={handleSendMessage}
-            className={`${darkTheme ? 'bg-black' : 'bg-white'} p-3  rounded-full`}
+            className={`${
+              darkTheme ? 'bg-black' : 'bg-white'
+            } p-3  rounded-full`}
           >
             <img src={`${darkTheme ? darkSend : lightSend}`} />
           </button>

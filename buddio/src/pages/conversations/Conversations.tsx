@@ -70,7 +70,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
     fetchConversations();
   }, []);
 
-  console.log(conversations);
+
 
   const fetchChat = async (conversationId: String) => {
     try {
