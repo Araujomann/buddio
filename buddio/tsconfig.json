@@ -1,18 +1,24 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
-  "compilationOptions": {
-    "compilerOptions": {
-      "resolveJsonModule": true,
-      "esModuleInterop": true,
-      "moduleResolution": "node",
-      "module": "esnext",
-      "allowSyntheticDefaultImports": true,
-      "strict": true
-    },
-    "include": ["src/**/*", "src/assets/**/*"]
-  }
+    "files": [],
+    "references": [
+        { "path": "./tsconfig.app.json" },
+        { "path": "./tsconfig.node.json" }
+    ],
+    "compilationOptions": {
+        "compilerOptions": {
+            "target": "ESNext",
+            "module": "ESNext",
+            "moduleResolution": "Node",
+            "strict": true,
+            "esModuleInterop": true,
+            "allowSyntheticDefaultImports": true,
+            "resolveJsonModule": true,
+            "types": ["vite/client"],
+            "typeRoots": ["./node_modules/@types"] // Se você tiver uma pasta 'types' personalizada
+
+            // Inclua explicitamente o Vite
+        },
+        "include": ["src/**/*", "env.d.ts"],
+        "exclude": ["node_modules"]
+    }
 }
