@@ -11,7 +11,6 @@ import messages from '../../assets/messagesLight.svg';
 import empty from '../../assets/emptyFeed.json';
 import Lottie from 'lottie-react';
 import { api } from '../../services/api';
-
 import { jwtDecode } from 'jwt-decode';
 
 interface PostData {

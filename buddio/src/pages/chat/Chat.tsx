@@ -81,7 +81,8 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
   }, []);
 
   useEffect(() => {
-    const newSocket = io('http://localhost:5000', {
+    
+    const newSocket = io(`${api}`, {
       query: { token },
       transports: ['websocket'],
     });
@@ -470,7 +471,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
 
               <div
                 key={index}
-                className={`flex lg:justify-end ${
+                className={`flex ${
                   msg.senderId === myId ? 'justify-end' : 'justify-start'
                 }`}
               >
