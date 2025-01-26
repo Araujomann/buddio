@@ -200,7 +200,7 @@ export const Feed: React.FC = () => {
                         posts.map((post, index) => (
                             <Post
                                 key={post._id}
-                                author={post.user.username}
+                                author={post.user?.username}    //gambis
                                 img={post.imageUrl}
                                 postId={post._id}
                                 isLiked={post.isLiked}
