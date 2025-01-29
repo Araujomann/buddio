@@ -1,5 +1,4 @@
 import { api } from '../../services/api';
-
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Link } from 'react-router-dom';
@@ -22,266 +21,339 @@ import search from '../../assets/searchLight.svg';
 import darkSearch from '../../assets/search.svg';
 import { Chat } from '../chat';
 import { SwitchS } from '../../components';
+import { div } from 'motion/react-client';
 
 interface Props {
-  switchTheme?: any;
+    switchTheme?: any;
 }
 
 interface TokenPayload {
-  id: string;
+    id: string;
 }
 
 export const Conversations: React.FC<Props> = ({ switchTheme }) => {
-  const [conversations, setConversations] = useState([]);
-  const [otherPeopleId, setOtherPeopleId] = useState<string>('');
-  const [myId, setMyId] = useState<string>('');
-  const [activeConversation, setActiveConversation] = useState<any>(null);
-  const token = localStorage.getItem('accessToken');
-  const [darkTheme, setDarkTheme] = useState<boolean>(() => {
-    const savedTheme = localStorage.getItem('darkTheme');
-    return savedTheme === 'dark';
-  });
+    const [searchResults, setSearchResults] = useState<any>(null);
+    const [searchTerm, setSearchTerm] = useState<string>();
+    const [conversations, setConversations] = useState([]);
+    const [otherPeopleId, setOtherPeopleId] = useState<string>('');
+    const [myId, setMyId] = useState<string>('');
+    const [activeConversation, setActiveConversation] = useState<any>(null);
+    const token = localStorage.getItem('accessToken');
+    const [darkTheme, setDarkTheme] = useState<boolean>(() => {
+        const savedTheme = localStorage.getItem('darkTheme');
+        return savedTheme === 'dark';
+    });
 
-  useEffect(() => {
-    if (token) {
-      const decode = jwtDecode<TokenPayload>(token);
-      setMyId(decode.id);
-    }
-  }, [token]);
+    useEffect(() => {
+        if (token) {
+            const decode = jwtDecode<TokenPayload>(token);
+            setMyId(decode.id);
+        }
+    }, [token]);
 
-  useEffect(() => {
-    localStorage.setItem('darkTheme', darkTheme ? 'dark' : 'light');
-  }, [darkTheme]);
+    useEffect(() => {
+        localStorage.setItem('darkTheme', darkTheme ? 'dark' : 'light');
+    }, [darkTheme]);
 
-  useEffect(() => {
-    const fetchConversations = async () => {
-      try {
-        const response = await api.get('/conversations', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setConversations(response.data);
-      } catch (error) {
-        return console.log(error);
-      }
+    useEffect(() => {
+        const fetchConversations = async () => {
+            try {
+                const response = await api.get('/conversations', {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setConversations(response.data);
+            } catch (error) {
+                return console.log(error);
+            }
+        };
+
+        fetchConversations();
+    }, []);
+
+    const fetchChat = async (conversationId: String) => {
+        try {
+            const response = await api.get(
+                `/conversations/messages/${conversationId}`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            console.log('aoo fetchChat: ', response.data);
+        } catch (error) {
+            console.log(error);
+        }
     };
 
-    fetchConversations();
-  }, []);
-
-
-
-  const fetchChat = async (conversationId: String) => {
-    try {
-      const response = await api.get(
-        `/conversations/messages/${conversationId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+    const handleOtherPeopleId = (conversation: any) => {
+        const otherParticipant = conversation.participants.find(
+            (participant: any) => participant._id !== myId
+        );
+        if (otherParticipant) {
+            console.log('otherParticipant: ', otherParticipant._id);
+            setOtherPeopleId(otherParticipant._id);
+            return otherParticipant._id;
         }
-      );
-      console.log('aoo fetchChat: ', response.data);
-    } catch (error) {
-      console.log(error);
-    }
-  };
+    };
 
-  const handleOtherPeopleId = (conversation: any) => {
-    const otherParticipant = conversation.participants.find(
-      (participant: any) => participant._id !== myId
-    );
-    if (otherParticipant) {
-      console.log('otherParticipant: ', otherParticipant._id);
-      setOtherPeopleId(otherParticipant._id);
-      return otherParticipant._id;
-    }
-  };
-
-  useEffect(() => {
-    if (activeConversation) {
-      fetchChat(activeConversation);
-    }
-  }, [activeConversation]);
-
-  return (
-    <div className={`relative flex w-screen h-full bg-[#f3f3f3]`}>
-      <div
-        className={`hidden md:flex fixed w-28 h-full ${
-          darkTheme ? 'bg-black border-[#505050]' : 'bg-white border-[#EEEEEF]'
-        } border-r-2  `}
-      >
-        <div className="absolute top-0 right-0 left-0 flex items-center justify-center  py-4">
-          <img src={buddioLogo} className="rounded-full size-16" />
-        </div>
-        <div className="flex flex-col h-full items-center justify-center  gap-9 w-full">
-          <Link to="/feed">
-            <div className="flex items-center gap-2 hover:relative hover:mr-4 transition-all">
-              <span>
-                <img src={darkTheme ? darkFeedIcon : FeedIcon} />
-              </span>
-            </div>
-          </Link>
-          <Link to="/conversations">
-            <div
-              className={`flex items-center gap-2  hover:mr-4  ${
-                location.pathname === '/conversations'
-                  ? 'font-bold  [filter:drop-shadow(7px_4px_3px_gray)]'
-                  : ''
-              }   hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black`}
-            >
-              <span>
-                <img src={darkTheme ? darkMessages : messages} />
-              </span>
-            </div>
-          </Link>
-          <Link to="/post" className="relative">
-            <div className="flex items-center hover:relative   gap-2 hover:mr-4   hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black">
-              <span>
-                <img
-                  src={darkTheme ? darkPostIcon : PostIcon}
-                  className="size-8"
-                />
-              </span>
-            </div>
-          </Link>
-          <Link to="/search">
-            <div className="flex items-center gap-2 hover:mr-4   hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black">
-              <span>
-                <img src={darkTheme ? darkSearchIcon : SearchIcon} />
-              </span>
-            </div>
-          </Link>
-          <Link to={`/profile/${myId}`}>
-            <div className="flex items-center gap-2  hover:mr-4  hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black">
-              <span>
-                <img src={darkTheme ? darkProfileIcon : ProfileIcon} />
-              </span>
-            </div>
-          </Link>
-        </div>
-      </div>
-
-      <div
-        className={`flex md:ml-28  flex-col xl:w-1/5  w-full ${
-          darkTheme ? 'bg-black border-[#505050]' : 'bg-white  border-[#EEEEEF]'
-        }  border-r-2`}
-      >
-        <div className="flex items-center justify-between h-20 pl-4 pr-4 font-montserrat">
-          <h1
-            className={`text-2xl font-bold ${
-              darkTheme ? ' text-white' : 'text-black'
-            }`}
-          >
-            Conversas
-          </h1>
-          <SwitchS
-            onClick={() => {
-              setDarkTheme(!darkTheme);
-              console.log(localStorage.getItem('darkTheme'));
-            }}
-            checked={darkTheme}
-            theme={switchTheme}
-          />
-        </div>
-        <div
-          className={`border-t-2 ${
-            darkTheme ? 'border-[#505050]' : 'border-[#EEEEEF]'
-          }  `}
-        >
-          <div
-            className={`${
-              darkTheme
-                ? ' text-white border-[#505050]'
-                : 'text-black   border-[#e7eaeb] '
-            }  my-4 flex items-center justify-center h-12 border-2 mx-2 px-2 rounded-xl`}
-          >
-            <img src={darkTheme ? darkSearch : search} className="mr-2" />
-
-            <input
-              type="text"
-              placeholder="Pesquisar"
-              className={` ${
-                darkTheme ? ' text-white bg-black' : 'text-black bg-white  '
-              } w-full font-montserrat focus:outline-none`}
-            />
-          </div>
-        </div>
-        <span className="flex h-6 gap-2 ml-4 mb-1 ">
-          <Lottie animationData={allPeoplesAnimation} />
-          <p className="text-[#9b9da2] font-medium">Todas as Mensagens</p>
-        </span>
-        {conversations.map((conversation: any) => (
-          <div
-            key={conversation._id}
-            onClick={() => {
-              if (activeConversation !== conversation._id) {
-                setActiveConversation(null);
-                setTimeout(() => {
-                  setActiveConversation(conversation._id);
-                  handleOtherPeopleId(conversation);
-                  fetchChat(conversation._id);
-                }, 0);
-              }
-            }}
-            className={`flex border-b-2 py-2 mx-4 h-20 lg:h-28 xl:h-20  ${
-              darkTheme
-                ? ' text-white border-[#505050]'
-                : 'text-black border-[#e7eaeb]'
-            } `}
-          >
-            <div className="flex items-center justify-center ml-2 w-12 mr-2 lg:w-20 lg:h-20 xl:w-12 xl:h-12">
-              <img
-                src={
-                  conversation.participants.find(
-                    (participant: any) => participant._id !== myId
-                  ).profileImage
-                }
-                className="w-12 h-12 lg:w-20 lg:h-20 xl:w-12 xl:h-12 rounded-full"
-              />
-            </div>
-            <div className="flex flex-col pt-2 flex-grow">
-              <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
+    const searchFollows = async (e: any) => {
+        const search = e.target.value;
+        setSearchTerm(search);
+        try {
+            const response = await api.get(
+                `/conversations/start-chat/${search}`,
                 {
-                  conversation.participants.find(
-                    (participant: any) => participant._id !== myId
-                  ).username
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
                 }
-              </span>
-              <span
-                className={`font-montserrat ${
-                  darkTheme ? ' text-white' : 'text-black'
-                } text-sm truncate  lg:text-lg xl:text-sm `}
-              >
-                {conversation.lastMessage.text}
-              </span>
+            );
+            setSearchResults(response.data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    console.log('searchResults: ', searchResults);
+
+    useEffect(() => {
+        if (activeConversation) {
+            fetchChat(activeConversation);
+        }
+    }, [activeConversation]);
+
+    return (
+        <div className={`relative flex w-screen h-full bg-[#f3f3f3]`}>
+            <div
+                className={`hidden md:flex fixed w-28 h-full ${
+                    darkTheme
+                        ? 'bg-black border-[#505050]'
+                        : 'bg-white border-[#EEEEEF]'
+                } border-r-2  `}
+            >
+                <div className="absolute top-0 right-0 left-0 flex items-center justify-center  py-4">
+                    <img src={buddioLogo} className="rounded-full size-16" />
+                </div>
+                <div className="flex flex-col h-full items-center justify-center  gap-9 w-full">
+                    <Link to="/feed">
+                        <div className="flex items-center gap-2 hover:relative hover:mr-4 transition-all">
+                            <span>
+                                <img
+                                    src={darkTheme ? darkFeedIcon : FeedIcon}
+                                />
+                            </span>
+                        </div>
+                    </Link>
+                    <Link to="/conversations">
+                        <div
+                            className={`flex items-center gap-2  hover:mr-4  ${
+                                location.pathname === '/conversations'
+                                    ? 'font-bold  [filter:drop-shadow(7px_4px_3px_gray)]'
+                                    : ''
+                            }   hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black`}
+                        >
+                            <span>
+                                <img
+                                    src={darkTheme ? darkMessages : messages}
+                                />
+                            </span>
+                        </div>
+                    </Link>
+                    <Link to="/post" className="relative">
+                        <div className="flex items-center hover:relative   gap-2 hover:mr-4   hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black">
+                            <span>
+                                <img
+                                    src={darkTheme ? darkPostIcon : PostIcon}
+                                    className="size-8"
+                                />
+                            </span>
+                        </div>
+                    </Link>
+                    <Link to="/search">
+                        <div className="flex items-center gap-2 hover:mr-4   hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black">
+                            <span>
+                                <img
+                                    src={
+                                        darkTheme ? darkSearchIcon : SearchIcon
+                                    }
+                                />
+                            </span>
+                        </div>
+                    </Link>
+                    <Link to={`/profile/${myId}`}>
+                        <div className="flex items-center gap-2  hover:mr-4  hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black">
+                            <span>
+                                <img
+                                    src={
+                                        darkTheme
+                                            ? darkProfileIcon
+                                            : ProfileIcon
+                                    }
+                                />
+                            </span>
+                        </div>
+                    </Link>
+                </div>
             </div>
-            <div className="flex flex-col items-center justify-start mr-1">
-              <span className="font-semibold text-[#9b9da2] text-xs py-1">
-                {new Date(
-                  conversation.lastMessage.timestamp
-                ).toLocaleTimeString([], {
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
-              </span>
+
+            <div
+                className={`flex md:ml-28  flex-col xl:w-1/5  w-full ${
+                    darkTheme
+                        ? 'bg-black border-[#505050]'
+                        : 'bg-white  border-[#EEEEEF]'
+                }  border-r-2`}
+            >
+                <div className="flex items-center justify-between h-20 pl-4 pr-4 font-montserrat">
+                    <h1
+                        className={`text-2xl font-bold ${
+                            darkTheme ? ' text-white' : 'text-black'
+                        }`}
+                    >
+                        Conversas
+                    </h1>
+                    <SwitchS
+                        onClick={() => {
+                            setDarkTheme(!darkTheme);
+                            console.log(localStorage.getItem('darkTheme'));
+                        }}
+                        checked={darkTheme}
+                        theme={switchTheme}
+                    />
+                </div>
+                <div
+                    className={`relative border-t-2  ${
+                        darkTheme ? 'border-[#505050]' : 'border-[#EEEEEF]'
+                    }  `}
+                >
+                    <div
+                        className={`${
+                            darkTheme
+                                ? ' text-white border-[#505050]'
+                                : 'text-black   border-[#e7eaeb] '
+                        }  my-4 flex items-center justify-center h-12 border-2 mx-2 px-2 rounded-xl`}
+                    >
+                        <img
+                            src={darkTheme ? darkSearch : search}
+                            className="mr-2"
+                        />
+
+                        <input
+                            type="text"
+                            placeholder="Pesquisar"
+                            onChange={searchFollows}
+                            className={` ${
+                                darkTheme
+                                    ? ' text-white bg-black'
+                                    : 'text-black bg-white  '
+                            } w-full font-montserrat focus:outline-none`}
+                        />
+                    </div>
+                    {searchResults && searchTerm && (
+                        <div className="absolute z-30 flex flex-col bg-white  py-4 rounded-lg p-2 inset-x-0.5 mx-4">
+                            <div className="rounded-xl bg-black w-fit px-3 py-1 font-montserrat">
+                                All
+                            </div>
+                            <span className="text-black text-sm py-2 mt-1 font-montserrat">
+                                People
+                            </span>
+                            {searchResults.map((result: any) => (
+                                <div key={result._id} className="flex hover:mr-4  hover:bg-gray-100 hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black py-2 px-2 w-full rounded-lg ">
+                                    <img
+                                        src={result.profileImage}
+                                        className="size-12 rounded-full bg-blue-300"
+                                    />
+                                    <span className="text-black font-semibold ml-2">
+                                        {result.username}
+                                    </span>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
+                <span className="flex h-6 gap-2 ml-4 mb-1 ">
+                    <Lottie animationData={allPeoplesAnimation} />
+                    <p className="text-[#9b9da2] font-medium">
+                        Todas as Mensagens
+                    </p>
+                </span>
+                {conversations.map((conversation: any) => (
+                    <div
+                        key={conversation._id}
+                        onClick={() => {
+                            if (activeConversation !== conversation._id) {
+                                setActiveConversation(null);
+                                setTimeout(() => {
+                                    setActiveConversation(conversation._id);
+                                    handleOtherPeopleId(conversation);
+                                    fetchChat(conversation._id);
+                                }, 0);
+                            }
+                        }}
+                        className={`flex border-b-2 py-2 mx-4 h-20 lg:h-28 xl:h-20  ${
+                            darkTheme
+                                ? ' text-white border-[#505050]'
+                                : 'text-black border-[#e7eaeb]'
+                        } `}
+                    >
+                        <div className="flex items-center justify-center ml-2 w-12 mr-2 lg:w-20 lg:h-20 xl:w-12 xl:h-12">
+                            <img
+                                src={
+                                    conversation.participants.find(
+                                        (participant: any) =>
+                                            participant._id !== myId
+                                    ).profileImage
+                                }
+                                className="w-12 h-12 lg:w-20 lg:h-20 xl:w-12 xl:h-12 rounded-full"
+                            />
+                        </div>
+                        <div className="flex flex-col pt-2 flex-grow">
+                            <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
+                                {
+                                    conversation.participants.find(
+                                        (participant: any) =>
+                                            participant._id !== myId
+                                    ).username
+                                }
+                            </span>
+                            <span
+                                className={`font-montserrat ${
+                                    darkTheme ? ' text-white' : 'text-black'
+                                } text-sm truncate  lg:text-lg xl:text-sm `}
+                            >
+                                {conversation.lastMessage.text}
+                            </span>
+                        </div>
+                        <div className="flex flex-col items-center justify-start mr-1">
+                            <span className="font-semibold text-[#9b9da2] text-xs py-1">
+                                {new Date(
+                                    conversation.lastMessage.timestamp
+                                ).toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })}
+                            </span>
+                        </div>
+                    </div>
+                ))}
             </div>
-          </div>
-        ))}
-      </div>
-      {activeConversation ? (
-        <div className=" absolute inset-0 xl:static flex items-center flex-grow max-h-screen">
-          <Chat chatOtherPeopleId={otherPeopleId} darkTheme={darkTheme} />
+            {activeConversation ? (
+                <div className=" absolute inset-0 xl:static flex items-center flex-grow max-h-screen">
+                    <Chat
+                        chatOtherPeopleId={otherPeopleId}
+                        darkTheme={darkTheme}
+                    />
+                </div>
+            ) : (
+                <div className="hidden xl:flex flex-grow h-screen ">
+                    <img
+                        src={darkTheme ? invertWithoutChat : withoutChat}
+                        className="flex w-full max-h-full "
+                    />
+                </div>
+            )}
         </div>
-      ) : (
-        <div className="hidden xl:flex flex-grow h-screen ">
-          <img
-            src={darkTheme ? invertWithoutChat : withoutChat}
-            className="flex w-full max-h-full "
-          />
-        </div>
-      )}
-    </div>
-  );
+    );
 };
