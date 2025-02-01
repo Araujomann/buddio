@@ -21,7 +21,6 @@ import search from '../../assets/searchLight.svg';
 import darkSearch from '../../assets/search.svg';
 import { Chat } from '../chat';
 import { SwitchS } from '../../components';
-import { div } from 'motion/react-client';
 
 interface Props {
     switchTheme?: any;
@@ -55,6 +54,55 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
         localStorage.setItem('darkTheme', darkTheme ? 'dark' : 'light');
     }, [darkTheme]);
 
+    const createConversation = async (otherPeopleId: string) => {
+        const objectTransform = (originalObject: any) => {
+            const { conversationId, participants, ...restProps } =
+                originalObject;
+
+            const formatedConversation = {
+                _id: conversationId,
+                participants: participants.map((participantId: any) => ({
+                    _id: participantId,
+                })),
+                ...restProps,
+            };
+
+            return formatedConversation;
+        };
+        try {
+            const response = await api.post(
+                `/conversations/${otherPeopleId}`,
+                {},
+                {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }
+            );
+            const conversation = response.data;
+            const formatedConversation = objectTransform(conversation);
+            console.log('Corpo da conversa: ', formatedConversation);
+
+            if (activeConversation !== formatedConversation._id) {
+                setActiveConversation(null);
+                setTimeout(() => {
+                    setActiveConversation(formatedConversation._id);
+                    handleOtherPeopleId(formatedConversation);
+                    fetchChat(formatedConversation._id);
+                }, 0);
+            }
+
+            setActiveConversation(null);
+            setTimeout(() => {
+                setActiveConversation(formatedConversation._id);
+
+                fetchChat(formatedConversation._id);
+            }, 0);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
     useEffect(() => {
         const fetchConversations = async () => {
             try {
@@ -74,15 +122,11 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
 
     const fetchChat = async (conversationId: String) => {
         try {
-            const response = await api.get(
-                `/conversations/messages/${conversationId}`,
-                {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
-                }
-            );
-            console.log('aoo fetchChat: ', response.data);
+            await api.get(`/conversations/messages/${conversationId}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            });
         } catch (error) {
             console.log(error);
         }
@@ -93,7 +137,6 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
             (participant: any) => participant._id !== myId
         );
         if (otherParticipant) {
-            console.log('otherParticipant: ', otherParticipant._id);
             setOtherPeopleId(otherParticipant._id);
             return otherParticipant._id;
         }
@@ -116,8 +159,6 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
             console.log(error);
         }
     };
-
-    console.log('searchResults: ', searchResults);
 
     useEffect(() => {
         if (activeConversation) {
@@ -252,20 +293,47 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                         />
                     </div>
                     {searchResults && searchTerm && (
-                        <div className="absolute z-30 flex flex-col bg-white  py-4 rounded-lg p-2 inset-x-0.5 mx-4">
-                            <div className="rounded-xl bg-black w-fit px-3 py-1 font-montserrat">
+                        <div
+                            className={` ${
+                                darkTheme
+                                    ? ' text-white bg-black border-[#505050]'
+                                    : 'text-black bg-white  '
+                            } absolute z-30 flex flex-col border py-4 rounded-lg p-2 inset-x-0 mx-4`}
+                        >
+                            <div
+                                className={`${
+                                    darkTheme
+                                        ? ' text-white bg-black border border-[#505050] ' 
+                                        : 'text-white bg-black  '
+                                } rounded-xl w-fit px-3 py-1 font-montserrat`}
+                            >
                                 All
                             </div>
-                            <span className="text-black text-sm py-2 mt-1 font-montserrat">
+                            <span className=" text-sm py-2 mt-1 font-montserrat">
                                 People
                             </span>
+                            {searchResults.length === 0 && (
+                                <span className="text-sm text-center font-montserrat my-2">
+                                    Nenhum resultado encontrado
+                                </span>
+                            )}
                             {searchResults.map((result: any) => (
-                                <div key={result._id} className="flex hover:mr-4  hover:bg-gray-100 hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black py-2 px-2 w-full rounded-lg ">
+                                <div
+                                    key={result._id}
+                                    className={`flex hover:mr-4  ${darkTheme? 'hover:bg-black/90 hover:[filter:drop-shadow(3px_2px_4px_gray)]': 'hover:bg-gray-100 hover:[filter:drop-shadow(3px_4px_3px_gray)]'} transition-all text-black py-2 px-2 w-full rounded-lg`}
+                                    onClick={() => {
+                                        createConversation(result._id);
+                                    }}
+                                >
                                     <img
                                         src={result.profileImage}
                                         className="size-12 rounded-full bg-blue-300"
                                     />
-                                    <span className="text-black font-semibold ml-2">
+                                    <span className={` ${
+                                    darkTheme
+                                        ? ' text-white  ' 
+                                        : 'text-black  '
+                                }  font-semibold ml-2`}>
                                         {result.username}
                                     </span>
                                 </div>
@@ -273,9 +341,9 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                         </div>
                     )}
                 </div>
-                <span className="flex h-6 gap-2 ml-4 mb-1 ">
+                <span className="flex h-5 gap-2 ml-4 mb-1 ">
                     <Lottie animationData={allPeoplesAnimation} />
-                    <p className="text-[#9b9da2] font-medium">
+                    <p className="text-[#9b9da2] font-medium font-montserrat text-sm">
                         Todas as Mensagens
                     </p>
                 </span>
