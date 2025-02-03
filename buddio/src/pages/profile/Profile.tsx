@@ -43,7 +43,7 @@ export const Profile: React.FC = () => {
     const [followers, setFollowers] = useState<User[]>([]);
     const [removeFollower, setRemoveFollower] = useState<boolean>(false);
     const navigate = useNavigate();
-
+    const isOwnProfile = userId === myProfileId && myProfileId !== '';
     const token = localStorage.getItem('accessToken');
 
     useEffect(() => {
@@ -55,8 +55,6 @@ export const Profile: React.FC = () => {
         }
     }, []);
     console.log('token: ', myProfileId);
-
-    const isOwnProfile = userId === myProfileId && myProfileId !== '';
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -128,9 +126,8 @@ export const Profile: React.FC = () => {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
-            })
+            });
             console.log('response', response);
-       
         } catch (error) {
             console.error('Erro ao remover user: ', error);
         }
@@ -250,6 +247,8 @@ export const Profile: React.FC = () => {
                                 Curtidas
                             </h2>
                         </span>
+                        {isOwnProfile && (
+
                         <span
                             className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
                                 activeSection === 'Seguidores'
@@ -268,6 +267,7 @@ export const Profile: React.FC = () => {
                                 Seguidores
                             </h2>
                         </span>
+                        )}
                     </div>
 
                     {activeSection === 'Galeria' && (
@@ -353,9 +353,14 @@ export const Profile: React.FC = () => {
                                                     Cancelar
                                                 </button>
                                                 <button
-                                                    onClick={() =>
-                                                        handleFollowerRemove(follower._id)
-                                                    }
+                                                    onClick={() => {
+                                                        handleFollowerRemove(
+                                                            follower._id
+                                                        );
+                                                        setRemoveFollower(
+                                                            false
+                                                        );
+                                                    }}
                                                     className="text-white focus:outline-none"
                                                 >
                                                     Remover
