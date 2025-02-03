@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import Lottie from 'lottie-react';
-
 import plus from '../../assets/plus.svg';
 import aperture from '../../assets/aperture.svg';
 import checkmark from '../../assets/checkmark.svg';
@@ -9,8 +8,8 @@ import posted from '../../assets/posted.json';
 import error from '../../assets/error.json';
 import { Header } from '../../components';
 import { api } from '../../services/api';
-
 import { useNavigate } from 'react-router-dom';
+import { Tooltip } from '@mui/material';
 
 export const Post: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -139,7 +138,7 @@ export const Post: React.FC = () => {
                     <span className="absolute flex flex-col text-center items-center justify-center inset-0 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                         <img src={aperture} className="size-32" />
                         <p className="font-montserrat text-xl font-bold text-[#A9A9A9]">
-                            click on '+' to select a photo.
+                            Clique no '+' para selecionar um retrato.
                         </p>
                     </span>
                 )}
@@ -169,6 +168,15 @@ export const Post: React.FC = () => {
                             </div>
                         </div>
                     ) : (
+                        <Tooltip title="Selecionar" arrow placement='top' slotProps={{ popper: { modifiers: [
+                            {
+                              name: "offset",
+                              options: {
+                                offset: [0, -12], // Ajuste a distância aqui (X, Y)
+                              },
+                            },
+                          ]}}} >
+
                         <div
                             className="relative flex items-center justify-center bg-white rounded-full size-20 bottom-10 border-[1px] cursor-pointer"
                             onClick={handleClick}
@@ -182,6 +190,7 @@ export const Post: React.FC = () => {
                                 onChange={handleFileChange}
                             />
                         </div>
+                          </Tooltip>
                     )}
                 </div>
             </div>

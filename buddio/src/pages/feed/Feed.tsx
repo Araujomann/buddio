@@ -118,13 +118,15 @@ export const Feed: React.FC = () => {
                         <div className="spinner"></div>
                     </div>
                 )}
+            
                 <div className="hidden md:flex flex-how relative  ">
+                    
                     <div className="hidden  md:flex fixed flex-col border-black items-center left-0 top-0 bottom-0 bg-white w-60">
                         <div className="relative flex px-5">
                             <h1 className="text-black font-ptSans font-extrabold text-8xl">
                                 B
                             </h1>
-
+        
                             <img
                                 src={buddioIcon}
                                 className="absolute rounded-full size-5 animate-spinSlow bottom-4 p-px bg-black right-0"

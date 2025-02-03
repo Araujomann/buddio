@@ -7,6 +7,11 @@ import profileCam from '../../assets/profile-cam.jpg';
 import edit from '../../assets/edit.svg';
 import back from '../../assets/back.svg';
 import remove from '../../assets/remove.svg';
+import { Tooltip } from '@mui/material';
+import { Dialog } from '@mui/material';
+import { DialogContent } from '@mui/material';
+import { DialogContentText } from '@mui/material';
+import { DialogActions } from '@mui/material';
 
 interface User {
     _id: string;
@@ -26,16 +31,17 @@ interface TokenPayload {
     id: string;
 }
 
-type Section = 'gallery' | 'likes' | 'followers';
+type Section = 'Galeria' | 'Curtidas' | 'Seguidores';
 
 export const Profile: React.FC = () => {
     const { userId = '' } = useParams();
     const [myProfileId, setMyProfileId] = useState<string>('');
     const [user, setUser] = useState<User | null>(null);
     const [posts, setPosts] = useState<Post[]>([]);
-    const [activeSection, setActiveSection] = useState<Section>('gallery');
+    const [activeSection, setActiveSection] = useState<Section>('Galeria');
     const [likedPosts, setLikedPosts] = useState<Post[]>([]);
     const [followers, setFollowers] = useState<User[]>([]);
+    const [removeFollower, setRemoveFollower] = useState<boolean>(false);
     const navigate = useNavigate();
 
     const token = localStorage.getItem('accessToken');
@@ -86,7 +92,7 @@ export const Profile: React.FC = () => {
             }
         };
 
-        if (activeSection === 'likes') fetchLikedPosts();
+        if (activeSection === 'Curtidas') fetchLikedPosts();
     }, [activeSection]);
 
     useEffect(() => {
@@ -105,7 +111,7 @@ export const Profile: React.FC = () => {
             }
         };
 
-        if (activeSection === 'followers') fetchFollowers();
+        if (activeSection === 'Seguidores') fetchFollowers();
     }, [activeSection]);
 
     const handleBack = () => {
@@ -114,6 +120,20 @@ export const Profile: React.FC = () => {
 
     const handleEdit = () => {
         navigate('/profile-photo-selection');
+    };
+
+    const handleFollowerRemove = async (id: string) => {
+        try {
+            const response = await api.delete(`/removeFollow/${id}`, {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            console.log('response', response);
+       
+        } catch (error) {
+            console.error('Erro ao remover user: ', error);
+        }
     };
 
     if (!user) return <h2>carregando perfil...</h2>;
@@ -133,12 +153,30 @@ export const Profile: React.FC = () => {
                     {user?.profileImage ? (
                         <div className="relative flex items-center justify-center rounded-full">
                             {isOwnProfile && (
-                                <span
-                                    className="absolute right-0 bottom-0 p-2 cursor-pointer bg-black rounded-full "
-                                    onClick={handleEdit}
+                                <Tooltip
+                                    title="Alterar foto de perfil"
+                                    arrow
+                                    placement="right-end"
+                                    slotProps={{
+                                        popper: {
+                                            modifiers: [
+                                                {
+                                                    name: 'offset',
+                                                    options: {
+                                                        offset: [6, -8], // Ajuste a distância aqui (X, Y)
+                                                    },
+                                                },
+                                            ],
+                                        },
+                                    }}
                                 >
-                                    <img src={edit} />
-                                </span>
+                                    <span
+                                        className="absolute block right-0 bottom-0 p-2 cursor-pointer bg-black rounded-full "
+                                        onClick={handleEdit}
+                                    >
+                                        <img src={edit} />
+                                    </span>
+                                </Tooltip>
                             )}
                             <img
                                 src={user.profileImage}
@@ -178,15 +216,15 @@ export const Profile: React.FC = () => {
                     <div className="flex ">
                         <span
                             className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
-                                activeSection === 'gallery'
+                                activeSection === 'Galeria'
                                     ? ' border-black'
                                     : 'border-[#9b9b9b]'
                             }`}
-                            onClick={() => setActiveSection('gallery')}
+                            onClick={() => setActiveSection('Galeria')}
                         >
                             <h2
                                 className={`font-montserrat font-semibold text-sm ${
-                                    activeSection === 'gallery'
+                                    activeSection === 'Galeria'
                                         ? ' text-black'
                                         : 'text-[#9b9b9b]'
                                 } `}
@@ -196,53 +234,53 @@ export const Profile: React.FC = () => {
                         </span>
                         <span
                             className={`  flex w-fit px-2 py-2 border-solid border-t-4  ${
-                                activeSection === 'likes'
+                                activeSection === 'Curtidas'
                                     ? ' border-black'
                                     : 'border-[#9b9b9b]'
                             }`}
-                            onClick={() => setActiveSection('likes')}
+                            onClick={() => setActiveSection('Curtidas')}
                         >
                             <h2
                                 className={`font-montserrat font-semibold text-sm ${
-                                    activeSection === 'likes'
+                                    activeSection === 'Curtidas'
                                         ? ' text-black'
                                         : 'text-[#9b9b9b]'
                                 }`}
                             >
-                                Likes
+                                Curtidas
                             </h2>
                         </span>
                         <span
                             className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
-                                activeSection === 'followers'
+                                activeSection === 'Seguidores'
                                     ? ' border-black'
                                     : 'border-[#9b9b9b]'
                             }`}
-                            onClick={() => setActiveSection('followers')}
+                            onClick={() => setActiveSection('Seguidores')}
                         >
                             <h2
                                 className={`font-montserrat font-semibold text-sm ${
-                                    activeSection === 'followers'
+                                    activeSection === 'Seguidores'
                                         ? ' text-black'
                                         : 'text-[#9b9b9b]'
                                 } `}
                             >
-                                Followers
+                                Seguidores
                             </h2>
                         </span>
                     </div>
 
-                    {activeSection === 'gallery' && (
+                    {activeSection === 'Galeria' && (
                         <Gallery images={posts.map((post) => post.imageUrl)} />
                     )}
-                    {activeSection === 'likes' && (
+                    {activeSection === 'Curtidas' && (
                         <Gallery
                             images={likedPosts.map(
                                 (likedPost) => likedPost.imageUrl
                             )}
                         />
                     )}
-                    {activeSection === 'followers' && (
+                    {activeSection === 'Seguidores' && (
                         <div className="flex flex-col gap-2 mt-4 ">
                             {followers.map((follower, index) => (
                                 <div
@@ -261,9 +299,70 @@ export const Profile: React.FC = () => {
                                         </div>
                                     </div>
 
-                                    <span>
-                                        <img src={remove} />
-                                    </span>
+                                    <Tooltip
+                                        title="Remover"
+                                        arrow
+                                        placement="left"
+                                        slotProps={{
+                                            popper: {
+                                                modifiers: [
+                                                    {
+                                                        name: 'offset',
+                                                        options: {
+                                                            offset: [0, -6], // Ajuste a distância aqui (X, Y)
+                                                        },
+                                                    },
+                                                ],
+                                            },
+                                        }}
+                                    >
+                                        <div
+                                            className="cursor-pointer"
+                                            onClick={() =>
+                                                setRemoveFollower(true)
+                                            }
+                                        >
+                                            <img
+                                                src={remove}
+                                                className="w-full h-full"
+                                            />
+                                        </div>
+                                    </Tooltip>
+
+                                    {setRemoveFollower && (
+                                        <Dialog
+                                            open={removeFollower}
+                                            onClose={() =>
+                                                setRemoveFollower(false)
+                                            }
+                                        >
+                                            <DialogContent>
+                                                <DialogContentText>
+                                                    Deseja realmente remover{' '}
+                                                    {follower.username} de seus
+                                                    seguidores?
+                                                </DialogContentText>
+                                            </DialogContent>
+                                            <DialogActions>
+                                                <button
+                                                    onClick={() =>
+                                                        setRemoveFollower(false)
+                                                    }
+                                                    className="text-white focus:outline-none"
+                                                >
+                                                    Cancelar
+                                                </button>
+                                                <button
+                                                    onClick={() =>
+                                                        handleFollowerRemove(follower._id)
+                                                    }
+                                                    className="text-white focus:outline-none"
+                                                >
+                                                    Remover
+                                                </button>
+                                            </DialogActions>
+                                        </Dialog>
+                                    )}
                                 </div>
                             ))}
                         </div>

@@ -1,4 +1,6 @@
 import * as motion from 'motion/react-client';
+import { Tooltip } from '@mui/material';
+
 
 interface LikeButtonProps {
   postId: string;
@@ -24,6 +26,14 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
   };
 
   return (
+    <Tooltip title={isLiked? "Descurtir": "Curtir"} slotProps={{ popper: { modifiers: [
+      {
+        name: "offset",
+        options: {
+          offset: [0, -10], // Ajuste a distância aqui (X, Y)
+        },
+      },
+    ]}}}>
     <span
       onClick={handleClick}
       className="w-full flex items-center justify-start focus:outline-none"
@@ -41,5 +51,6 @@ export const LikeButton: React.FC<LikeButtonProps> = ({
         />
       </motion.svg>
     </span>
+  </Tooltip>
   );
 };
