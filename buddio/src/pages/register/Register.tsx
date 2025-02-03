@@ -155,7 +155,7 @@ export const Register: React.FC = () => {
       <span className="absolute top-6 left-4" onClick={handleToBack}>
         <img src={back} />
       </span>
-      <div className="flex flex-col items-center">
+      <div className="flex flex-col items-center w-[90vw] max-w-[300px]">
         <h1 className="text-black font-montserrat text-3xl font-medium">
           Create Your Acount
         </h1>

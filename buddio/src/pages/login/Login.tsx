@@ -114,7 +114,7 @@ export const Login: React.FC = () => {
       <span className="absolute top-6 left-4" onClick={handleToBack}>
         <img src={back} />
       </span>
-      <div className="flex flex-col items-center w-[90vw] max-w-[400px] ">
+      <div className="flex flex-col items-center w-[90vw] max-w-[300px] ">
         <h1 className="text-black font-montserrat text-3xl font-medium">
           Login
         </h1>
@@ -137,7 +137,7 @@ export const Login: React.FC = () => {
           <div className="w-full h-px bg-gray-200"></div>
         </div>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className='w-[90vw] max-w-[300px]'>
           <div>
             <label htmlFor="email" className="text-black font-medium  text-sm">
               Email

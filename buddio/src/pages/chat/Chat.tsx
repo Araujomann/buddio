@@ -82,7 +82,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
 
   useEffect(() => {
     
-    const newSocket = io('https://buddio-backend-production.up.railway.app', {  // Trocar pro endereço do servidor em produção
+    const newSocket = io('http://localhost:5000', {  // Trocar pro endereço do servidor em produção
       query: { token },
       transports: ['websocket'],
     });
@@ -97,16 +97,10 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
     }
 
     newSocket.on('receiveMessage', (message: Message) => {
+      console.log('Data da mensagem socket:', message.timestamp);
+  
       setChatMessages((prevMessages) => [...prevMessages, message]);
     });
-
-    // newSocket.on('userOnline', () => {
-    //   setIsOnline(true);
-    // });
-
-    // newSocket.on('userOffline', () => {
-    //   setIsOnline(false);
-    // });
 
     newSocket.on('updateOnlineStatus', (status) => {
       console.log('Status Online: ', status);
@@ -142,7 +136,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
   }, [receiverId, chatMessages]);
 
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchConversation = async () => {
       try {
         const idToUse = chatOtherPeopleId ? chatOtherPeopleId : receiverId;
         const conversationResponse = await api.post(
@@ -168,6 +162,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
             },
           }
         );
+        console.log('Data das mensagens API:', fetchMessages.data[0]?.timestamp);
 
         setChatMessages(fetchMessages.data);
       } catch (error: any) {
@@ -215,7 +210,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
     };
 
     fetchUser();
-    fetchMessages();
+    fetchConversation();
     fetchPreferences();
   }, [receiverId, token]);
 
@@ -237,11 +232,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
       };
       socket.emit('sendMessage', messageToSend);
 
-      setChatMessages((prevMessages) => [
-        ...prevMessages,
-        { ...messageToSend },
-      ]);
-
+    
       const sendLastMessage = async () => {
         try {
           await api.post(
@@ -273,6 +264,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
   const isToday = (dateString: string) => {
     const today = new Date();
     const date = new Date(dateString);
+
     return (
       date.getDate() === today.getDate() &&
       date.getMonth() === today.getMonth() &&
