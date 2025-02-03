@@ -33,6 +33,7 @@ interface TokenPayload {
 export const Conversations: React.FC<Props> = ({ switchTheme }) => {
     const [searchResults, setSearchResults] = useState<any>(null);
     const [searchTerm, setSearchTerm] = useState<string>();
+    const [searchedChat, setSearchedChat] = useState<boolean>(false);
     const [conversations, setConversations] = useState([]);
     const [otherPeopleId, setOtherPeopleId] = useState<string>('');
     const [myId, setMyId] = useState<string>('');
@@ -297,14 +298,16 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                             className={` ${
                                 darkTheme
                                     ? ' text-white bg-black border-[#505050]'
-                                    : 'text-black bg-white  '
-                            } absolute z-30 flex flex-col border py-4 rounded-lg p-2 inset-x-0 mx-4`}
+                                    : 'text-black bg-white'
+                            } absolute ${
+                                searchedChat ? 'hidden lg:block' : ''
+                            } z-30 flex flex-col border py-4 rounded-lg p-2 inset-x-0 mx-4`}
                         >
                             <div
                                 className={`${
                                     darkTheme
-                                        ? ' text-white bg-black border border-[#505050] ' 
-                                        : 'text-white bg-black  '
+                                        ? ' text-white bg-black border border-[#505050] '
+                                        : 'text-white bg-black'
                                 } rounded-xl w-fit px-3 py-1 font-montserrat`}
                             >
                                 All
@@ -320,20 +323,27 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                             {searchResults.map((result: any) => (
                                 <div
                                     key={result._id}
-                                    className={`flex hover:mr-4  ${darkTheme? 'hover:bg-black/90 hover:[filter:drop-shadow(3px_2px_4px_gray)]': 'hover:bg-gray-100 hover:[filter:drop-shadow(3px_4px_3px_gray)]'} transition-all text-black py-2 px-2 w-full rounded-lg`}
+                                    className={`flex hover:mr-4  ${
+                                        darkTheme
+                                            ? 'hover:bg-black/90 hover:[filter:drop-shadow(3px_2px_4px_gray)]'
+                                            : 'hover:bg-gray-100 hover:[filter:drop-shadow(3px_4px_3px_gray)]'
+                                    } transition-all text-black py-2 px-2 w-full rounded-lg`}
                                     onClick={() => {
                                         createConversation(result._id);
+                                        setSearchedChat(true);
                                     }}
                                 >
                                     <img
                                         src={result.profileImage}
                                         className="size-12 rounded-full bg-blue-300"
                                     />
-                                    <span className={` ${
-                                    darkTheme
-                                        ? ' text-white  ' 
-                                        : 'text-black  '
-                                }  font-semibold ml-2`}>
+                                    <span
+                                        className={` ${
+                                            darkTheme
+                                                ? ' text-white  '
+                                                : 'text-black  '
+                                        }  font-semibold ml-2`}
+                                    >
                                         {result.username}
                                     </span>
                                 </div>
