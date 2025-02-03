@@ -82,7 +82,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
 
   useEffect(() => {
     
-    const newSocket = io('http://localhost:5000', {  // Trocar pro endereço do servidor em produção
+    const newSocket = io('buddio-backend-production.up.railway.app', {  // Trocar pro endereço do servidor em produção
       query: { token },
       transports: ['websocket'],
     });
