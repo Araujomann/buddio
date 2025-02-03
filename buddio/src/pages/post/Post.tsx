@@ -26,6 +26,7 @@ export const Post: React.FC = () => {
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files && e.target.files[0]) {
+            setSelectedImage(e.target.files[0]);
         }
     };
 
@@ -153,7 +154,7 @@ export const Post: React.FC = () => {
                                 <img
                                     src={close}
                                     className="size-12 hover:[filter:drop-shadow(0px_-1px_1px_red)]"
-                                    alt="Submit"
+                                    alt="Cancel"
                                 />
                             </div>
                             <div
@@ -168,14 +169,7 @@ export const Post: React.FC = () => {
                             </div>
                         </div>
                     ) : (
-                        <Tooltip title="Selecionar" arrow placement='top' slotProps={{ popper: { modifiers: [
-                            {
-                              name: "offset",
-                              options: {
-                                offset: [0, -12], // Ajuste a distância aqui (X, Y)
-                              },
-                            },
-                          ]}}} >
+                       
 
                         <div
                             className="relative flex items-center justify-center bg-white rounded-full size-20 bottom-10 border-[1px] cursor-pointer"
@@ -190,7 +184,7 @@ export const Post: React.FC = () => {
                                 onChange={handleFileChange}
                             />
                         </div>
-                          </Tooltip>
+                         
                     )}
                 </div>
             </div>
