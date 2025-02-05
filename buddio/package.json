@@ -22,7 +22,7 @@
         "classnames": "^2.5.1",
         "clsx": "^2.1.1",
         "dotenv": "^16.4.7",
-        "firebase": "^11.0.2",
+        "firebase": "^11.2.0",
         "firebaseui": "^6.1.0",
         "jwt-decode": "^4.0.0",
         "lottie-react": "^2.4.0",
