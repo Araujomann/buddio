@@ -1,5 +1,6 @@
-import { initializeApp } from 'firebase/app';
-
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+ 
 const firebaseConfig = {
   apiKey: "AIzaSyDUwW1V__CJQghehurJO6QkqPzKheXh8mg",
   authDomain: "buddio2.firebaseapp.com",
@@ -10,10 +11,7 @@ const firebaseConfig = {
   measurementId: "G-1DWTMB7X7T"
 };
 
+
 export const app = initializeApp(firebaseConfig);
-
-
-
-
-
+export const analytics = getAnalytics(app);
 
