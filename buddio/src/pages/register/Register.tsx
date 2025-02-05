@@ -8,14 +8,14 @@ import { api }from '../../services/api'
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
-import { App } from '../../services/googleAuthConfig';
+import { app } from '../../services/googleAuthConfig';
 
 const eyeOpen = 'https://img.icons8.com/ios/452/visible.png';
 const eyeClosed =
   'https://img.icons8.com/?size=100&id=121539&format=png&color=000000';
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth(App);
+const auth = getAuth(app);
 
 export const Register: React.FC = () => {
   const navigate = useNavigate();

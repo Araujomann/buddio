@@ -4,7 +4,7 @@ import { toast, Toaster } from 'react-hot-toast';
 import googleIcon from '../../assets/google.png';
 import back from '../../assets/back.svg';
 import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
-import { App } from '../../services/googleAuthConfig';
+import { app } from '../../services/googleAuthConfig';
 import { api }from '../../services/api'
 
 const eyeOpen = 'https://img.icons8.com/ios/452/visible.png';
@@ -12,7 +12,7 @@ const eyeClosed =
   'https://img.icons8.com/?size=100&id=121539&format=png&color=000000';
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth(App);
+const auth = getAuth(app);
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
