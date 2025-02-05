@@ -1,13 +1,13 @@
 import { initializeApp } from 'firebase/app';
 
 const firebaseConfig = {
-    apiKey: 'AIzaSyAGqFxCv2UVw7HeIQgGIl1imqrr3pPru10',
-    authDomain: 'buddio-8194f.firebaseapp.com',
-    projectId: 'buddio-8194f',
-    storageBucket: 'buddio-8194f.firebasestorage.app',
-    messagingSenderId: '78891245479',
-    appId: '1:78891245479:web:f2b5127a3e9a6a683ce082',
-    measurementId: 'G-4769X8362J',
+  apiKey: "AIzaSyDUwW1V__CJQghehurJO6QkqPzKheXh8mg",
+  authDomain: "buddio2.firebaseapp.com",
+  projectId: "buddio2",
+  storageBucket: "buddio2.firebasestorage.app",
+  messagingSenderId: "113171457540",
+  appId: "1:113171457540:web:5b30e05b9f454309d3b751",
+  measurementId: "G-1DWTMB7X7T"
 };
 
 export const app = initializeApp(firebaseConfig);
