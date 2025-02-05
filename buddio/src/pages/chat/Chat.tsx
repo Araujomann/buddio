@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-
 import { jwtDecode } from 'jwt-decode';
 import { api } from '../../services/api';
 import { io, Socket } from 'socket.io-client';
