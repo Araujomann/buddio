@@ -180,7 +180,7 @@ export const Register: React.FC = () => {
 
         <form onSubmit={handleRegister}>
           <div>
-            <label htmlFor="userame" className="text-black font-medium text-sm">
+            <label htmlFor="username" className="text-black font-medium text-sm">
               Username
             </label>
             <input
