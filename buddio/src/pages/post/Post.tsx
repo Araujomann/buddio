@@ -9,7 +9,7 @@ import error from '../../assets/error.json';
 import { Header } from '../../components';
 import { api } from '../../services/api';
 import { useNavigate } from 'react-router-dom';
-import { Tooltip } from '@mui/material';
+
 
 export const Post: React.FC = () => {
     const [selectedImage, setSelectedImage] = useState<File | null>(null);
