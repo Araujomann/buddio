@@ -19,8 +19,8 @@ export const EmailConfirmation: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <div className="flex flex-col items-center bg-white py-4 px-2 mx-4 rounded-sm">
+    <div className="flex items-center justify-center h-screen w-screen bg-gray-100">
+      <div className="flex flex-col items-center bg-white py-4 px-2 mx-4 max-w-72 rounded-xl shadow-md">
         <h1 className="text-black text-2xl font-bold mb-4">
           Confirmação de Conta
         </h1>
