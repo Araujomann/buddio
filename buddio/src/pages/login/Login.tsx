@@ -1,5 +1,5 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import googleIcon from '../../assets/google.png';
 import back from '../../assets/back.svg';
@@ -16,11 +16,22 @@ const auth = getAuth(app);
 
 export const Login: React.FC = () => {
   const navigate = useNavigate();
-
+  const [searchParams] = useSearchParams();
+  const verified = searchParams.get('verified');
   const [form, setForm] = React.useState({
     email: '',
     password: '',
   });
+
+  useEffect(() => {
+    if(verified) {
+     toast.success('Email verificado com sucesso! Agora é só aproveitar!', {
+      icon: "✅",
+      position: "top-center",
+      duration: 8000,
+     });
+    }
+  }, [verified]);  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;

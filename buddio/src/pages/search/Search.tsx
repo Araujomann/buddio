@@ -21,7 +21,7 @@ export const Search: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [searchResults, setSearchResults] = useState<User[]>([]);
   const [followingIds, setFollowingIds] = useState<string[]>([]);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isLoading, setIsLoading] = useState<boolean>();
 
   useEffect(() => {
     const fetchFollowing = async () => {
@@ -90,7 +90,7 @@ export const Search: React.FC = () => {
           />
         </div>
         {isLoading && (
-          <div className="relative flex items-center h-full justify-center w-screen z-30 mt-20 text-black ">
+          <div className="absolute flex h-full items-center  justify-center w-screen z-30 mt-20 text-black ">
             <div className="spinner"></div>
           </div>
         )}
