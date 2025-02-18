@@ -335,7 +335,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
                 >
                     <div
                         onClick={(e) => e.stopPropagation()}
-                        className="absolute z-10 top-14 right-10 xl:right-96 xl:mr-16 w-60 xl:w-2/4 h-80 xl:h-2/4 xl:h bg-[#383838] rounded-lg shadow-lg"
+                        className={`absolute z-10 top-14 right-10 xl:right-96 xl:mr-16 w-60 xl:w-2/4 h-80 xl:h-fit  ${darkTheme ? 'bg-black' : 'bg-white'} rounded-lg shadow-lg`}
                     >
                         <div
                             className="flex items-center justify-center bg-cover h-20 rounded-t-lg"
@@ -346,13 +346,13 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
                             }}
                         />
 
-                        <div className="flex flex-col items-center justify-center">
-                            <div className="w-full h-px bg-slate-200" />
-                            <p className="font-montserrat text-xs font-semibold justify-self-center mt-5 xl:text-lg">
+                        <div className="flex flex-col items-center justify-center rounded-b-xl">
+                            <div className="w-full h-px bg-slate-400" />
+                            <p className={`font-montserrat ${darkTheme ? 'text-white' : 'text-black'} text-xs font-semibold justify-self-center mt-5 xl:text-lg`}>
                                 Plano de fundo dessa conversa:
                             </p>
-                            <div className="flex flex-col gap-2">
-                                <div className="flex justify-center gap-1 mt-3 h-36 xl:h-60">
+                            <div className="flex flex-col flex-grow gap-2 xl:mb-2">
+                                <div className="flex justify-center gap-1 mt-3 h-36 xl:h-60 ">
                                     {wallpapers.map((wallpaper, index) => (
                                         <div
                                             key={index}
@@ -363,7 +363,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
                                         >
                                             <img
                                                 src={wallpaper}
-                                                className="h-full rounded-xl max-w-32"
+                                                className="h-full rounded-xl max-w-12 xl:max-w-32 border-black hover:border hover:border-px"
                                             />
                                             {wallpapers[index] === background ||
                                                 (selectBackground === index && (
@@ -389,7 +389,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
                                 </div>
 
                                 <button
-                                    className="flex items-center justify-center xl:text-lg rounded-md hover:ring-0 hover:outline-none mx-2 h-8 xl:h-14 bg-[#292929] hover:bg-[#181818]"
+                                    className={`flex items-center justify-center xl:text-lg rounded-md mx-2 h-8 xl:h-14 focus:outline-none focus:ring-2  ${darkTheme? 'bg-[#292929] hover:bg-[#181818] text-white' : 'bg-[#f2f2f2] hover:bg-[#dadada]'} text-black font-semibold font-montserrat}`}
                                     onClick={() => {
                                         if (
                                             selectBackground !== null &&

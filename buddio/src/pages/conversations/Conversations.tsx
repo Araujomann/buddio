@@ -168,7 +168,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
     }, [activeConversation]);
 
     return (
-        <div className={`relative flex w-screen h-full bg-[#f3f3f3]`}>
+        <div className={`relative flex w-screen h-full`}>
             <div
                 className={`hidden md:flex fixed w-28 h-full ${
                     darkTheme
@@ -181,7 +181,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                 </div>
                 <div className="flex flex-col h-full items-center justify-center  gap-9 w-full">
                     <Link to="/feed">
-                        <div className="flex items-center gap-2 hover:relative hover:mr-4 transition-all">
+                        <div className="flex items-center gap-2 hover:relative hover:mr-4 transition-all hover:[filter:drop-shadow(3px_4px_3px_gray)]">
                             <span>
                                 <img
                                     src={darkTheme ? darkFeedIcon : FeedIcon}
@@ -191,11 +191,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                     </Link>
                     <Link to="/conversations">
                         <div
-                            className={`flex items-center gap-2  hover:mr-4  ${
-                                location.pathname === '/conversations'
-                                    ? 'font-bold  [filter:drop-shadow(7px_4px_3px_gray)]'
-                                    : ''
-                            }   hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black`}
+                            className={`flex items-center gap-2 hover:mr-4 hover:[filter:drop-shadow(3px_4px_3px_gray)] transition-all text-black`}
                         >
                             <span>
                                 <img
@@ -358,63 +354,63 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                     </p>
                 </span>
                 {conversations.map((conversation: any) => (
-        <div
-            key={conversation._id}
-            onClick={() => {
-                if (activeConversation !== conversation._id) {
-                    setActiveConversation(null);
-                    setTimeout(() => {
-                        setActiveConversation(conversation._id);
-                        handleOtherPeopleId(conversation);
-                        fetchChat(conversation._id);
-                    }, 0);
-                }
-            }}
-            className={`flex border-b-2 py-2 mx-4 h-20 lg:h-28 xl:h-20 ${
-                darkTheme
-                    ? 'text-white border-[#505050]'
-                    : 'text-black border-[#e7eaeb]'
-            }`}
-        >
-            <div className="flex items-center justify-center ml-2 w-12 mr-2 lg:w-20 lg:h-20 xl:w-12 xl:h-12">
-                <img
+                    <div
+                        key={conversation._id}
+                        onClick={() => {
+                            if (activeConversation !== conversation._id) {
+                                setActiveConversation(null);
+                                setTimeout(() => {
+                                    setActiveConversation(conversation._id);
+                                    handleOtherPeopleId(conversation);
+                                    fetchChat(conversation._id);
+                                }, 0);
+                            }
+                        }}
+                        className={`flex border-b-2 py-2 mx-4 h-20 lg:h-28 xl:h-20 ${
+                            darkTheme
+                                ? 'text-white border-[#505050]'
+                                : 'text-black border-[#e7eaeb]'
+                        }`}
+                    >
+                        <div className="flex items-center justify-center ml-2 w-12 mr-2 lg:w-20 lg:h-20 xl:w-12 xl:h-12">
+                            <img
                                 src={
                                     conversation.participants.find(
                                         (participant: any) =>
                                             participant._id !== myId
                                     ).profileImage
                                 }
-                    className="w-12 h-12 lg:w-20 lg:h-20 xl:w-12 xl:h-12 rounded-full"
-                />
-            </div>
-            <div className="flex flex-col pt-2 flex-grow">
-                <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
+                                className="w-12 h-12 lg:w-20 lg:h-20 xl:w-12 xl:h-12 rounded-full"
+                            />
+                        </div>
+                        <div className="flex flex-col pt-2 flex-grow">
+                            <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
                                 {
                                     conversation.participants.find(
                                         (participant: any) =>
                                             participant._id !== myId
                                     ).username
                                 }
-                </span>
-                <span
-                    className={`font-montserrat ${
-                        darkTheme ? 'text-white' : 'text-black'
-                    } text-sm truncate lg:text-lg xl:text-sm`}
-                >
-                    {conversation.lastMessage.text}
-                </span>
-            </div>
-            <div className="flex flex-col items-center justify-start mr-1">
-                <span className="font-semibold text-[#9b9da2] text-xs py-1">
-                    {new Date(
-                        conversation.lastMessage.timestamp
-                    ).toLocaleTimeString([], {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                    })}
-                </span>
-            </div>
-        </div>
+                            </span>
+                            <span
+                                className={`font-montserrat ${
+                                    darkTheme ? 'text-white' : 'text-black'
+                                } text-sm truncate lg:text-lg xl:text-sm`}
+                            >
+                                {conversation.lastMessage.text}
+                            </span>
+                        </div>
+                        <div className="flex flex-col items-center justify-start mr-1">
+                            <span className="font-semibold text-[#9b9da2] text-xs py-1">
+                                {new Date(
+                                    conversation.lastMessage.timestamp
+                                ).toLocaleTimeString([], {
+                                    hour: '2-digit',
+                                    minute: '2-digit',
+                                })}
+                            </span>
+                        </div>
+                    </div>
                 ))}
             </div>
             {activeConversation ? (
