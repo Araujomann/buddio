@@ -213,7 +213,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
                         },
                     }
                 );
-                setBackground(response.data.chatBackground);
+                setBackground(response.data.chatBackground || wallpapers[0]);
             } catch (error) {
                 console.error('Erro ao buscar preferências: ', error);
             }
