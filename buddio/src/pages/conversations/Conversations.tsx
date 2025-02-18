@@ -366,7 +366,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                 }, 0);
                             }
                         }}
-                        className={`flex border-b-2 py-2 mx-4 h-20 lg:h-28 xl:h-20 ${
+                        className={`flex border-b-2 py-2 mx-4 h-20 lg:h-28 xl:h-20  ${
                             darkTheme
                                 ? 'text-white border-[#505050]'
                                 : 'text-black border-[#e7eaeb]'
@@ -383,7 +383,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                 className="w-12 h-12 lg:w-20 lg:h-20 xl:w-12 xl:h-12 rounded-full"
                             />
                         </div>
-                        <div className="flex flex-col pt-2 flex-grow">
+                        <div className="flex flex-col pt-2 w-10/12 ">
                             <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
                                 {
                                     conversation.participants.find(
@@ -392,13 +392,13 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                     ).username
                                 }
                             </span>
-                            <span
+                            <div
                                 className={`font-montserrat ${
                                     darkTheme ? 'text-white' : 'text-black'
-                                } text-sm truncate lg:text-lg xl:text-sm`}
+                                } text-sm truncate lg:text-lg xl:text-sm w-full overflow-hidden`}
                             >
                                 {conversation.lastMessage.text}
-                            </span>
+                            </div>
                         </div>
                         <div className="flex flex-col items-center justify-start mr-1">
                             <span className="font-semibold text-[#9b9da2] text-xs py-1">

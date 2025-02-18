@@ -82,7 +82,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
     }, []);
 
     useEffect(() => {
-        const newSocket = io('http://localhost:50http://localhost:5000', {
+        const newSocket = io('https://buddio-backend.onrender.com', {
             // Trocar pro endereço do servidor em produção
             query: { token },
             transports: ['websocket'],
@@ -504,16 +504,16 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
                                 }`}
                             >
                                 <div
-                                    className={`flex max-w-72 xl:max-w-96 px-4 py-2 gap-0 rounded-2xl break-word  ${
+                                    className={`flex max-w-72  xl:max-w-96 px-4 py-2 gap-0 rounded-2xl break-words ${
                                         msg.senderId === myId
                                             ? 'bg-[#e0e0e0] text-[#363636] font-semibold rounded-tr-none'
                                             : 'bg-[#363636] text-[#e0e0e0] font-semibold rounded-tl-none'
                                     }`}
                                 >
-                                    <p>{msg.message}</p>
+                                    <p className='w-11/12'>{msg.message}</p>
 
                                     <span
-                                        className={`text-[10px] text-gray-500 flex self-end h-2 `}
+                                        className={`text-[10px] text-gray-500 flex self-end h-2`}
                                     >
                                         {new Date(
                                             msg.timestamp
