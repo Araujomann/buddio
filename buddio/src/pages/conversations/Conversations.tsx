@@ -34,7 +34,13 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
     const [searchResults, setSearchResults] = useState<any>(null);
     const [searchTerm, setSearchTerm] = useState<string>();
     const [searchedChat, setSearchedChat] = useState<boolean>(false);
-    const [conversations, setConversations] = useState([]);
+    interface Conversation {
+        _id: string;
+        participants: { _id: string; profileImage: string; username: string }[];
+        lastMessage: { text: string; timestamp: string };
+    }
+    
+    const [conversations, setConversations] = useState<Conversation[]>([]);
     const [otherPeopleId, setOtherPeopleId] = useState<string>('');
     const [myId, setMyId] = useState<string>('');
     const [activeConversation, setActiveConversation] = useState<any>(null);
@@ -120,6 +126,31 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
 
         fetchConversations();
     }, []);
+
+    const updateLastMessage = (conversationId: string, lastMessage: string) => {
+        setConversations((prevConversations) => {
+            const updatedConversations = prevConversations.map((conversation) => {
+                if (conversation._id === conversationId) {
+                    return {
+                        ...conversation,
+                        lastMessage: {
+                            text: lastMessage,
+                            timestamp: new Date().toISOString(),
+                        },
+                    };
+                }
+                return conversation;
+            });
+    
+            // Reordena as conversas pela última mensagem
+            return updatedConversations.sort((a, b) => {
+                return (
+                    new Date(b.lastMessage.timestamp).getTime() -
+                    new Date(a.lastMessage.timestamp).getTime()
+                );
+            });
+        });
+    };
 
     const fetchChat = async (conversationId: String) => {
         try {
@@ -418,6 +449,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                     <Chat
                         chatOtherPeopleId={otherPeopleId}
                         darkTheme={darkTheme}
+                        updateLastMessage={updateLastMessage}
                     />
                 </div>
             ) : (

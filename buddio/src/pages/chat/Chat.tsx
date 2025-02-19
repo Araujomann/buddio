@@ -23,6 +23,7 @@ interface Message {
 interface ChatProps {
     darkTheme?: boolean;
     chatOtherPeopleId?: string;
+    updateLastMessage?: (conversationId: string, lastMessage: string) => void;
 }
 
 interface User {
@@ -37,7 +38,7 @@ interface TokenPayload {
     id: string;
 }
 
-export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
+export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme, updateLastMessage }) => {
     const receiverId = chatOtherPeopleId;
     const [newMessage, setNewMessage] = useState<string>('');
     const [chatMessages, setChatMessages] = useState<Message[]>([]);
@@ -79,7 +80,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
 
             setMyId(loggedUserId);
         }
-    }, []);
+    }, [token]);
 
     useEffect(() => {
         const newSocket = io('https://buddio-backend.onrender.com', {
@@ -224,6 +225,18 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
         fetchPreferences();
     }, [receiverId, token]);
 
+    useEffect(() => {
+        if(socket) {
+            socket.on("receiveMessage", (message: Message) => {
+               
+
+                if(updateLastMessage && conversationIdentifier) {
+                    updateLastMessage(conversationIdentifier, message.message)
+                }
+            });
+        }
+    }, [socket, updateLastMessage, conversationIdentifier]);
+
     const handleBack = () => {
         setTimeout(() => {
             setIsLoading(true);
@@ -241,6 +254,11 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme }) => {
                 timestamp: new Date().toISOString(),
             };
             socket.emit('sendMessage', messageToSend);
+
+            if(updateLastMessage && conversationIdentifier) {
+                updateLastMessage(conversationIdentifier, newMessage)
+            }
+            setNewMessage("")
 
             const sendLastMessage = async () => {
                 try {
