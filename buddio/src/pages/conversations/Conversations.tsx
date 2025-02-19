@@ -1,4 +1,5 @@
 import { api } from '../../services/api';
+import { io } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 import { jwtDecode } from 'jwt-decode';
 import { Link } from 'react-router-dom';
@@ -37,6 +38,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
     const [conversations, setConversations] = useState([]);
     const [otherPeopleId, setOtherPeopleId] = useState<string>('');
     const [myId, setMyId] = useState<string>('');
+    const [socket, setSocket] = useState<any>(null);
     const [activeConversation, setActiveConversation] = useState<any>(null);
     const token = localStorage.getItem('accessToken');
     const [darkTheme, setDarkTheme] = useState<boolean>(() => {
@@ -418,6 +420,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                     <Chat
                         chatOtherPeopleId={otherPeopleId}
                         darkTheme={darkTheme}
+                        updateLastMessage={updateLastMessage}
                     />
                 </div>
             ) : (
