@@ -397,13 +397,13 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                 }, 0);
                             }
                         }}
-                        className={`flex border-b-2 py-2 mx-4 h-20 lg:h-28 xl:h-20  ${
+                        className={`relative flex border-b-2 py-2 mx-4 h-20 lg:h-28 xl:h-20 ${
                             darkTheme
                                 ? 'text-white border-[#505050]'
                                 : 'text-black border-[#e7eaeb]'
                         }`}
                     >
-                        <div className="flex flex- shrink-0 items-center justify-center mx-2 size-14">
+                        <div className="flex flex- shrink-0 items-center justify-center  mx-2 size-14">
                             <img
                                 src={
                                     conversation.participants.find(
@@ -414,7 +414,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                 className=" w-full h-full rounded-full object-cover"
                             />
                         </div>
-                        <div className="flex flex-col  pt-2 min-w-0">
+                        <div className="flex flex-col  pt-2 min-w-0  bg-blue-950">
                             <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
                                 {
                                     conversation.participants.find(
@@ -431,7 +431,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                 {conversation.lastMessage.text}
                             </div>
                         </div>
-                        <div className="flex flex-col items-center justify-start mr-1">
+                        <div className="absolute flex flex-col items-center  justify-start right-3 top-4">
                             <span className="font-semibold text-[#9b9da2] text-xs py-1">
                                 {new Date(
                                     conversation.lastMessage.timestamp
