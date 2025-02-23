@@ -280,96 +280,103 @@ export const Profile: React.FC = () => {
                         />
                     )}
                     {activeSection === 'Seguidores' && (
-                        <div className="flex flex-col gap-2 mt-4 ">
-                            {followers.map((follower, index) => (
-                                follower && (
-                                <div
-                                    key={index}
-                                    className="flex items-center justify-between gap-4 h-20 rounded-md px-4 shadow-[0px_4px_10px_-2px_rgba(0,0,0,0.5),0px_-4px_10px_-2px_rgba(0,0,0,0.1)]"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <img
-                                            src={follower.profileImage}
-                                            className="rounded-full size-14 object-cover"
-                                        />
-                                        <div className="flex flex-col">
-                                            <h2 className="font-bold text-md text-black">
-                                                {follower.username}
-                                            </h2>
-                                        </div>
-                                    </div>
-
-                                    <Tooltip
-                                        title="Remover"
-                                        arrow
-                                        placement="left"
-                                        slotProps={{
-                                            popper: {
-                                                modifiers: [
-                                                    {
-                                                        name: 'offset',
-                                                        options: {
-                                                            offset: [0, -6], // Ajuste a distância aqui (X, Y)
-                                                        },
-                                                    },
-                                                ],
-                                            },
-                                        }}
-                                    >
+                        <div className="flex flex-col  md:flex-row md:flex-wrap gap-2 mt-4 ">
+                            {followers.map(
+                                (follower, index) =>
+                                    follower && (
                                         <div
-                                            className="cursor-pointer"
-                                            onClick={() =>
-                                                setRemoveFollower(true)
-                                            }
+                                            key={index}
+                                            className="flex items-center justify-between gap-4 h-20 rounded-md px-4 shadow-[0px_4px_10px_-2px_rgba(0,0,0,0.5),0px_-4px_10px_-2px_rgba(0,0,0,0.1)]"
                                         >
-                                            <img
-                                                src={remove}
-                                                className="w-full h-full"
-                                            />
-                                        </div>
-                                    </Tooltip>
+                                            <div className="flex items-center gap-4">
+                                                <img
+                                                    src={follower.profileImage}
+                                                    className="rounded-full size-14 object-cover"
+                                                />
+                                                <div className="flex flex-col">
+                                                    <h2 className="font-bold text-md text-black">
+                                                        {follower.username}
+                                                    </h2>
+                                                </div>
+                                            </div>
 
-                                    {setRemoveFollower && (
-                                        <Dialog
-                                            open={removeFollower}
-                                            onClose={() =>
-                                                setRemoveFollower(false)
-                                            }
-                                        >
-                                            <DialogContent>
-                                                <DialogContentText>
-                                                    Deseja realmente remover{' '}
-                                                    {follower.username} de seus
-                                                    seguidores?
-                                                </DialogContentText>
-                                            </DialogContent>
-                                            <DialogActions>
-                                                <button
+                                            <Tooltip
+                                                title="Remover"
+                                                arrow
+                                                placement="left"
+                                                slotProps={{
+                                                    popper: {
+                                                        modifiers: [
+                                                            {
+                                                                name: 'offset',
+                                                                options: {
+                                                                    offset: [
+                                                                        0, -6,
+                                                                    ], // Ajuste a distância aqui (X, Y)
+                                                                },
+                                                            },
+                                                        ],
+                                                    },
+                                                }}
+                                            >
+                                                <div
+                                                    className="cursor-pointer"
                                                     onClick={() =>
+                                                        setRemoveFollower(true)
+                                                    }
+                                                >
+                                                    <img
+                                                        src={remove}
+                                                        className="w-full h-full"
+                                                    />
+                                                </div>
+                                            </Tooltip>
+
+                                            {setRemoveFollower && (
+                                                <Dialog
+                                                    open={removeFollower}
+                                                    onClose={() =>
                                                         setRemoveFollower(false)
                                                     }
-                                                    className="text-white focus:outline-none"
                                                 >
-                                                    Cancelar
-                                                </button>
-                                                <button
-                                                    onClick={() => {
-                                                        handleFollowerRemove(
-                                                            follower._id
-                                                        );
-                                                        setRemoveFollower(
-                                                            false
-                                                        );
-                                                    }}
-                                                    className="text-white focus:outline-none"
-                                                >
-                                                    Remover
-                                                </button>
-                                            </DialogActions>
-                                        </Dialog>
-                                    )}
-                                </div>
-                            )))}
+                                                    <DialogContent>
+                                                        <DialogContentText>
+                                                            Deseja realmente
+                                                            remover{' '}
+                                                            {follower.username}{' '}
+                                                            de seus seguidores?
+                                                        </DialogContentText>
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <button
+                                                            onClick={() =>
+                                                                setRemoveFollower(
+                                                                    false
+                                                                )
+                                                            }
+                                                            className="text-white focus:outline-none"
+                                                        >
+                                                            Cancelar
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                handleFollowerRemove(
+                                                                    follower._id
+                                                                );
+                                                                setRemoveFollower(
+                                                                    false
+                                                                );
+                                                            }}
+                                                            className="text-white focus:outline-none"
+                                                        >
+                                                            Remover
+                                                        </button>
+                                                    </DialogActions>
+                                                </Dialog>
+                                            )}
+                                        </div>
+                                    )
+                            )}
                         </div>
                     )}
                 </div>
