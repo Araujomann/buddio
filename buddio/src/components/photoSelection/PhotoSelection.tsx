@@ -22,8 +22,8 @@ export const PhotoSelection: React.FC = () => {
     location.pathname === '/profile-photo-selection';
 
   const uploadEndpointPhoto = isProfilePhotoSelection
-    ? `${api}/profile/upload-profile`
-    : `${api}/posts/upload`
+    ? `/profile/upload-profile`
+    : `/posts/upload`
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -71,7 +71,7 @@ export const PhotoSelection: React.FC = () => {
 
         if (isProfilePhotoSelection) {
           const updateResponse = await api.put(
-            `${api}/profile/user/update-profile`,
+            `/profile/user/update-profile`,
             { imageUrl },
             {
               headers: {

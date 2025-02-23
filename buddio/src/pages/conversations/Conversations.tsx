@@ -403,7 +403,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                 : 'text-black border-[#e7eaeb]'
                         }`}
                     >
-                        <div className="flex items-center justify-center ml-2 w-12 mr-2 lg:w-20 lg:h-20 xl:w-12 xl:h-12">
+                        <div className="flex flex- shrink-0 items-center justify-center mx-2 size-14">
                             <img
                                 src={
                                     conversation.participants.find(
@@ -411,10 +411,10 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                             participant._id !== myId
                                     ).profileImage
                                 }
-                                className="w-12 h-12 lg:w-20 lg:h-20 xl:w-12 xl:h-12 rounded-full"
+                                className=" w-full h-full rounded-full object-cover"
                             />
                         </div>
-                        <div className="flex flex-col pt-2 w-10/12 ">
+                        <div className="flex flex-col  pt-2 min-w-0">
                             <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
                                 {
                                     conversation.participants.find(
@@ -426,7 +426,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                             <div
                                 className={`font-montserrat ${
                                     darkTheme ? 'text-white' : 'text-black'
-                                } text-sm truncate lg:text-lg xl:text-sm w-full overflow-hidden`}
+                                } text-sm truncate lg:text-lg xl:text-sm  overflow-hidden`}
                             >
                                 {conversation.lastMessage.text}
                             </div>
