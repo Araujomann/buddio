@@ -248,25 +248,24 @@ export const Profile: React.FC = () => {
                             </h2>
                         </span>
                         {isOwnProfile && (
-
-                        <span
-                            className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
-                                activeSection === 'Seguidores'
-                                    ? ' border-black'
-                                    : 'border-[#9b9b9b]'
-                            }`}
-                            onClick={() => setActiveSection('Seguidores')}
-                        >
-                            <h2
-                                className={`font-montserrat font-semibold text-sm ${
+                            <span
+                                className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
                                     activeSection === 'Seguidores'
-                                        ? ' text-black'
-                                        : 'text-[#9b9b9b]'
-                                } `}
+                                        ? ' border-black'
+                                        : 'border-[#9b9b9b]'
+                                }`}
+                                onClick={() => setActiveSection('Seguidores')}
                             >
-                                Seguidores
-                            </h2>
-                        </span>
+                                <h2
+                                    className={`font-montserrat font-semibold text-sm ${
+                                        activeSection === 'Seguidores'
+                                            ? ' text-black'
+                                            : 'text-[#9b9b9b]'
+                                    } `}
+                                >
+                                    Seguidores
+                                </h2>
+                            </span>
                         )}
                     </div>
 
@@ -283,6 +282,7 @@ export const Profile: React.FC = () => {
                     {activeSection === 'Seguidores' && (
                         <div className="flex flex-col gap-2 mt-4 ">
                             {followers.map((follower, index) => (
+                                follower && (
                                 <div
                                     key={index}
                                     className="flex items-center justify-between gap-4 h-20 rounded-md px-4 shadow-[0px_4px_10px_-2px_rgba(0,0,0,0.5),0px_-4px_10px_-2px_rgba(0,0,0,0.1)]"
@@ -369,7 +369,7 @@ export const Profile: React.FC = () => {
                                         </Dialog>
                                     )}
                                 </div>
-                            ))}
+                            )))}
                         </div>
                     )}
                 </div>
