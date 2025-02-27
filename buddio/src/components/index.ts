@@ -10,3 +10,4 @@ export { PhotoSelection } from './photoSelection';
 export { FollowButton } from './followButton';
 export { LikeButton } from './likeButton';
 export { SwitchS } from './switch';
+export { Sidebar } from './sidebar';

@@ -144,7 +144,7 @@ export const Post: React.FC = () => {
                     </span>
                 )}
 
-                <div className="relative flex justify-center bg-black h-20 w-full bottom-0">
+                <div className="absolute flex justify-center bg-black h-20 w-full bottom-0">
                     {selectedImage ? (
                         <div className="flex gap-2">
                             <div

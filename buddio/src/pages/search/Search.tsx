@@ -6,6 +6,7 @@ import { api }from '../../services/api'
 import isFollowing from '../../assets/following.svg';
 import visit from '../../assets/visit.svg';
 
+
 interface Post {
   imageUrl: string;
 }
@@ -75,14 +76,14 @@ export const Search: React.FC = () => {
   }, [searchTerm]);
 
   return (
-    <div className="flex flex-col w-screen h-screen md:overflow-x-hidden">
+    <div className="flex lg:ml-64 flex-col w-full h-full min-width-custom overflow-y-scroll">
       <div className="relative z-30">
         <Header />
       </div>
       <div className="flex flex-col items-center flex-1">
-        <div className=" relative h-12 flex items-center  w-10/12  border-b-[1px] border-gray-300 mt-20 mb-6">
+        <div className=" relative h-12 flex items-center w-10/12  border-b-[1px] border-gray-300 mt-20 mb-6">
           <input
-            className="bg-white font-montserrat text-xl outline-none text-black"
+            className="bg-white font-montserrat text-xl w-full outline-none text-black"
             type="text"
             placeholder="Buscar usuários"
             value={searchTerm}
@@ -95,7 +96,7 @@ export const Search: React.FC = () => {
           </div>
         )}
 
-        <ul className="flex flex-col md:px-20 md:flex-row items-center justify-center mb-2 mx-auto gap-1 max-h-80 md:max-h-full md:overflow-y-hidden w-80 md:w-full md:flex-wrap overflow-y-auto overflow-x-hidden py-1 rounded-md">
+        <ul className="flex flex-col md:px-0 md:flex-row items-center justify-center mb-2 mx-auto gap-1 max-h-80 md:max-h-full md:overflow-y-hidden w-10/12 md:w-full md:flex-wrap overflow-y-auto overflow-x-hidden py-1 rounded-md">
           {searchResults &&
             searchResults.map((user) => (
               <li

@@ -136,16 +136,16 @@ export const Profile: React.FC = () => {
     if (!user) return <h2>carregando perfil...</h2>;
 
     return (
-        <div className="flex flex-col bg-white h-full ">
-            <header className="relative flex bg-white mb-12 mt-4 items-center justify-center">
-                <span className="absolute left-4 " onClick={handleBack}>
+        <div className="flex flex-col w-full h-full max-width-custom lg:ml-64 overflow-y-auto">
+            <header className="relative flex  mb-12 mt-4 items-center justify-center">
+                <span className="absolute left-4 lg:hidden" onClick={handleBack}>
                     <img src={back} />
                 </span>
-                <p className="text-black font-montserrat font-semibold text-sm">
+                <p className="text-black font-montserrat font-semibold text-sm lg:mr-64">
                     {user?.email}
                 </p>
             </header>
-            <div className="bg-white flex flex-col h-full w-screen">
+            <div className=" flex flex-col h-full w-full">
                 <div className="flex gap-4  px-4 items-center mb-12">
                     {user?.profileImage ? (
                         <div className="relative flex items-center justify-center rounded-full">
