@@ -13,10 +13,14 @@ import logoutIcon2 from '../../assets/logout.svg';
 import messages2 from '../../assets/messages.svg';
 import { Link, useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode, JwtPayload } from 'jwt-decode';
 import { api } from '../../services/api';
 
 export const Sidebar: React.FC = () => {
+    interface Payload extends JwtPayload {
+        id: string;
+    }
+
     const [id, setId] = useState<string>('');
     const location = useLocation();
 
@@ -24,8 +28,9 @@ export const Sidebar: React.FC = () => {
 
     useEffect(() => {
         if (token) {
-            const decode = jwtDecode<string>(token);
-            setId(decode);
+            const decode = jwtDecode<Payload>(token);
+            console.log('toekn', decode.id);
+            setId(decode.id);
         }
     }, [token]);
 
@@ -35,7 +40,6 @@ export const Sidebar: React.FC = () => {
         '/register',
         '/forgot-password',
         '/reset-password',
-    
     ];
     const shouldRenderSidebar = !pathsWithoutSidebar.includes(
         location.pathname
@@ -54,7 +58,7 @@ export const Sidebar: React.FC = () => {
 
     return (
         shouldRenderSidebar && (
-            <div className="hidden md:flex flex-row">
+            <div className="hidden h-full overflow-hidden lg:flex">
                 <div
                     className={`${
                         location.pathname === '/search'
@@ -224,7 +228,13 @@ export const Sidebar: React.FC = () => {
                             LOG OUT
                         </div>
                     </div>
-                    <div className={`absolute z-40 ${location.pathname === '/search' ? 'bg-black': 'bg-gray-300'}  h-screen w-px right-0 `}/>
+                    <div
+                        className={`absolute z-40 ${
+                            location.pathname === '/search'
+                                ? 'bg-black'
+                                : 'bg-gray-300'
+                        }  h-screen w-px right-0 `}
+                    />
                 </div>
             </div>
         )
