@@ -24,20 +24,20 @@ export const Footer: React.FC = () => {
   };
 
   return (
-    <div className="bg-black w-full flex flex-col ">
+    <div className="bg-black flex flex-col w-full overflow-hidden">
       <div
         className={`pt-10 flex flex-col ${
           location.pathname !== '/' ? 'gap-4' : 'gap-10'
-        }  px-10 bg-black sm:w-full sm:px-20 xl:flex-row`}
+        }  px-10 bg-black sm:w-full sm:px-20 xl:flex-row `}
       >
-        <div className="flex items-center gap-2 ">
+        <div className="flex items-center gap-2 max-w-full">
           <img
             src={buddioIcon}
-            className="flex size-12 sm:size-16  xl:size-72 xl:mr-20 xl:mb-10"
+            className="flex size-12 sm:size-16  xl:size-72 xl:mr-20 xl:mb-10 object-contain"
           />
           <h2 className="font-montserrat md:text-2xl xl:hidden">Buddio.</h2>
         </div>
-        <div className="flex flex-col xl:block ">
+        <div className="flex flex-col xl:block max-w-full">
           {location.pathname === '/' && (
             <div className="flex flex-col gap-4 xl:hidden">
               <Button
@@ -57,7 +57,7 @@ export const Footer: React.FC = () => {
             </div>
           )}
         </div>
-        <div className="flex flex-col gap-12  xl:py-6 xl:ml-32">
+        <div className="flex flex-col gap-12  xl:py-6 xl:ml-32 max-w-full">
           <div className="hidden xl:flex justify-between">
             <h1 className="hidden xl:block font-montserrat mb-2">Buddio</h1>
 
@@ -83,7 +83,7 @@ export const Footer: React.FC = () => {
           <div className="xl:flex xl:gap-32 ">
             <section className="flex flex-col gap-3">
               <h2 className="font-bold text-lg">COMPANY</h2>
-              <ul className="flex flex-col gap-2 font-montserrat text-white">
+              <ul className="flex flex-col gap-2 font-montserrat text-[#c0c0c0]">
                 <li>About</li>
                 <li>Blog</li>
                 <li>Jobs</li>
@@ -91,31 +91,31 @@ export const Footer: React.FC = () => {
             </section>
             <section className="flex flex-col gap-3">
               <h2 className="font-bold text-lg">COMMUNITY</h2>
-              <ul className="flex flex-col gap-2 font-montserrat text-white">
+              <ul className="flex flex-col gap-2 font-montserrat text-[#c0c0c0]">
                 <li>Learn</li>
                 <li>Forum</li>
               </ul>
             </section>
-            <section className="flex flex-col gap-3">
+            <section className="font-montserrat flex flex-col gap-3">
               <h2 className="font-bold text-lg">RULES</h2>
-              <ul className="flex flex-col text-[#c0c0c0] font-montserrat font-bold text-xs gap-2">
+              <ul className="flex flex-col text-[#c0c0c0] font-montserrat  gap-2">
                 <li>Terms of use</li>
                 <li>Privacy Policy</li>
               </ul>
             </section>
           </div>
         </div>
-        <p className="font-montserrat text-sm text-[#c0c0c0] xl:hidden">
+        <p className="font-montserrat text-sm text-[#c0c0c0] xl:hidden max-w-full">
           copyright 2024 Buddio. All rights reserved{' '}
         </p>
       </div>
-      <div className="hidden xl:block mb-6 mx-24 h-px border border-[#808080] " />
-      <div className="hidden xl:flex justify-between  w-full px-24">
+      <div className="hidden xl:block mb-6 mx-24 h-px border border-[#808080] max-w-full" />
+      <div className="hidden xl:flex justify-between  w-full  px-24 ">
         <div className="flex justify-between w-1/3 mb-6">
           <p>Copyright @ Buddio</p>
           <p>Terms of Service</p>
         </div>
-        <span className="flex gap-3 items-center h-fit" onClick={scrollToTop}>
+        <span className="flex gap-3 items-center h-fit max-w-full" onClick={scrollToTop}>
           <p>Back to top</p>
           <img src={chevronUp} />
         </span>
