@@ -414,7 +414,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                 className=" w-full h-full rounded-full object-cover"
                             />
                         </div>
-                        <div className="flex flex-col  pt-2 min-w-0  bg-blue-950">
+                        <div className="flex flex-col pt-2 min-w-0">
                             <span className="font-montserrat font-medium lg:text-[24px] xl:text-base">
                                 {
                                     conversation.participants.find(
