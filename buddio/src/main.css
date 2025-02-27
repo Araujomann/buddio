@@ -17,13 +17,43 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Estiliza a barra de rolagem vertical */
+::-webkit-scrollbar {
+  width: 12px; /* Largura da barra de rolagem */
+}
+
+/* Estiliza o "trilho" da barra de rolagem */
+::-webkit-scrollbar-track {
+  background: #1e1e1e; /* Cor de fundo do trilho */
+  border-radius: 10px; /* Bordas arredondadas */
+}
+
+/* Estiliza o "thumb" (a parte móvel da barra de rolagem) */
+::-webkit-scrollbar-thumb {
+  background: #444444; /* Cor do thumb */
+  border-radius: 10px; /* Bordas arredondadas */
+  border: 3px solid #1e1e1e; /* Borda ao redor do thumb */
+}
+
+/* Estiliza o thumb ao passar o mouse */
+::-webkit-scrollbar-thumb:hover {
+  background: #666666; /* Cor do thumb ao passar o mouse */
+}
+/* Estiliza a barra de rolagem no Firefox */
+* {
+    scrollbar-width: thin;
+    scrollbar-color: #cacacad4 #959595;
+}
+
+
+
 a {
   font-weight: 500;
-  color: #646cff;
+  color: inherit;
   text-decoration: inherit;
 }
 a:hover {
-  color: #535bf2;
+  color: inherit;
 }
 
 body {
@@ -40,6 +70,11 @@ body {
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
+}
+
+.min-width-custom {
+  min-width: calc(100vw - 256px);
+
 }
 
 button {
