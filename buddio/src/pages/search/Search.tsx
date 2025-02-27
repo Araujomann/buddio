@@ -76,7 +76,7 @@ export const Search: React.FC = () => {
   }, [searchTerm]);
 
   return (
-    <div className="flex xl:ml-64 flex-col w-full h-full min-width-custom overflow-y-scroll">
+    <div className="flex lg:ml-64 flex-col w-full h-full min-width-custom overflow-y-scroll">
       <div className="relative z-30">
         <Header />
       </div>
@@ -96,7 +96,7 @@ export const Search: React.FC = () => {
           </div>
         )}
 
-        <ul className="flex flex-col md:px-20 md:flex-row items-center justify-center mb-2 mx-auto gap-1 max-h-80 md:max-h-full md:overflow-y-hidden w-80 md:w-full md:flex-wrap overflow-y-auto overflow-x-hidden py-1 rounded-md">
+        <ul className="flex flex-col md:px-0 md:flex-row items-center justify-center mb-2 mx-auto gap-1 max-h-80 md:max-h-full md:overflow-y-hidden w-10/12 md:w-full md:flex-wrap overflow-y-auto overflow-x-hidden py-1 rounded-md">
           {searchResults &&
             searchResults.map((user) => (
               <li

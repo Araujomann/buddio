@@ -77,7 +77,7 @@ export const Feed: React.FC = () => {
 
     return (
         <>
-            <div className="fixed z-50 md:hidden">
+            <div className="fixed z-50">
                 <Header />
             </div>
 
@@ -88,7 +88,7 @@ export const Feed: React.FC = () => {
                     </div>
                 )}
 
-                <div className="relative z-40 flex flex-col items-center md:ml-60 md:pr-40 lg:ml-60 lg:pr-48 xl:ml-60 xl:pr-96 xl:pl-32 flex-1 overflow-y-auto">
+                <div className="relative z-40 flex flex-col items-center md:ml-56 md:pr-40 lg:ml-60 lg:pr-48 xl:ml-60 xl:pr-96 xl:pl-32 flex-1 overflow-y-auto">
                     {posts.length > 0 ? (
                         posts.map((post, index) => (
                             <Post
