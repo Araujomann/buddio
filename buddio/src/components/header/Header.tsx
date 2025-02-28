@@ -12,11 +12,11 @@ export const Header: React.FC = () => {
   const welcomePage = location.pathname === '/';
 
   return (
-    <div className='flex lg:hidden'>
+    <div className={`flex w-full ${welcomePage ? 'lg:block' : 'lg:hidden'} `}>
       {isOptionsOpen && (
         <Options handleClick={() => setIsOptionsOpen(!isOptionsOpen)} />
       )}
-      <div className="flex ld:hideen z-20 fixed font-montserrat items-center justify-between h-14 bg-black w-full px-4">
+      <div className="flex lg:hideen z-20 fixed font-montserrat items-center justify-between h-14 bg-black w-full px-4">
         <img
           src={buddioIcon}
           className="rounded-full size-9"

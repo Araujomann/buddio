@@ -97,7 +97,7 @@ export const Welcome: React.FC = () => {
   };
 
   return (
-    <div className="bg-buddyGray flex flex-col w-full  overflow-x-hidden h-full  items-center justify-start">
+    <div className="bg-buddyGray flex flex-col w-full overflow-x-hidden h-full  items-center justify-start">
       <Header />
 
       <animated.div style={titleAnimation} className="w-11/12 mt-24">
@@ -131,12 +131,12 @@ export const Welcome: React.FC = () => {
 
       <div className="relative flex w-full md:w-auto mt-14 justify-between mx-10 lg:px-20 xl:px-32">
         <div className="flex items-center justify-center w-full">
-          <animated.div style={imageAnimation} className="relative flex">
+          <animated.div style={imageAnimation} className="relative flex ">
             <animated.h2
               style={textAnimation}
-              className="absolute z-10 text-4xl font-extrabold text-white left-0"
+              className="absolute z-10 text-4xl sm:text-5xl font-extrabold text-white  w-full left-0"
             >
-              FOR <span className="absolute right-6">ALL</span> PHOTOGRAPHERS
+              FOR <span className="absolute right-2">ALL</span> <span className=' block text-3xl sm:text-[1em] md:text-[.8em]'>PHOTOGRAPHERS</span>
             </animated.h2>
             <img src={cam} className="grayscale md:max-w-96" alt="Camera" />
           </animated.div>
@@ -161,7 +161,7 @@ export const Welcome: React.FC = () => {
         </div>
       </div>
 
-      <div className="hidden md:flex relative  w-full flex-row-reverse md:w-auto mt-24 justify-between mx-10 lg:px-20 xl:px-32">
+      <div className="hidden md:flex relative w-full flex-row-reverse md:w-auto mt-24 justify-between mx-10 lg:px-20 xl:px-32">
         <div className="flex items-center justify-center w-full">
           <animated.div style={image2Animation} className="relative flex">
             <img src={image2} className="max-w-96 md:py-4 lg:py-9 bg-white" />
@@ -171,7 +171,7 @@ export const Welcome: React.FC = () => {
         <div className="hidden md:flex flex-col items-start justify-center">
           <animated.p
             style={quote2Animation}
-            className="relative font-montserrat  flex text-xl lg:text-2xl pr-10 py-6 font-semibold  lg:text-justify leading-tight text-white"
+            className="relative font-montserrat h-full items-center flex text-xl lg:text-2xl pr-10 py-6 font-semibold  lg:text-justify leading-tight text-white"
           >
             "Acordei esta manhã com um devoto reconhecimento pela beleza ao meu
             redor. O céu estava puro e sereno, e toda a terra parecia em
@@ -179,7 +179,7 @@ export const Welcome: React.FC = () => {
             contemplação por tudo que é belo e verdadeiro."
             <animated.span
               style={author2Animation}
-              className="absolute right-4 md:bottom-4 lg:bottom-4 lg:right-10  font-montserrat text-sm font-normal text-pretty text-white"
+              className="absolute right-4 md:bottom-4  lg:right-10  font-montserrat text-sm font-normal text-pretty text-white"
             >
               Henry David Thoreau
             </animated.span>
@@ -205,7 +205,7 @@ export const Welcome: React.FC = () => {
           </animated.p>
           <animated.span
             style={author3Animation}
-            className="absolute right-4 md:bottom-0  lg:right-20 xl:right-32 font-montserrat text-sm font-normal text-white"
+            className="absolute right-4 md:bottom-4  lg:right-20 xl:right-32 font-montserrat text-sm font-normal text-white"
           >
             Vincent van Gogh
           </animated.span>
