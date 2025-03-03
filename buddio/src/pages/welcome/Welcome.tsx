@@ -210,7 +210,7 @@ export const Welcome: React.FC = () => {
             Vincent van Gogh
           </animated.span>
         </div>
-      </div>
+      </div> 
       <Footer />
     </div>
   );
