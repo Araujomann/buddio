@@ -409,9 +409,10 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
                                     conversation.participants.find(
                                         (participant: any) =>
                                             participant._id !== myId
-                                    ).profileImage
+                                    )?.profileImage || '/default-avatar.png'
                                 }
-                                className=" w-full h-full rounded-full object-cover"
+                                alt="Foto de perfil do participante"
+                                className="w-full h-full rounded-full object-cover"
                             />
                         </div>
                         <div className="flex flex-col pt-2 min-w-0">
