@@ -31,7 +31,7 @@ interface TokenPayload {
     id: string;
 }
 
-type Section = 'Galeria' | 'Curtidas' | 'Seguidores';
+type Section = 'Galeria' | 'Curtidas' | 'Seguidores' | 'Seguindo';
 
 export const Profile: React.FC = () => {
     const { userId = '' } = useParams();
@@ -41,6 +41,7 @@ export const Profile: React.FC = () => {
     const [activeSection, setActiveSection] = useState<Section>('Galeria');
     const [likedPosts, setLikedPosts] = useState<Post[]>([]);
     const [followers, setFollowers] = useState<User[]>([]);
+    const [following, setFollowing] = useState<User[]>([]);
     const [removeFollower, setRemoveFollower] = useState<boolean>(false);
     const navigate = useNavigate();
     const isOwnProfile = userId === myProfileId && myProfileId !== '';
@@ -110,6 +111,28 @@ export const Profile: React.FC = () => {
         };
 
         if (activeSection === 'Seguidores') fetchFollowers();
+    }, [activeSection]);
+
+    useEffect(() => {
+        const fetchFollowing = async () => {
+            try {
+                const response = await api.get(`/following`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                const myFollowings = response.data;
+                setFollowing(myFollowings);
+                console.log(
+                    'myFollowings =--------------------------------------------->>>>: ',
+                    myFollowings
+                );
+            } catch (error) {
+                console.error('Erro ao buscar perfil: ', error);
+            }
+        };
+
+        if (activeSection === 'Seguindo') fetchFollowing();
     }, [activeSection]);
 
     const handleBack = () => {
@@ -267,6 +290,27 @@ export const Profile: React.FC = () => {
                                 </h2>
                             </span>
                         )}
+
+                        {isOwnProfile && (
+                            <span
+                                className={`  flex w-fit px-2 py-2 border-solid border-t-4 ${
+                                    activeSection === 'Seguindo'
+                                        ? ' border-black'
+                                        : 'border-[#9b9b9b]'
+                                }`}
+                                onClick={() => setActiveSection('Seguindo')}
+                            >
+                                <h2
+                                    className={`font-montserrat font-semibold text-sm ${
+                                        activeSection === 'Seguindo'
+                                            ? ' text-black'
+                                            : 'text-[#9b9b9b]'
+                                    } `}
+                                >
+                                    Seguindo
+                                </h2>
+                            </span>
+                        )}
                     </div>
 
                     {activeSection === 'Galeria' && (
@@ -362,6 +406,106 @@ export const Profile: React.FC = () => {
                                                             onClick={() => {
                                                                 handleFollowerRemove(
                                                                     follower._id
+                                                                );
+                                                                setRemoveFollower(
+                                                                    false
+                                                                );
+                                                            }}
+                                                            className="text-white focus:outline-none"
+                                                        >
+                                                            Remover
+                                                        </button>
+                                                    </DialogActions>
+                                                </Dialog>
+                                            )}
+                                        </div>
+                                    )
+                            )}
+                        </div>
+                    )}
+
+                    {activeSection === 'Seguindo' && (
+                        <div className="flex flex-col  md:flex-row md:flex-wrap gap-2 mt-4 ">
+                            {following.map(
+                                (following, index) =>
+                                    following && (
+                                        <div
+                                            key={index}
+                                            className="flex items-center justify-between gap-4 h-20 rounded-md px-4 shadow-[0px_4px_10px_-2px_rgba(0,0,0,0.5),0px_-4px_10px_-2px_rgba(0,0,0,0.1)]"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <img
+                                                    src={following.profileImage}
+                                                    className="rounded-full size-14 object-cover"
+                                                />
+                                                <div className="flex flex-col">
+                                                    <h2 className="font-bold text-md text-black">
+                                                        {following.username}
+                                                    </h2>
+                                                </div>
+                                            </div>
+
+                                            <Tooltip
+                                                title="Remover"
+                                                arrow
+                                                placement="left"
+                                                slotProps={{
+                                                    popper: {
+                                                        modifiers: [
+                                                            {
+                                                                name: 'offset',
+                                                                options: {
+                                                                    offset: [
+                                                                        0, -6,
+                                                                    ], // Ajuste a distância aqui (X, Y)
+                                                                },
+                                                            },
+                                                        ],
+                                                    },
+                                                }}
+                                            >
+                                                <div
+                                                    className="cursor-pointer"
+                                                    onClick={() =>
+                                                        setRemoveFollower(true)
+                                                    }
+                                                >
+                                                    <img
+                                                        src={remove}
+                                                        className="w-full h-full"
+                                                    />
+                                                </div>
+                                            </Tooltip>
+
+                                            {setRemoveFollower && (
+                                                <Dialog
+                                                    open={removeFollower}
+                                                    onClose={() =>
+                                                        setRemoveFollower(false)
+                                                    }
+                                                >
+                                                    <DialogContent>
+                                                        <DialogContentText>
+                                                            Deseja realmente
+                                                            deixar de seguir{' '}
+                                                            {following.username}{' '}
+                                                        </DialogContentText>
+                                                    </DialogContent>
+                                                    <DialogActions>
+                                                        <button
+                                                            onClick={() =>
+                                                                setRemoveFollower(
+                                                                    false
+                                                                )
+                                                            }
+                                                            className="text-white focus:outline-none"
+                                                        >
+                                                            Cancelar
+                                                        </button>
+                                                        <button
+                                                            onClick={() => {
+                                                                handleFollowerRemove(
+                                                                    following._id
                                                                 );
                                                                 setRemoveFollower(
                                                                     false

@@ -58,13 +58,13 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme, update
     );
     const token = localStorage.getItem('accessToken');
     const chatBackground0 =
-        'https://res.cloudinary.com/dkhosxear/image/upload/v1739829330/aprimoredBackgroundChat_hg9olu.jpg';
+        'https://res.cloudinary.com/dkhosxear/image/upload/v1741732402/default-bg-chat_zxiyjf.jpg';
     const chatBackground1 =
-        'https://res.cloudinary.com/dkhosxear/image/upload/v1734727951/chatBackground1_cqe7ox.png';
+        'https://res.cloudinary.com/dkhosxear/image/upload/v1741722431/blue-gradient-bg-chat_rorb5v.jpg';
     const chatBackground2 =
-        'https://res.cloudinary.com/dkhosxear/image/upload/v1734727951/chatBackground2_zoxaxl.png';
+        'https://res.cloudinary.com/dkhosxear/image/upload/v1741722461/lines-bg-chat_dhgonx.jpg';
     const chatBackground3 =
-        'https://res.cloudinary.com/dkhosxear/image/upload/v1734727950/chatbackground3_yf1rfa.png';
+        'https://res.cloudinary.com/dkhosxear/image/upload/v1741722416/camouflage-bg-chat_bzhue1.jpg';
     const wallpapers = [
         chatBackground0,
         chatBackground1,
@@ -487,7 +487,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme, update
             {/* Mensagens */}
 
             <div
-                className="flex-col h-full text-sm overflow-y-auto p-4 pb-16 pt-24 space-y-3 scrollbar-hide w-full bg-cover bg-no-repeat"
+                className="flex-col h-full text-sm overflow-y-auto p-4 pb-16 pt-24 space-y-3 scrollbar-hide bg-cover bg-no-repeat"
                 style={{
                     backgroundImage: `url(${background})`,
                 }}
