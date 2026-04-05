@@ -83,7 +83,7 @@ export const Chat: React.FC<ChatProps> = ({ chatOtherPeopleId, darkTheme, update
     }, [token]);
 
     useEffect(() => {
-        const newSocket = io('https://buddio-backend.onrender.com', {
+        const newSocket = io('http://localhost:5000', {
             // Trocar pro endereço do servidor em produção
             query: { token },
             transports: ['websocket'],

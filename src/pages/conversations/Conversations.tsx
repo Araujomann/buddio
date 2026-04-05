@@ -39,7 +39,7 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
         participants: { _id: string; profileImage: string; username: string }[];
         lastMessage: { text: string; timestamp: string };
     }
-    
+
     const [conversations, setConversations] = useState<Conversation[]>([]);
     const [otherPeopleId, setOtherPeopleId] = useState<string>('');
     const [myId, setMyId] = useState<string>('');
@@ -130,18 +130,18 @@ export const Conversations: React.FC<Props> = ({ switchTheme }) => {
     const updateLastMessage = (conversationId: string, lastMessage: string) => {
         setConversations((prevConversations) => {
             const updatedConversations = prevConversations.map((conversation) => {
-                if (conversation._id === conversationId) {
-                    return {
-                        ...conversation,
-                        lastMessage: {
-                            text: lastMessage,
-                            timestamp: new Date().toISOString(),
-                        },
-                    };
-                }
-                return conversation;
+                    if (conversation._id === conversationId) {
+                        return {
+                            ...conversation,
+                            lastMessage: {
+                                text: lastMessage,
+                                timestamp: new Date().toISOString(),
+                            },
+                        };
+                    }
+                    return conversation;
             });
-    
+
             // Reordena as conversas pela última mensagem
             return updatedConversations.sort((a, b) => {
                 return (
