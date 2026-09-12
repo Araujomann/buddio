@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import googleIcon from '../../assets/google.png';
 import rightArrow from '../../assets/circle-chevron-right.svg';
 import back from '../../assets/back.svg';
@@ -7,7 +7,7 @@ import { api }from '../../services/api'
 
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
-import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, getAuth, signInWithRedirect, getRedirectResult } from 'firebase/auth';
 import { app } from '../../services/googleAuthConfig';
 
 const eyeOpen = 'https://img.icons8.com/ios/452/visible.png';
@@ -38,29 +38,33 @@ export const Register: React.FC = () => {
     console.log(e.target.value);
   };
 
+  useEffect(() => {
+    const checkGoogleRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const user = result.user;
+          const idToken = await user.getIdToken();
+          const response = await api.post('/auth/google', { idToken });
+          localStorage.setItem('accessToken', response.data.accessToken);
+          navigate('/feed');
+        }
+      } catch (error: any) {
+        console.error('aconteceu algo inesperado: ', error);
+        setErrorMessage(`Erro ao processar conta do Google: ${error.message}`);
+      }
+    };
+    checkGoogleRedirect();
+  }, [navigate]);
+
+
   const handleGoogleRegister = async () => {
-    const result = await signInWithPopup(auth, provider);
-    const user = result.user;
     try {
-      const response = await api.post(
-        '/user/register',
-        {
-          username: user.displayName,
-          email: user.email,
-          password: user.uid,
-          authProvider: 'google',
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        },
-      );
-      console.log(response.data.message);
-    } catch (error) {
+      await signInWithRedirect(auth, provider);
+    } catch (error: any) {
       console.error('aconteceu algo inesperado: ', error);
       setErrorMessage(
-        'Já existe um perfil associado a essa conta. Faça login em vez disso.',
+        `Erro ao entrar com a conta do Google: ${error.message || error}`
       );
     }
   };

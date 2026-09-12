@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import googleIcon from '../../assets/google.png';
 import back from '../../assets/back.svg';
-import { GoogleAuthProvider, getAuth, signInWithPopup } from 'firebase/auth';
+import { GoogleAuthProvider, getAuth, signInWithRedirect, getRedirectResult } from 'firebase/auth';
 import { app } from '../../services/googleAuthConfig';
 import { api }from '../../services/api'
 
@@ -31,6 +31,23 @@ export const Login: React.FC = () => {
       duration: 8000,
      });
     }
+
+    const checkGoogleRedirect = async () => {
+      try {
+        const result = await getRedirectResult(auth);
+        if (result) {
+          const user = result.user;
+          const idToken = await user.getIdToken();
+          const response = await api.post('/auth/google', { idToken });
+          localStorage.setItem('accessToken', response.data.accessToken);
+          window.location.href = '/feed';
+        }
+      } catch (error: any) {
+        console.error('aconteceu algo inesperado: ', error);
+        toast.error(`Erro processando Google login: ${error.message || error}`);
+      }
+    };
+    checkGoogleRedirect();
   }, [verified]);  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -42,20 +59,10 @@ export const Login: React.FC = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      const result = await signInWithPopup(auth, provider);
-      const user = result.user;
-
-      const response = await api.post('/auth/login', {
-        Headers: {
-          'Content-Type': 'application/json',
-        },
-        email: user.email,
-        password: user.uid,
-      });
-      localStorage.setItem('accessToken', response.data.accessToken);
-      window.location.href = '/feed';
-    } catch (error) {
+      await signInWithRedirect(auth, provider);
+    } catch (error: any) {
       console.error('aconteceu algo inesperado: ', error);
+      toast.error(`Erro: ${error.message || 'Erro ao inicializar o Google.'}`);
     }
   };
 

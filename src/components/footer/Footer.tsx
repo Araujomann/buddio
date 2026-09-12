@@ -115,11 +115,11 @@ export const Footer: React.FC = () => {
           <p>Copyright @ Buddio</p>
           <p>Terms of Service</p>
         </div>
-        <span className="flex gap-3 items-center h-fit max-w-full" onClick={scrollToTop}>
+        <span className="flex gap-3 items-center h-fit max-w-full cursor-pointer" onClick={scrollToTop}>
           <p>Back to top</p>
           <img src={chevronUp} />
         </span>
       </div>
     </div>
   );
-};
+}
