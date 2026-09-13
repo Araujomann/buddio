@@ -3,8 +3,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast, Toaster } from 'react-hot-toast';
 import googleIcon from '../../assets/google.png';
 import back from '../../assets/back.svg';
-import { GoogleAuthProvider, getAuth, signInWithRedirect, getRedirectResult } from 'firebase/auth';
-import { app } from '../../services/googleAuthConfig';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth, authPersistenceReady } from '../../services/googleAuthConfig';
 import { api }from '../../services/api'
 
 const eyeOpen = 'https://img.icons8.com/ios/452/visible.png';
@@ -12,8 +12,6 @@ const eyeClosed =
   'https://img.icons8.com/?size=100&id=121539&format=png&color=000000';
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth(app);
-
 export const Login: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -32,23 +30,7 @@ export const Login: React.FC = () => {
      });
     }
 
-    const checkGoogleRedirect = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result) {
-          const user = result.user;
-          const idToken = await user.getIdToken();
-          const response = await api.post('/auth/google', { idToken });
-          localStorage.setItem('accessToken', response.data.accessToken);
-          window.location.href = '/feed';
-        }
-      } catch (error: any) {
-        console.error('aconteceu algo inesperado: ', error);
-        toast.error(`Erro processando Google login: ${error.message || error}`);
-      }
-    };
-    checkGoogleRedirect();
-  }, [verified]);  
+  }, [navigate, verified]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -59,7 +41,18 @@ export const Login: React.FC = () => {
 
   const handleGoogleLogin = async () => {
     try {
-      await signInWithRedirect(auth, provider);
+      await authPersistenceReady;
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken();
+      const response = await api.post('/auth/google', { idToken });
+      const accessToken = response.data?.accessToken;
+
+      if (!accessToken) {
+        throw new Error('O backend não retornou um token de acesso.');
+      }
+
+      localStorage.setItem('accessToken', accessToken);
+      navigate('/feed', { replace: true });
     } catch (error: any) {
       console.error('aconteceu algo inesperado: ', error);
       toast.error(`Erro: ${error.message || 'Erro ao inicializar o Google.'}`);

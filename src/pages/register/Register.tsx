@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import googleIcon from '../../assets/google.png';
 import rightArrow from '../../assets/circle-chevron-right.svg';
 import back from '../../assets/back.svg';
@@ -7,16 +7,14 @@ import { api }from '../../services/api'
 
 import { useNavigate } from 'react-router-dom';
 import { useUser } from '../../context/UserContext';
-import { GoogleAuthProvider, getAuth, signInWithRedirect, getRedirectResult } from 'firebase/auth';
-import { app } from '../../services/googleAuthConfig';
+import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { auth, authPersistenceReady } from '../../services/googleAuthConfig';
 
 const eyeOpen = 'https://img.icons8.com/ios/452/visible.png';
 const eyeClosed =
   'https://img.icons8.com/?size=100&id=121539&format=png&color=000000';
 
 const provider = new GoogleAuthProvider();
-const auth = getAuth(app);
-
 export const Register: React.FC = () => {
   const navigate = useNavigate();
 
@@ -38,29 +36,20 @@ export const Register: React.FC = () => {
     console.log(e.target.value);
   };
 
-  useEffect(() => {
-    const checkGoogleRedirect = async () => {
-      try {
-        const result = await getRedirectResult(auth);
-        if (result) {
-          const user = result.user;
-          const idToken = await user.getIdToken();
-          const response = await api.post('/auth/google', { idToken });
-          localStorage.setItem('accessToken', response.data.accessToken);
-          navigate('/feed');
-        }
-      } catch (error: any) {
-        console.error('aconteceu algo inesperado: ', error);
-        setErrorMessage(`Erro ao processar conta do Google: ${error.message}`);
-      }
-    };
-    checkGoogleRedirect();
-  }, [navigate]);
-
-
   const handleGoogleRegister = async () => {
     try {
-      await signInWithRedirect(auth, provider);
+      await authPersistenceReady;
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken();
+      const response = await api.post('/auth/google', { idToken });
+      const accessToken = response.data?.accessToken;
+
+      if (!accessToken) {
+        throw new Error('O backend não retornou um token de acesso.');
+      }
+
+      localStorage.setItem('accessToken', accessToken);
+      navigate('/feed', { replace: true });
     } catch (error: any) {
       console.error('aconteceu algo inesperado: ', error);
       setErrorMessage(
